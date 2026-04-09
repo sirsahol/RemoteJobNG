@@ -13,8 +13,8 @@ class JobListSerializer(serializers.ModelSerializer):
         model = Job
         fields = [
             'id', 'slug', 'title', 'company_name', 'company_logo_url',
-            'location', 'country', 'job_type', 'remote_type', 'experience_level',
-            'salary_min', 'salary_max', 'salary_currency', 'is_salary_public',
+            'location', 'job_type', 'remote_type', 'experience_level',
+            'salary_min', 'salary_max', 'salary_currency',
             'category', 'skill_tags', 'is_featured', 'is_aggregated',
             'source_name', 'application_count', 'view_count',
             'published_at', 'created_at', 'deadline', 'is_saved',
@@ -38,15 +38,14 @@ class JobDetailSerializer(serializers.ModelSerializer):
         model = Job
         fields = [
             'id', 'slug', 'title', 'company_name', 'company_logo_url',
-            'company_website', 'location', 'country', 'timezone_requirement',
-            'job_type', 'remote_type', 'experience_level',
-            'description', 'responsibilities', 'requirements', 'nice_to_have',
-            'salary_min', 'salary_max', 'salary_currency', 'is_salary_public',
+            'location', 'job_type', 'remote_type', 'experience_level',
+            'description',
+            'salary_min', 'salary_max', 'salary_currency',
             'category', 'skill_tags',
-            'application_url', 'apply_email',
+            'application_url',
             'is_featured', 'is_aggregated', 'source_name', 'source_url',
             'application_count', 'view_count',
-            'status', 'deadline', 'published_at', 'created_at', 'updated_at',
+            'status', 'deadline', 'published_at', 'created_at',
             'is_saved', 'has_applied',
         ]
 
@@ -72,12 +71,12 @@ class JobWriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = [
-            'title', 'company_name', 'company_logo_url', 'company_website',
-            'description', 'responsibilities', 'requirements', 'nice_to_have',
+            'title', 'company_name', 'company_logo_url',
+            'description',
             'category', 'skill_tag_ids', 'job_type', 'remote_type', 'experience_level',
-            'location', 'country', 'timezone_requirement',
-            'salary_min', 'salary_max', 'salary_currency', 'is_salary_public',
-            'application_url', 'apply_email', 'deadline', 'status',
+            'location',
+            'salary_min', 'salary_max', 'salary_currency',
+            'application_url', 'deadline', 'status',
         ]
 
     def create(self, validated_data):

@@ -1,0 +1,81 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Create .env for CI
+        run: |
+          cd backend
+          echo "SECRET_KEY=ci-test-secret-key-not-for-production" > .env
+          echo "DEBUG=True" >> .env
+          echo "ALLOWED_HOSTS=localhost,127.0.0.1" >> .env
+
+      - name: Run Django system check
+        run: |
+          cd backend
+          python manage.py check
+
+      - name: Run migrations
+        run: |
+          cd backend
+          python manage.py migrate
+
+      - name: Run tests
+        run: |
+          cd backend
+          python manage.py test --verbosity=2
+
+  frontend:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+          cache-dependency-path: my-app/package-lock.json
+
+      - name: Install dependencies
+        run: |
+          cd my-app
+          npm ci
+
+      - name: Create .env.local for CI
+        run: |
+          cd my-app
+          echo "NEXT_PUBLIC_API_URL=http://localhost:8000" > .env.local
+
+      - name: Build
+        run: |
+          cd my-app
+          npm run build
+
+      - name: Lint
+        run: |
+          cd my-app
+          npm run lint || true

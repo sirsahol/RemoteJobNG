@@ -26,7 +26,7 @@ class UserViewSet(viewsets.ModelViewSet):
                     if obj == self.request.user:
                         return UserPrivateSerializer
                 except Exception:
-                    pass
+                    pass  # profile fetch non-critical on login
             return UserPrivateSerializer  # fallback for /me/
         return UserPublicSerializer
 
