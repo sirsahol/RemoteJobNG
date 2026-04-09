@@ -14,8 +14,19 @@ class FetchLogModelTest(TestCase):
         self.assertIsNone(log.completed_at)
         self.assertIsNone(log.duration_seconds)
 
-    def test_duration_seconds_none_when_not_complete(self):
-        log = FetchLog.objects.create(source='remotive_rss')
+    def test_fetch_log_str(self):
+        log = FetchLog.objects.create(source="weworkremotely_rss", jobs_fetched=10, jobs_created=2)
+        self.assertIn("weworkremotely_rss", str(log))
+
+    def test_fetch_log_defaults(self):
+        log = FetchLog.objects.create(source="adzuna_api")
+        self.assertEqual(log.jobs_fetched, 0)
+        self.assertEqual(log.jobs_created, 0)
+        self.assertEqual(log.jobs_skipped, 0)
+        self.assertEqual(log.status, "running")
+
+    def test_duration_seconds_none_when_incomplete(self):
+        log = FetchLog.objects.create(source="manual")
         self.assertIsNone(log.duration_seconds)
 
 
@@ -69,3 +80,9 @@ class IngestorTest(TestCase):
         self.assertEqual(counts2['created'], 0)
         self.assertEqual(counts2['skipped'], 1)
         self.assertEqual(Job.objects.filter(source_url='https://example.com/unique-job-1').count(), 1)
+
+    def test_ingest_job_without_source_url(self):
+        from .ingestor import ingest_jobs
+        log = FetchLog.objects.create(source="manual")
+        result = ingest_jobs([{"title": "No URL"}], log)
+        self.assertEqual(result["errors"], 1)

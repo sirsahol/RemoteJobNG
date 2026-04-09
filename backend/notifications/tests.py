@@ -1,14 +1,45 @@
+from django.test import TestCase
 from django.contrib.auth import get_user_model
-from rest_framework.test import APITestCase
+from rest_framework.test import APIClient
 from rest_framework import status
+from jobs.models import Job
 from .models import Notification, JobAlert
 
 User = get_user_model()
 
 
-class NotificationAPITest(APITestCase):
+class NotificationModelTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='testuser', password='pass')
+        self.user = User.objects.create_user(
+            username="notif_user", email="notif@example.com", password="pass"
+        )
+
+    def test_create_notification(self):
+        notif = Notification.objects.create(
+            user=self.user,
+            notification_type="system",
+            title="Welcome",
+            message="You have a new application",
+        )
+        self.assertEqual(notif.user, self.user)
+        self.assertFalse(notif.is_read)
+
+    def test_notification_str(self):
+        notif = Notification.objects.create(
+            user=self.user,
+            notification_type="system",
+            title="Test",
+            message="Test message",
+        )
+        self.assertIn("notif_user", str(notif))
+
+
+class NotificationAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            username='testuser', email='testuser@example.com', password='pass'
+        )
         Notification.objects.create(
             user=self.user,
             notification_type='system',
@@ -35,9 +66,70 @@ class NotificationAPITest(APITestCase):
         self.assertTrue(notif.is_read)
 
 
-class JobAlertAPITest(APITestCase):
+class JobAlertTest(TestCase):
     def setUp(self):
-        self.user = User.objects.create_user(username='alertuser', password='pass')
+        self.user = User.objects.create_user(
+            username="alert_user", email="alert@example.com", password="pass"
+        )
+
+    def test_create_job_alert(self):
+        alert = JobAlert.objects.create(
+            user=self.user,
+            keywords="python remote",
+        )
+        self.assertEqual(alert.user, self.user)
+        self.assertIn("python", alert.keywords)
+
+    def test_job_alert_str(self):
+        alert = JobAlert.objects.create(
+            user=self.user,
+            name="My Alert",
+            keywords="django",
+        )
+        self.assertIn("alert_user", str(alert))
+
+    def test_matches_job(self):
+        employer = User.objects.create_user(
+            username="alert_emp", email="alert_emp@example.com", password="pass", role="employer"
+        )
+        job = Job.objects.create(
+            title="Python Developer",
+            company_name="TechCo",
+            description="Build Django apps",
+            location="Remote",
+            employer=employer,
+            job_type="full_time",
+        )
+        alert = JobAlert.objects.create(
+            user=self.user,
+            keywords="python",
+        )
+        self.assertTrue(alert.matches_job(job))
+
+    def test_no_match_job(self):
+        employer = User.objects.create_user(
+            username="alert_emp2", email="alert_emp2@example.com", password="pass", role="employer"
+        )
+        job = Job.objects.create(
+            title="Java Developer",
+            company_name="JavaCo",
+            description="Build Java apps",
+            location="Remote",
+            employer=employer,
+        )
+        alert = JobAlert.objects.create(
+            user=self.user,
+            keywords="python",
+        )
+        self.assertFalse(alert.matches_job(job))
+
+
+class JobAlertAPITest(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = User.objects.create_user(
+            username='alertapiuser', email='alertapi@example.com', password='pass'
+        )
 
     def test_create_job_alert(self):
         self.client.force_authenticate(user=self.user)
