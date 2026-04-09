@@ -10,6 +10,8 @@ from users.views import UserViewSet
 from jobs.views import JobViewSet, SavedJobViewSet
 from applications.views import ApplicationViewSet
 from categories.views import CategoryViewSet, SkillTagViewSet
+from notifications.views import NotificationViewSet, JobAlertViewSet
+from aggregation.views import AggregationStatsView
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -18,6 +20,8 @@ router.register(r'saved-jobs', SavedJobViewSet, basename='savedjob')
 router.register(r'applications', ApplicationViewSet, basename='application')
 router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'skill-tags', SkillTagViewSet, basename='skilltag')
+router.register(r'notifications', NotificationViewSet, basename='notification')
+router.register(r'job-alerts', JobAlertViewSet, basename='jobalert')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,4 +31,5 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('api/v1/aggregation/stats/', AggregationStatsView.as_view(), name='aggregation-stats'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
