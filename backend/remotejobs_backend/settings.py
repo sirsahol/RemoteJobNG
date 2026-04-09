@@ -7,18 +7,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 SECRET_KEY = 'django-insecure-^cu*gfy33=k0@b4+2gao4&%oca2s$$l+f&$56!^e35i#59wtx+'
 DEBUG = False
-ALLOWED_HOSTS = ['api.remoteworknaija.com',]
+ALLOWED_HOSTS = ['api.remoteworknaija.com', 'localhost', '127.0.0.1']
 
 # Application definition
 INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
+    'django_filters',
+    'drf_spectacular',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'categories',
     'applications',
     'jobs',
     'users',
@@ -105,11 +108,25 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.AllowAny', 
+        'rest_framework.permissions.AllowAny',
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 20,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'RemoteWorkNaija API',
+    'DESCRIPTION': 'API for RemoteWorkNaija job platform',
+    'VERSION': '2.0.0',
 }
 
 CORS_ALLOWED_ORIGINS = [
     "https://remoteworknaija.com",
     "https://www.remoteworknaija.com",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
