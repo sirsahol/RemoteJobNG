@@ -4,6 +4,7 @@ import { useState, Suspense } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import api from "@/utils/axiosInstance";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -19,14 +20,8 @@ function LoginForm() {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/token/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Login failed");
-      await login(data.access, data.refresh);
+      const res = await api.post("/token/", { username, password });
+      await login(res.data.access, res.data.refresh);
       // Wait for user to be fetched, then redirect
       const savedUser = localStorage.getItem("user");
       let role = "job_seeker";
