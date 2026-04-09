@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 from users.views import (
     create_user, get_all_users, get_user, update_user, delete_user
 )
@@ -13,6 +14,12 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from notifications.views import NotificationViewSet, JobAlertViewSet
+from aggregation.views import AggregationStatsView
+
+router = DefaultRouter()
+router.register(r'notifications', NotificationViewSet, basename='notification')
+router.register(r'job-alerts', JobAlertViewSet, basename='jobalert')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,6 +46,12 @@ urlpatterns = [
     path('api/applications/delete/<int:pk>/', delete_application),
 
     # JWT authentication endpoints
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Router-based API (notifications, job-alerts)
+    path('api/v1/', include(router.urls)),
+
+    # Aggregation stats (admin-only)
+    path('api/v1/aggregation/stats/', AggregationStatsView.as_view(), name='aggregation-stats'),
 ]
