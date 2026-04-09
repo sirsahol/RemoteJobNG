@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from users.views import (
     create_user, get_all_users, get_user, update_user, delete_user
 )
@@ -13,6 +13,14 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from rest_framework.routers import DefaultRouter
+from payments.views import (
+    PaymentPlanListView, InitiatePaymentView, VerifyPaymentView,
+    PaystackWebhookView, MyPaymentsView
+)
+
+router = DefaultRouter()
+router.register(r'my-payments', MyPaymentsView, basename='mypayment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -39,6 +47,15 @@ urlpatterns = [
     path('api/applications/delete/<int:pk>/', delete_application),
 
     # JWT authentication endpoints
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),  
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+
+    # Payment endpoints
+    path('api/v1/payment/plans/', PaymentPlanListView.as_view()),
+    path('api/v1/payment/initiate/', InitiatePaymentView.as_view()),
+    path('api/v1/payment/verify/', VerifyPaymentView.as_view()),
+    path('api/v1/payment/webhook/', PaystackWebhookView.as_view()),
+
+    # Router URLs
+    path('api/v1/', include(router.urls)),
 ]
