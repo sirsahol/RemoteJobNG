@@ -65,6 +65,9 @@ class Job(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     published_at = models.DateTimeField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    is_featured = models.BooleanField(default=False)
+    view_count = models.PositiveIntegerField(default=0)
+    application_count = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['-created_at']
@@ -76,3 +79,16 @@ class Job(models.Model):
         if not self.slug:
             self.slug = slugify(f"{self.title}-{self.company_name}")[:250]
         super().save(*args, **kwargs)
+
+
+class SavedJob(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='saved_jobs')
+    job = models.ForeignKey(Job, on_delete=models.CASCADE, related_name='saved_by')
+    saved_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'job')
+        ordering = ['-saved_at']
+
+    def __str__(self):
+        return f"{self.user.username} saved {self.job.title}"

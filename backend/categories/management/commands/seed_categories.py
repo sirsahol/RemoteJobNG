@@ -3,16 +3,16 @@ from categories.models import Category, SkillTag
 
 
 CATEGORIES = [
-    {'name': 'Technology', 'icon': '💻', 'sort_order': 1},
-    {'name': 'Design & Creative', 'icon': '🎨', 'sort_order': 2},
-    {'name': 'Marketing & Sales', 'icon': '📈', 'sort_order': 3},
-    {'name': 'Writing & Content', 'icon': '✍️', 'sort_order': 4},
-    {'name': 'Finance & Accounting', 'icon': '💰', 'sort_order': 5},
-    {'name': 'Customer Support', 'icon': '🎧', 'sort_order': 6},
-    {'name': 'Data & Analytics', 'icon': '📊', 'sort_order': 7},
-    {'name': 'Product Management', 'icon': '🗂️', 'sort_order': 8},
-    {'name': 'Legal & Compliance', 'icon': '⚖️', 'sort_order': 9},
-    {'name': 'Operations & HR', 'icon': '🏢', 'sort_order': 10},
+    {'name': 'Technology', 'slug': 'technology'},
+    {'name': 'Design & Creative', 'slug': 'design-creative'},
+    {'name': 'Marketing & Sales', 'slug': 'marketing-sales'},
+    {'name': 'Writing & Content', 'slug': 'writing-content'},
+    {'name': 'Finance & Accounting', 'slug': 'finance-accounting'},
+    {'name': 'Customer Support', 'slug': 'customer-support'},
+    {'name': 'Data & Analytics', 'slug': 'data-analytics'},
+    {'name': 'Product Management', 'slug': 'product-management'},
+    {'name': 'Legal & Compliance', 'slug': 'legal-compliance'},
+    {'name': 'Operations & HR', 'slug': 'operations-hr'},
 ]
 
 SKILL_TAGS = {
@@ -36,10 +36,10 @@ class Command(BaseCommand):
         for cat_data in CATEGORIES:
             cat, created = Category.objects.get_or_create(
                 name=cat_data['name'],
-                defaults={'icon': cat_data['icon'], 'sort_order': cat_data['sort_order']}
+                defaults={'slug': cat_data['slug']}
             )
             tags = SKILL_TAGS.get(cat_data['name'], [])
             for tag_name in tags:
-                SkillTag.objects.get_or_create(name=tag_name, defaults={'category': cat})
+                SkillTag.objects.get_or_create(name=tag_name)
             self.stdout.write(f"{'Created' if created else 'Exists'}: {cat.name} ({len(tags)} tags)")
         self.stdout.write(self.style.SUCCESS('Seeding complete.'))
