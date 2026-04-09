@@ -1,67 +1,61 @@
 from rest_framework import serializers
 from .models import User, UserSkill
-
-
-class UserSkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserSkill
-        fields = ['id', 'skill_name', 'proficiency']
+from categories.serializers import SkillTagSerializer
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
-    """Safe read-only serializer for public profile display."""
-    skills = UserSkillSerializer(many=True, read_only=True)
+    skills = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'profile_slug', 'role', 'headline', 'bio',
-            'location', 'profile_picture', 'company_name', 'company_website',
-            'company_logo', 'company_size', 'is_verified_employer',
-            'years_experience', 'linkedin_url', 'portfolio_url', 'github_url',
-            'resume_url', 'availability', 'is_profile_public', 'skills',
-            'created_at',
+            'id', 'username', 'slug', 'first_name', 'last_name',
+            'headline', 'bio', 'location', 'role', 'availability',
+            'company_name', 'profile_picture', 'website',
+            'github_url', 'linkedin_url', 'twitter_url',
+            'skills', 'created_at',
         ]
-        read_only_fields = ['id', 'username', 'profile_slug', 'created_at']
+
+    def get_skills(self, obj):
+        return UserSkillSerializer(obj.skills.all(), many=True).data
 
 
 class UserPrivateSerializer(serializers.ModelSerializer):
-    """Full serializer for authenticated user accessing their own profile."""
-    skills = UserSkillSerializer(many=True, read_only=True)
+    skills = serializers.SerializerMethodField()
 
     class Meta:
         model = User
         fields = [
-            'id', 'username', 'email', 'first_name', 'last_name',
-            'profile_slug', 'role', 'phone', 'headline', 'bio',
-            'location', 'profile_picture', 'company_name', 'company_website',
-            'company_logo', 'company_size', 'is_verified_employer',
-            'years_experience', 'linkedin_url', 'portfolio_url', 'github_url',
-            'resume_url', 'availability', 'is_profile_public', 'skills',
-            'created_at', 'updated_at',
+            'id', 'username', 'slug', 'email', 'first_name', 'last_name',
+            'headline', 'bio', 'location', 'role', 'availability',
+            'phone', 'company_name', 'profile_picture',
+            'is_profile_public', 'website',
+            'github_url', 'linkedin_url', 'twitter_url',
+            'skills', 'created_at', 'updated_at',
         ]
-        read_only_fields = ['id', 'username', 'profile_slug', 'role', 'is_verified_employer', 'created_at', 'updated_at']
-        # CRITICAL: never include 'password' in any serializer fields list
+
+    def get_skills(self, obj):
+        return UserSkillSerializer(obj.skills.all(), many=True).data
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
-    """Registration serializer."""
-    password = serializers.CharField(write_only=True, min_length=8)
-    password_confirm = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'password_confirm', 'role', 'first_name', 'last_name']
-
-    def validate(self, data):
-        if data['password'] != data['password_confirm']:
-            raise serializers.ValidationError({'password_confirm': 'Passwords do not match.'})
-        return data
+        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'role']
 
     def create(self, validated_data):
-        validated_data.pop('password_confirm')
         password = validated_data.pop('password')
         user = User(**validated_data)
         user.set_password(password)
         user.save()
         return user
+
+
+class UserSkillSerializer(serializers.ModelSerializer):
+    skill_tag_detail = SkillTagSerializer(source='skill_tag', read_only=True)
+
+    class Meta:
+        model = UserSkill
+        fields = ['id', 'skill_tag', 'skill_tag_detail', 'name', 'proficiency']

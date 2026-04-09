@@ -1,22 +1,36 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
-from rest_framework.permissions import AllowAny
+from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, IsAdminUser
+from django_filters.rest_framework import DjangoFilterBackend
 from .models import Category, SkillTag
-from .serializers import CategorySerializer, CategoryListSerializer, SkillTagSerializer
+from .serializers import CategoryListSerializer, CategoryDetailSerializer, SkillTagSerializer
 
 
-class CategoryViewSet(ReadOnlyModelViewSet):
-    queryset = Category.objects.filter(is_active=True).prefetch_related('skill_tags')
-    permission_classes = [AllowAny]
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.filter(is_active=True)
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['name']
+    ordering_fields = ['name', 'created_at']
+    ordering = ['name']
 
     def get_serializer_class(self):
-        if self.action == 'list':
-            return CategoryListSerializer
-        return CategorySerializer
+        if self.action == 'retrieve':
+            return CategoryDetailSerializer
+        return CategoryListSerializer
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticatedOrReadOnly()]
+        return [IsAdminUser()]
 
 
-class SkillTagViewSet(ReadOnlyModelViewSet):
-    queryset = SkillTag.objects.filter(is_active=True)
+class SkillTagViewSet(viewsets.ModelViewSet):
+    queryset = SkillTag.objects.all()
     serializer_class = SkillTagSerializer
-    permission_classes = [AllowAny]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
     filterset_fields = ['category']
     search_fields = ['name']
+
+    def get_permissions(self):
+        if self.action in ['list', 'retrieve']:
+            return [IsAuthenticatedOrReadOnly()]
+        return [IsAdminUser()]

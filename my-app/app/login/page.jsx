@@ -1,45 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import Link from "next/link";
-import { loginUser } from "../../utils/api"; 
+import { useRouter, useSearchParams } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-export default function LoginPage() {
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  });
-
+function LoginForm() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const { login } = useAuth();
 
-  // handle input
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
-
-  // handle login
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
-
     try {
-      const res = await loginUser(formData);
-
-      if (res.access) {
-        console.log("Login success:", res);
-        alert("Login successful!");
-        localStorage.setItem("accessToken", res.access);
-        localStorage.setItem("refreshToken", res.refresh);
-        window.location.href = "/";
-      } else {
-        setError("Invalid username or password");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000"}/api/token/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Login failed");
+      await login(data.access, data.refresh);
+      // Wait for user to be fetched, then redirect
+      const savedUser = localStorage.getItem("user");
+      let role = "job_seeker";
+      if (savedUser) {
+        try { role = JSON.parse(savedUser).role; } catch {}
       }
+      const redirectTo = searchParams.get("redirect") ||
+        (role === "employer" ? "/dashboard/employer" : "/dashboard/seeker");
+      router.push(redirectTo);
     } catch (err) {
-      console.error(err);
-      setError("Something went wrong. Please try again.");
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -48,39 +46,35 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
       <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
-          Welcome Back 👋
+        <h2 className="text-3xl font-bold text-center text-green-800 mb-6">
+          Welcome Back
         </h2>
 
-        <form className="space-y-5" onSubmit={handleLogin}>
-          {/* Username */}
+        <form className="space-y-5" onSubmit={handleSubmit}>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Username
             </label>
             <input
               type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               placeholder="Enter your username"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
           </div>
 
-          {/* Password */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
               type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="••••••••"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
               required
             />
           </div>
@@ -90,22 +84,34 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition"
+            className="w-full bg-green-700 text-white py-3 rounded-lg font-medium hover:bg-green-800 transition disabled:opacity-50"
           >
             {loading ? "Signing in..." : "Sign In"}
           </button>
         </form>
 
         <p className="text-center text-gray-600 mt-6">
-          Don’t have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
-            className="text-blue-600 font-medium hover:underline"
+            className="text-green-700 font-medium hover:underline"
           >
             Create one
           </Link>
         </p>
       </div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   );
 }

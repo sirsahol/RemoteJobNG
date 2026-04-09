@@ -2,17 +2,10 @@ from django.contrib import admin
 from .models import Job, SavedJob
 
 
-@admin.register(Job)
 class JobAdmin(admin.ModelAdmin):
-    list_display = ['title', 'company_name', 'job_type', 'remote_type', 'experience_level', 'status', 'is_featured', 'is_aggregated', 'created_at']
-    list_filter = ['status', 'job_type', 'remote_type', 'experience_level', 'is_aggregated', 'is_featured']
-    search_fields = ['title', 'company_name', 'description']
-    list_editable = ['status', 'is_featured']
-    prepopulated_fields = {'slug': ('title',)}
-    filter_horizontal = ['skill_tags']
-    date_hierarchy = 'created_at'
+    list_display = ('title', 'employer', 'location', 'job_type', 'remote_type', 'status', 'created_at')
+    search_fields = ('title', 'employer__username', 'location', 'company_name')
+    list_filter = ('job_type', 'remote_type', 'status', 'is_featured', 'created_at')
 
-
-@admin.register(SavedJob)
-class SavedJobAdmin(admin.ModelAdmin):
-    list_display = ['user', 'job', 'saved_at']
+admin.site.register(Job, JobAdmin)
+admin.site.register(SavedJob)
