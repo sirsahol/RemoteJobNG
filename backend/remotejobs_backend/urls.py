@@ -12,6 +12,10 @@ from applications.views import ApplicationViewSet
 from categories.views import CategoryViewSet, SkillTagViewSet
 from notifications.views import NotificationViewSet, JobAlertViewSet
 from aggregation.views import AggregationStatsView
+from payments.views import (
+    PaymentPlanListView, InitiatePaymentView, VerifyPaymentView,
+    PaystackWebhookView, MyPaymentsView
+)
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet, basename='user')
@@ -22,6 +26,7 @@ router.register(r'categories', CategoryViewSet, basename='category')
 router.register(r'skill-tags', SkillTagViewSet, basename='skilltag')
 router.register(r'notifications', NotificationViewSet, basename='notification')
 router.register(r'job-alerts', JobAlertViewSet, basename='jobalert')
+router.register(r'my-payments', MyPaymentsView, basename='mypayment')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -32,4 +37,8 @@ urlpatterns = [
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/v1/aggregation/stats/', AggregationStatsView.as_view(), name='aggregation-stats'),
+    path('api/v1/payment/plans/', PaymentPlanListView.as_view()),
+    path('api/v1/payment/initiate/', InitiatePaymentView.as_view()),
+    path('api/v1/payment/verify/', VerifyPaymentView.as_view()),
+    path('api/v1/payment/webhook/', PaystackWebhookView.as_view()),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
