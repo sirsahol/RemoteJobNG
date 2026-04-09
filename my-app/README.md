@@ -1,36 +1,107 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# RemoteWorkNaija — Frontend
 
-## Getting Started
+Next.js 16 + React 19 frontend for [RemoteWorkNaija.com](https://remoteworknaija.com).
 
-First, run the development server:
+## Tech Stack
+
+- **Next.js 16** — App Router, SSR/SSG, Edge Middleware
+- **React 19** — UI framework
+- **Tailwind CSS v4** — utility-first styling
+- **axios 1.11** — HTTP client with JWT interceptors
+
+## Quick Start
 
 ```bash
+npm install
+cp .env.example .env.local
+# Set NEXT_PUBLIC_API_URL=http://127.0.0.1:8000
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Backend must be running at `NEXT_PUBLIC_API_URL`. See the [root README](../README.md) for backend setup.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Environment Variables
 
-## Learn More
+| Variable | Required | Description |
+|---|---|---|
+| `NEXT_PUBLIC_API_URL` | Yes | Backend URL e.g. `http://127.0.0.1:8000` |
+| `NEXT_PUBLIC_SITE_URL` | No | Frontend domain for SEO |
+| `NEXT_PUBLIC_SITE_NAME` | No | Site display name |
+| `NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY` | No | Paystack public key |
 
-To learn more about Next.js, take a look at the following resources:
+## Pages
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Route | Description |
+|---|---|
+| `/jobs` | Browse all jobs with search + filters |
+| `/jobs/[id]` | Job detail + Save/Apply buttons |
+| `/jobs/[id]/apply` | Application form (auth required) |
+| `/login` | JWT login |
+| `/signup` | New account registration |
+| `/dashboard/seeker` | Saved jobs, applications, alerts (auth) |
+| `/dashboard/employer` | Manage posted jobs (auth) |
+| `/post_job` | Post a new job (auth) |
+| `/notifications` | In-app notifications + alert settings (auth) |
+| `/pricing` | Paystack plan selection |
+| `/payment/verify` | Paystack callback handler |
+| `/profile/[username]` | Public user profile |
+| `/profile/edit` | Edit own profile (auth) |
+| `/about` | About RemoteWorkNaija |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Key Files
 
-## Deploy on Vercel
+| File | Purpose |
+|---|---|
+| `context/AuthContext.js` | Auth state: user, tokens, isEmployer, isSeeker, login, logout, refresh |
+| `utils/axiosInstance.js` | Preconfigured axios: auto-attaches JWT, auto-refreshes on 401 |
+| `middleware.js` | Edge route protection: redirects unauthenticated users to /login |
+| `app/layout.js` | Root layout: wraps app with AuthProvider, mounts Navbar |
+| `app/components/Navbar/Navbar.jsx` | Nav with notification bell, role-based dashboard link |
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Making API Calls
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Always use `axiosInstance` — never use `fetch` or raw `axios`:
+
+```javascript
+import api from "@/utils/axiosInstance";
+
+// GET jobs
+const { data } = await api.get("/jobs/", { params: { job_type: "full_time" } });
+
+// POST application
+const { data } = await api.post("/applications/", formData, {
+  headers: { "Content-Type": "multipart/form-data" }
+});
+
+// PATCH profile
+await api.patch("/users/me/", { headline: "Senior Developer" });
+```
+
+The instance automatically attaches your JWT and handles token refresh on 401 responses.
+
+## Auth in Components
+
+```javascript
+"use client";
+import { useAuth } from "@/context/AuthContext";
+
+export default function MyPage() {
+  const { user, isAuthenticated, isEmployer, loading, logout } = useAuth();
+
+  if (loading) return <div>Loading...</div>;
+  if (!isAuthenticated) return null; // middleware handles redirect
+
+  return <div>Hello {user.username}</div>;
+}
+```
+
+## Scripts
+
+```bash
+npm run dev      # development server (http://localhost:3000)
+npm run build    # production build
+npm start        # serve production build
+npm run lint     # ESLint
+```
