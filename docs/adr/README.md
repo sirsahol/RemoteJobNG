@@ -15,6 +15,7 @@ ADRs are immutable once accepted. If a decision is reversed, a new ADR is writte
 | [ADR-005](ADR-005-paystack-over-stripe-for-payments.md) | Paystack over Stripe for payment processing | Accepted | 2025-03-20 |
 | [ADR-006](ADR-006-cloudinary-for-media-storage.md) | Cloudinary for media/file storage | Accepted | 2025-03-20 |
 | [ADR-007](ADR-007-sqlite-to-postgresql-migration-path.md) | SQLite for dev, PostgreSQL migration path for production | Accepted | 2025-03-01 |
+| [ADR-008](ADR-008-aggregation-source-strategy.md) | Aggregation source strategy — Remotive, WeWorkRemotely, RSS parser design, dry-run architecture | Accepted | 2026-04-08 |
 
 ## How to Add an ADR
 
