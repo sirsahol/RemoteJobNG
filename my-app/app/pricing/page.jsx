@@ -18,17 +18,36 @@ export default function PricingPage() {
       .finally(() => setLoading(false));
   }, []);
 
-  const handleSelectPlan = (plan) => {
+  const handleSelectPlan = async (plan) => {
     if (!isAuthenticated) {
       router.push("/login?redirect=/pricing");
       return;
     }
     if (!isEmployer) {
-      alert("Only employers can post jobs. Please sign up as an employer.");
+      alert("Only employers can purchase job posting plans. Please sign up as an employer.");
       return;
     }
-    // Redirect to job post form with selected plan
-    router.push(`/jobs/post?plan=${plan.tier}`);
+    setInitiating(plan.id);
+    try {
+      const res = await api.post("/payment/initiate/", {
+        plan_id: plan.id,
+        tier: plan.tier,
+      });
+      // Redirect to Paystack payment page if authorization_url is returned
+      if (res.data.authorization_url) {
+        window.location.href = res.data.authorization_url;
+      } else if (res.data.payment_url) {
+        window.location.href = res.data.payment_url;
+      } else {
+        // Fallback: redirect to job post form with plan
+        router.push(`/jobs/post?plan=${plan.tier}`);
+      }
+    } catch (err) {
+      console.error("Payment initiation failed:", err);
+      alert("Failed to initiate payment. Please try again.");
+    } finally {
+      setInitiating(null);
+    }
   };
 
   const TIER_COLORS = {
@@ -64,15 +83,15 @@ export default function PricingPage() {
               <p className="text-gray-500 text-sm mb-4">{plan.description}</p>
 
               <div className="mb-6">
-                <span className="text-3xl font-bold text-gray-900">₦{Number(plan.price_ngn).toLocaleString()}</span>
+                <span className="text-3xl font-bold text-gray-900">{"\u20a6"}{Number(plan.price_ngn).toLocaleString()}</span>
                 <span className="text-gray-400 text-sm ml-1">/ listing</span>
-                <p className="text-gray-400 text-xs mt-0.5">≈ ${Number(plan.price_usd).toFixed(0)} USD</p>
+                <p className="text-gray-400 text-xs mt-0.5">{"\u2248"} ${Number(plan.price_usd).toFixed(0)} USD</p>
               </div>
 
               <ul className="space-y-2 mb-6">
                 {(plan.features || []).map((feature, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-gray-600">
-                    <span className="text-green-600">✓</span>
+                    <span className="text-green-600">{"\u2713"}</span>
                     {feature}
                   </li>
                 ))}
@@ -80,20 +99,21 @@ export default function PricingPage() {
 
               <button
                 onClick={() => handleSelectPlan(plan)}
-                className={`w-full py-3 rounded-xl font-semibold text-sm transition ${
+                disabled={initiating === plan.id}
+                className={`w-full py-3 rounded-xl font-semibold text-sm transition disabled:opacity-50 ${
                   plan.tier === "featured"
                     ? "bg-green-700 text-white hover:bg-green-800"
                     : "bg-gray-100 text-gray-900 hover:bg-gray-200"
                 }`}
               >
-                Get Started
+                {initiating === plan.id ? "Processing..." : "Get Started"}
               </button>
             </div>
           ))}
         </div>
 
         <p className="text-center text-gray-400 text-sm mt-8">
-          Payments secured by Paystack · VAT may apply · {" "}
+          Payments secured by Paystack {"\u00b7"} VAT may apply {"\u00b7"} {" "}
           <a href="mailto:support@remoteworknaija.com" className="hover:text-green-700">Contact support</a>
         </p>
       </div>

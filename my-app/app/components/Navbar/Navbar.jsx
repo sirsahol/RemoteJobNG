@@ -8,11 +8,12 @@ import api from "@/utils/axiosInstance";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, isEmployer, isSeeker, logout } = useAuth();
   const [unreadCount, setUnreadCount] = useState(0);
 
   const links = [
     { name: "Home", href: "/" },
+    { name: "Jobs", href: "/jobs" },
     { name: "Post a Job", href: "/post_job" },
   ];
 
@@ -23,13 +24,15 @@ export default function Navbar() {
       .catch(() => {});
   }, [isAuthenticated]);
 
+  const dashboardHref = isEmployer ? "/dashboard/employer" : "/dashboard/seeker";
+
   return (
     <nav className="bg-white shadow-sm fixed top-0 left-0 w-full z-50">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link
           href="/"
-          className="text-2xl font-bold text-blue-600 tracking-tight"
+          className="text-2xl font-bold text-green-700 tracking-tight"
         >
           Remote<span className="text-gray-800">JobsNG</span>
         </Link>
@@ -42,8 +45,8 @@ export default function Navbar() {
               href={link.href}
               className={`font-medium ${
                 pathname === link.href
-                  ? "text-blue-600"
-                  : "text-gray-700 hover:text-blue-600 transition-colors"
+                  ? "text-green-700"
+                  : "text-gray-700 hover:text-green-700 transition-colors"
               }`}
             >
               {link.name}
@@ -55,6 +58,19 @@ export default function Navbar() {
         <div className="space-x-3 flex items-center">
           {isAuthenticated ? (
             <>
+              {/* Dashboard link based on role */}
+              <Link
+                href={dashboardHref}
+                className={`font-medium text-sm ${
+                  pathname.startsWith("/dashboard")
+                    ? "text-green-700"
+                    : "text-gray-700 hover:text-green-700 transition-colors"
+                }`}
+              >
+                Dashboard
+              </Link>
+
+              {/* Notification bell with unread count */}
               <div className="relative">
                 <Link href="/notifications" className="text-gray-600 hover:text-green-800 transition">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -67,6 +83,8 @@ export default function Navbar() {
                   )}
                 </Link>
               </div>
+
+              {/* Logout button */}
               <button
                 onClick={logout}
                 className="text-red-500 border border-red-500 px-4 py-2 rounded-xl font-medium hover:bg-red-50 transition"
@@ -78,13 +96,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="text-blue-600 border border-blue-600 px-4 py-2 rounded-xl font-medium hover:bg-blue-50 transition"
+                className="text-green-700 border border-green-700 px-4 py-2 rounded-xl font-medium hover:bg-green-50 transition"
               >
                 Login
               </Link>
               <Link
                 href="/signup"
-                className="bg-blue-600 text-white px-4 py-2 rounded-xl font-medium hover:bg-blue-700 transition"
+                className="bg-green-700 text-white px-4 py-2 rounded-xl font-medium hover:bg-green-800 transition"
               >
                 Sign Up
               </Link>
