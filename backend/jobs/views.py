@@ -10,6 +10,7 @@ from .filters import JobFilter
 
 
 class JobViewSet(viewsets.ModelViewSet):
+    lookup_field = 'slug'
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_class = JobFilter
     search_fields = ['title', 'company_name', 'description', 'location', 'skill_tags__name']
