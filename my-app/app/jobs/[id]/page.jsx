@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import api from "@/utils/axiosInstance";
 import { useAuth } from "@/context/AuthContext";
 
@@ -28,7 +29,6 @@ export default function JobDetails() {
         if (id) fetchJob();
     }, [id]);
 
-    // Check if job is already saved
     useEffect(() => {
         if (!isAuthenticated || !id) return;
         api.get("/jobs/saved-jobs/")
@@ -63,21 +63,24 @@ export default function JobDetails() {
 
     if (loading) {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen text-gray-600">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
+            <div className="flex flex-col items-center justify-center min-h-screen text-white/20">
+                <div className="relative w-12 h-12">
+                    <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+                    <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+                </div>
             </div>
         );
     }
 
     if (!job || job.detail === "Not found.") {
         return (
-            <div className="flex flex-col items-center justify-center min-h-screen text-gray-600">
-                <p>Job not found.</p>
+            <div className="flex flex-col items-center justify-center min-h-screen text-white/40">
+                <p className="text-xl font-bold">Opportunity not found.</p>
                 <button
                     onClick={() => router.push("/jobs")}
-                    className="text-green-700 mt-4 hover:underline"
+                    className="text-blue-400 mt-4 hover:underline font-black uppercase text-xs tracking-widest"
                 >
-                    &larr; Back to jobs
+                    &larr; Return to Market
                 </button>
             </div>
         );
@@ -86,84 +89,119 @@ export default function JobDetails() {
     const formatSalary = () => {
         if (!job.is_salary_public || (!job.salary_min && !job.salary_max)) return null;
         const currency = job.salary_currency || "USD";
-        const symbols = { USD: "$", GBP: "\u00a3", EUR: "\u20ac", NGN: "\u20a6", CAD: "CA$", AUD: "A$" };
+        const symbols = { USD: "$", GBP: "£", EUR: "€", NGN: "₦", CAD: "CA$", AUD: "A$" };
         const sym = symbols[currency] || currency;
-        if (job.salary_min && job.salary_max) return `${sym}${Number(job.salary_min).toLocaleString()} \u2013 ${sym}${Number(job.salary_max).toLocaleString()}`;
+        if (job.salary_min && job.salary_max) return `${sym}${Number(job.salary_min).toLocaleString()} – ${sym}${Number(job.salary_max).toLocaleString()}`;
         if (job.salary_min) return `From ${sym}${Number(job.salary_min).toLocaleString()}`;
         return `Up to ${sym}${Number(job.salary_max).toLocaleString()}`;
     };
 
     return (
-        <section className="max-w-3xl mx-auto py-12 px-6">
-            <button
-                onClick={() => router.back()}
-                className="text-green-700 hover:underline mb-6"
-            >
-                &larr; Back to jobs
-            </button>
+        <div className="min-h-screen pt-32 pb-20 px-4">
+            <div className="max-w-4xl mx-auto">
+                <button
+                    onClick={() => router.back()}
+                    className="text-white/40 hover:text-white transition-colors mb-8 flex items-center gap-2 group"
+                >
+                    <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Market Feed</span>
+                </button>
 
-            <div className="bg-white shadow-md rounded-2xl p-8">
-                <div className="flex items-start gap-4 mb-4">
-                    {job.company_logo_url ? (
-                        <img src={job.company_logo_url} alt={job.company_name} className="h-14 w-14 rounded-lg object-contain bg-gray-50 border" />
-                    ) : (
-                        <div className="h-14 w-14 rounded-lg bg-green-100 flex items-center justify-center text-green-700 font-bold text-lg flex-shrink-0">
-                            {job.company_name?.charAt(0) || "C"}
+                <div className="glass-card overflow-hidden border-white/10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+                    {/* Hero Section */}
+                    <div className="p-8 md:p-12 border-b border-white/5 bg-white/[0.02] flex flex-col md:flex-row gap-8 items-start md:items-center">
+                        {job.company_logo_url ? (
+                            <Image src={job.company_logo_url} alt={job.company_name} width={80} height={80} className="h-20 w-20 rounded-2xl object-contain bg-white/5 border border-white/10 p-2 shadow-xl" />
+                        ) : (
+                            <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white font-black text-3xl shadow-xl">
+                                {job.company_name?.charAt(0) || "C"}
+                            </div>
+                        )}
+                        <div className="flex-1">
+                            <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight leading-tight">{job.title}</h1>
+                            <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-4">
+                                <span className="text-blue-400 font-bold text-sm tracking-tight">{job.company_name}</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/10"></span>
+                                <span className="text-white/40 text-sm font-medium">{job.location || "Remote"}</span>
+                                <span className="w-1.5 h-1.5 rounded-full bg-white/10"></span>
+                                <span className="text-white/40 text-sm font-black uppercase tracking-widest text-[10px]">{job.job_type?.replace("_", " ")}</span>
+                            </div>
                         </div>
-                    )}
-                    <div>
-                        <h1 className="text-3xl font-bold text-gray-900">{job.title}</h1>
-                        <p className="text-gray-600 mt-1">
-                            {job.company_name} {job.location && `\u00b7 ${job.location}`} {job.job_type && `\u00b7 ${job.job_type.replace("_", " ").toUpperCase()}`}
-                        </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 lg:grid-cols-3 divide-y lg:divide-y-0 lg:divide-x divide-white/5">
+                        {/* Main Content */}
+                        <div className="lg:col-span-2 p-8 md:p-12 space-y-10">
+                            <section>
+                                <h2 className="text-[10px] font-black text-white/40 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                                    <span className="w-2 h-4 bg-blue-500 rounded-full"></span>
+                                    Position intelligence
+                                </h2>
+                                <div className="text-white/70 leading-relaxed whitespace-pre-wrap font-medium text-lg">
+                                    {job.description}
+                                </div>
+                            </section>
+
+                            <div className="flex items-center gap-4 pt-6 border-t border-white/5">
+                                <button
+                                    onClick={handleSave}
+                                    disabled={saving}
+                                    className={`flex-1 flex items-center justify-center gap-2 py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all border ${
+                                        saved
+                                            ? "bg-blue-500/10 text-blue-400 border-blue-500/30"
+                                            : "bg-white/5 text-white/60 border-white/10 hover:bg-white/10"
+                                    } disabled:opacity-50`}
+                                >
+                                    {saved ? "★ Saved to Watchlist" : "☆ Save Position"}
+                                </button>
+                                <Link
+                                    href={`/jobs/${job.slug || job.id}/apply`}
+                                    className="flex-[1.5] bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest text-center transition-all shadow-lg shadow-blue-600/20 active:scale-95"
+                                >
+                                    Transmit Application
+                                </Link>
+                            </div>
+                        </div>
+
+                        {/* Side Panel */}
+                        <div className="p-8 md:p-12 bg-white/[0.01] space-y-10">
+                            <section>
+                                <h3 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-4">Metadata</h3>
+                                <div className="space-y-6">
+                                    {formatSalary() && (
+                                        <div>
+                                            <p className="text-white font-bold text-xl tracking-tight">{formatSalary()}</p>
+                                            <p className="text-white/20 text-[9px] font-black uppercase mt-1">Annual Compensation</p>
+                                        </div>
+                                    )}
+                                    <div className="flex flex-wrap gap-2">
+                                        {job.remote_type && (
+                                            <span className="bg-white/5 border border-white/10 text-white/60 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                                {job.remote_type.replace("_", " ")}
+                                            </span>
+                                        )}
+                                        {job.experience_level && job.experience_level !== "any" && (
+                                            <span className="bg-white/5 border border-white/10 text-white/60 px-3 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest capitalize">
+                                                {job.experience_level}
+                                            </span>
+                                        )}
+                                    </div>
+                                </div>
+                            </section>
+
+                            <section className="p-6 rounded-2xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-white/5">
+                                <h4 className="text-white font-black text-xs uppercase tracking-widest mb-2">Verified Opportunity</h4>
+                                <p className="text-white/40 text-[10px] leading-relaxed font-medium">This listing has been indexed by our 2026 talent protocol. Verified Nigerian remote role.</p>
+                            </section>
+
+                            <section className="pt-6 border-t border-white/5">
+                                <p className="text-[9px] font-black text-white/10 uppercase tracking-widest mb-1">Posted on</p>
+                                <p className="text-white/40 text-xs font-bold">{new Date(job.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</p>
+                            </section>
+                        </div>
                     </div>
                 </div>
-
-                <div className="flex flex-wrap gap-2 mb-4">
-                    {job.remote_type && (
-                        <span className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded text-xs font-medium">
-                            {job.remote_type.replace("_", " ")}
-                        </span>
-                    )}
-                    {job.experience_level && job.experience_level !== "any" && (
-                        <span className="bg-orange-50 text-orange-700 px-2 py-0.5 rounded text-xs font-medium capitalize">
-                            {job.experience_level}
-                        </span>
-                    )}
-                    {job.is_featured && (
-                        <span className="bg-green-100 text-green-800 px-2 py-0.5 rounded text-xs font-semibold">Featured</span>
-                    )}
-                </div>
-
-                {formatSalary() && (
-                    <p className="font-medium text-gray-900 mb-4 text-lg">{formatSalary()}</p>
-                )}
-
-                <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-gray-800 mb-2">Description</h2>
-                    <div className="text-gray-700 leading-relaxed whitespace-pre-wrap">{job.description}</div>
-                </div>
-
-                <div className="flex items-center justify-end gap-3 mt-6">
-                    <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className={`px-5 py-2 rounded-lg font-medium transition border ${
-                            saved
-                                ? "bg-green-50 text-green-700 border-green-300 hover:bg-green-100"
-                                : "text-gray-600 border-gray-300 hover:bg-gray-50"
-                        } disabled:opacity-50`}
-                    >
-                        {saving ? "..." : saved ? "Saved" : "Save Job"}
-                    </button>
-                    <Link
-                        href={`/jobs/${job.slug || job.id}/apply`}
-                        className="bg-green-700 text-white px-5 py-2 rounded-lg font-medium hover:bg-green-800 transition"
-                    >
-                        Apply Now
-                    </Link>
-                </div>
             </div>
-        </section>
+        </div>
     );
 }

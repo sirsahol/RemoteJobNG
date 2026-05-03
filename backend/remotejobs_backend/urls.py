@@ -4,9 +4,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
-
-from users.views import UserViewSet
+from rest_framework_simplejwt.views import TokenVerifyView
+from users.views import UserViewSet, CookieTokenObtainPairView, CookieTokenRefreshView
 from jobs.views import JobViewSet, SavedJobViewSet
 from applications.views import ApplicationViewSet
 from categories.views import CategoryViewSet, SkillTagViewSet
@@ -33,12 +32,14 @@ urlpatterns = [
     path('api/v1/', include(router.urls)),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/', CookieTokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', CookieTokenRefreshView.as_view(), name='token_refresh'),
     path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/v1/aggregation/stats/', AggregationStatsView.as_view(), name='aggregation-stats'),
     path('api/v1/payment/plans/', PaymentPlanListView.as_view()),
     path('api/v1/payment/initiate/', InitiatePaymentView.as_view()),
     path('api/v1/payment/verify/', VerifyPaymentView.as_view()),
     path('api/v1/payment/webhook/', PaystackWebhookView.as_view()),
+    path('api/v1/intelligence/', include('intelligence.urls')),
+    path('api/v1/verification/', include('verification.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

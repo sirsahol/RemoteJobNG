@@ -16,11 +16,11 @@ const geistMono = Geist_Mono({
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://remoteworknaija.com"),
   title: {
-    default: "RemoteWorkNaija — Global Remote Jobs for Nigerians",
-    template: "%s | RemoteWorkNaija",
+    default: "RemoteJobNG — Premier Global Talent Protocol for Nigerians",
+    template: "%s | RemoteJobNG",
   },
-  description: "Find global remote jobs tailored for Nigerian professionals. Work from anywhere for top international companies.",
-  keywords: ["remote jobs Nigeria", "work from home Nigeria", "Nigerian remote work", "global jobs Nigeria", "international jobs Nigeria"],
+  description: "The authoritative gateway for Nigerian technical excellence. Access high-tier global remote opportunities from companies that value professional integrity and skill.",
+  keywords: ["RemoteJobNG", "remote jobs Nigeria", "work from home Nigeria", "Nigerian remote work", "global jobs Nigeria", "international jobs Nigeria"],
   openGraph: {
     type: "website",
     locale: "en_NG",
@@ -40,11 +40,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-50`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased selection:bg-blue-500/30`}
       >
         <AuthProvider>
           <Navbar />
-          <main>{children}</main>
+          <main className="relative z-10">{children}</main>
         </AuthProvider>
       </body>
     </html>

@@ -12,65 +12,84 @@ export function AuthProvider({ children }) {
   const [refreshToken, setRefreshToken] = useState(null);
   const [loading, setLoading] = useState(true);     // initial hydration
 
-  // Hydrate from localStorage on mount
+  // Hydrate from localStorage on mount (only user object, tokens are in HttpOnly cookies)
   useEffect(() => {
-    const savedToken = localStorage.getItem("access_token");
-    const savedRefresh = localStorage.getItem("refresh_token");
     const savedUser = localStorage.getItem("user");
-    if (savedToken) setToken(savedToken);
-    if (savedRefresh) setRefreshToken(savedRefresh);
     if (savedUser) {
       try { setUser(JSON.parse(savedUser)); } catch {}
     }
-    setLoading(false);
-  }, []);
+    
+    // Check if we are still logged in by fetching /me/
+    const verifyAuth = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/v1/users/me/`, {
+          credentials: 'include',
+        });
+        if (res.ok) {
+          const userData = await res.json();
+          setUser(userData);
+          localStorage.setItem("user", JSON.stringify(userData));
+          setToken("PRESENT"); // Dummy value to indicate we have a cookie
+        } else {
+          logout();
+        }
+      } catch (e) {
+        // If fetch fails, we might be offline or session expired
+        console.error("Auth verification failed", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    verifyAuth();
+  }, [logout]);
 
   const login = useCallback(async (access, refresh) => {
-    localStorage.setItem("access_token", access);
-    localStorage.setItem("refresh_token", refresh);
-    setToken(access);
-    setRefreshToken(refresh);
+    // access and refresh are still in response body for now, 
+    // but they are also set as HttpOnly cookies by the backend.
+    setToken("PRESENT");
+    setRefreshToken("PRESENT");
+    
     // Fetch user profile immediately after login
     try {
       const res = await fetch(`${API_URL}/api/v1/users/me/`, {
-        headers: { Authorization: `Bearer ${access}` },
+        credentials: 'include',
       });
       if (res.ok) {
         const userData = await res.json();
         setUser(userData);
         localStorage.setItem("user", JSON.stringify(userData));
-        // Set cookie for middleware SSR route protection
-        document.cookie = `access_token=${access}; path=/; max-age=3600; SameSite=Lax`;
       }
     } catch (e) {
       console.error("Failed to fetch user profile after login", e);
     }
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem("access_token");
-    localStorage.removeItem("refresh_token");
+  const logout = useCallback(async () => {
+    try {
+      await fetch(`${API_URL}/api/v1/users/logout/`, {
+        method: "POST",
+        credentials: 'include',
+      });
+    } catch (e) {
+      console.error("Logout request failed", e);
+    }
+    
     localStorage.removeItem("user");
-    document.cookie = "access_token=; path=/; max-age=0";
     setToken(null);
     setRefreshToken(null);
     setUser(null);
   }, []);
 
   const refreshAccessToken = useCallback(async () => {
-    const storedRefresh = localStorage.getItem("refresh_token");
-    if (!storedRefresh) return null;
     try {
       const res = await fetch(`${API_URL}/api/token/refresh/`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ refresh: storedRefresh }),
+        credentials: 'include',
       });
       if (res.ok) {
-        const data = await res.json();
-        localStorage.setItem("access_token", data.access);
-        setToken(data.access);
-        return data.access;
+        setToken("PRESENT");
+        return "PRESENT";
       } else {
         logout();
         return null;
@@ -84,11 +103,12 @@ export function AuthProvider({ children }) {
   const isAuthenticated = Boolean(token);
   const isEmployer = user?.role === "employer";
   const isSeeker = user?.role === "job_seeker";
+  const isAdmin = user?.is_staff || false;
 
   return (
     <AuthContext.Provider value={{
       user, token, refreshToken, loading,
-      isAuthenticated, isEmployer, isSeeker,
+      isAuthenticated, isEmployer, isSeeker, isAdmin,
       login, logout, refreshAccessToken,
     }}>
       {children}

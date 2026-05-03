@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import api from "@/utils/axiosInstance";
 
@@ -22,82 +23,129 @@ export default function PublicProfilePage() {
 
   if (loading) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
     </div>
   );
 
   if (notFound) return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-4">
-      <h1 className="text-2xl font-bold text-gray-800">Profile not found</h1>
-      <p className="text-gray-500">This profile doesn't exist or is private.</p>
-      <Link href="/jobs" className="text-blue-600 hover:underline">Browse Jobs</Link>
+    <div className="min-h-screen flex flex-col items-center justify-center gap-6 px-4 text-center">
+      <div className="w-24 h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-white/20 mb-4">
+        <svg className="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+        </svg>
+      </div>
+      <h1 className="text-3xl font-black text-white tracking-tight">Profile Not Found</h1>
+      <p className="text-white/40 max-w-md font-medium">This profile does not exist or has been restricted by the owner&apos;s privacy protocols.</p>
+      <Link href="/jobs" className="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all">
+        Browse Active Roles
+      </Link>
     </div>
   );
 
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-3xl mx-auto">
-        {/* Profile header */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 mb-6">
-          <div className="flex items-start gap-6">
-            {profile.profile_picture ? (
-              <img src={profile.profile_picture} alt={profile.full_name || profile.username}
-                className="w-20 h-20 rounded-full object-cover border-2 border-gray-200" />
-            ) : (
-              <div className="w-20 h-20 rounded-full bg-blue-600 flex items-center justify-center text-white text-2xl font-bold">
-                {(profile.full_name || profile.username)?.[0]?.toUpperCase()}
+    <main className="min-h-screen pt-32 pb-20 px-4">
+      <div className="max-w-4xl mx-auto space-y-8">
+        {/* Profile Header Protocol */}
+        <div className="glass-card p-10 border-white/10 relative overflow-hidden group">
+          <div className="absolute -top-24 -right-24 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-500/20 transition-all duration-700"></div>
+          
+          <div className="flex flex-col md:flex-row items-center md:items-start gap-10 relative z-10">
+            <div className="relative">
+              {profile.profile_picture ? (
+                <Image src={profile.profile_picture} alt={profile.full_name || profile.username}
+                  width={128} height={128}
+                  className="w-32 h-32 rounded-[2.5rem] object-cover border-2 border-white/10 p-1 shadow-2xl" />
+              ) : (
+                <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl">
+                  {(profile.full_name || profile.username)?.[0]?.toUpperCase()}
+                </div>
+              )}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-[#0a0c10] flex items-center justify-center">
+                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
               </div>
-            )}
-            <div className="flex-1">
-              <h1 className="text-2xl font-bold text-gray-900">{profile.full_name || profile.username}</h1>
-              {profile.headline && <p className="text-gray-500 mt-1">{profile.headline}</p>}
-              {profile.location && <p className="text-sm text-gray-400 mt-1">{profile.location}</p>}
-              <div className="flex gap-4 mt-3">
+            </div>
+
+            <div className="flex-1 text-center md:text-left">
+              <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Talent Identity verified</span>
+              <h1 className="text-4xl font-black text-white tracking-tight leading-tight mb-2">
+                {profile.full_name || profile.username}
+              </h1>
+              {profile.headline && (
+                <p className="text-xl font-medium text-white/60 tracking-tight">{profile.headline}</p>
+              )}
+              {profile.location && (
+                <div className="flex items-center justify-center md:justify-start gap-2 mt-4 text-white/40">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <span className="text-xs font-bold uppercase tracking-widest">{profile.location}</span>
+                </div>
+              )}
+
+              <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 mt-8">
                 {profile.website && (
                   <a href={profile.website} target="_blank" rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:underline">Website</a>
+                    className="px-6 py-3 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl text-[10px] font-black uppercase tracking-widest text-white transition-all">
+                    Network Node
+                  </a>
                 )}
                 {profile.linkedin_url && (
                   <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:underline">LinkedIn</a>
+                    className="px-6 py-3 bg-[#0077b5]/10 hover:bg-[#0077b5]/20 border border-[#0077b5]/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#00a0dc] transition-all">
+                    Professional
+                  </a>
                 )}
                 {profile.github_url && (
                   <a href={profile.github_url} target="_blank" rel="noopener noreferrer"
-                    className="text-sm text-blue-600 hover:underline">GitHub</a>
+                    className="px-6 py-3 bg-white/10 hover:bg-white/20 border border-white/10 rounded-xl text-[10px] font-black uppercase tracking-widest text-white transition-all">
+                    Repository
+                  </a>
                 )}
               </div>
             </div>
           </div>
+
           {profile.bio && (
-            <div className="mt-6 pt-6 border-t border-gray-100">
-              <h2 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">About</h2>
-              <p className="text-gray-600 leading-relaxed">{profile.bio}</p>
+            <div className="mt-12 pt-10 border-t border-white/5">
+              <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
+                <span className="w-4 h-px bg-white/10"></span>
+                Intelligence Dossier
+              </h2>
+              <p className="text-white/60 leading-relaxed font-medium text-lg max-w-3xl italic">&quot;{profile.bio}&quot;</p>
             </div>
           )}
         </div>
 
-        {/* Skills */}
-        {profile.skills?.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Skills</h2>
-            <div className="flex flex-wrap gap-2">
-              {profile.skills.map((skill) => (
-                <span key={skill.id || skill.name}
-                  className="bg-blue-50 text-blue-700 text-sm px-3 py-1 rounded-full border border-blue-100">
-                  {skill.name || skill}
-                </span>
-              ))}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Experience Card */}
+            <div className="glass-card p-8 border-white/10 md:col-span-1">
+                <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">Service Tenure</h2>
+                <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-black text-white">{profile.years_of_experience || "0"}</span>
+                    <span className="text-xs font-bold text-white/40 uppercase tracking-widest">Years</span>
+                </div>
+                <p className="text-white/20 text-[9px] font-medium uppercase tracking-widest mt-4">Verified Professional cycle</p>
             </div>
-          </div>
-        )}
 
-        {/* Experience */}
-        {profile.years_of_experience && (
-          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-            <h2 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">Experience</h2>
-            <p className="text-gray-600">{profile.years_of_experience} years of professional experience</p>
-          </div>
-        )}
+            {/* Skills Card */}
+            {profile.skills?.length > 0 && (
+                <div className="glass-card p-8 border-white/10 md:col-span-2">
+                    <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] mb-6">Core Competencies</h2>
+                    <div className="flex flex-wrap gap-3">
+                        {profile.skills.map((skill) => (
+                            <span key={skill.id || skill.name}
+                                className="px-4 py-2 bg-blue-500/10 border border-blue-500/20 text-blue-400 text-[10px] font-black uppercase tracking-widest rounded-xl">
+                                {skill.name || skill}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+        </div>
       </div>
     </main>
   );

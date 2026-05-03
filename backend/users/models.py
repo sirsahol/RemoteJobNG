@@ -28,6 +28,8 @@ class User(AbstractUser):
     github_url = models.URLField(blank=True, default='')
     linkedin_url = models.URLField(blank=True, default='')
     twitter_url = models.URLField(blank=True, default='')
+    reputation_score = models.IntegerField(default=50) # 0-100 base score
+    is_verified = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True)
 

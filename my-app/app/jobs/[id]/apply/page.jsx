@@ -24,7 +24,7 @@ export default function ApplyPage() {
     if (id) {
       api.get(`/jobs/${id}/`).then(res => setJob(res.data)).catch(console.error);
     }
-  }, [id, isAuthenticated, loading]);
+  }, [id, isAuthenticated, loading, router]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -39,10 +39,10 @@ export default function ApplyPage() {
       await api.post("/applications/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      setMessage("Application submitted successfully!");
+      setMessage("Transmission Successful! Your application has been logged.");
       setTimeout(() => router.push("/dashboard/seeker"), 2000);
     } catch (err) {
-      setError(err.response?.data?.detail || "Failed to submit. Please try again.");
+      setError(err.response?.data?.detail || "Signal failure. Please attempt transmission again.");
     } finally {
       setSubmitting(false);
     }
@@ -50,51 +50,86 @@ export default function ApplyPage() {
 
   if (loading || !job) return (
     <div className="min-h-screen flex items-center justify-center">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
     </div>
   );
 
   return (
-    <section className="min-h-screen bg-gray-50 py-12 px-4">
-      <div className="max-w-2xl mx-auto bg-white rounded-2xl shadow-md p-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-1">Apply for {job.title}</h1>
-        <p className="text-gray-500 mb-6">{job.company_name} · {job.location}</p>
-        {message && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-200 text-green-700 rounded-lg">{message}</div>
-        )}
-        {error && (
-          <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-700 rounded-lg">{error}</div>
-        )}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Cover Letter</label>
-            <textarea
-              value={coverLetter}
-              onChange={(e) => setCoverLetter(e.target.value)}
-              required
-              rows={6}
-              placeholder="Tell the employer why you're a great fit..."
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+    <div className="min-h-screen pt-32 pb-20 px-4">
+      <div className="max-w-2xl mx-auto">
+        <button
+            onClick={() => router.back()}
+            className="text-white/40 hover:text-white transition-colors mb-8 flex items-center gap-2 group"
+        >
+            <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Cancel Transmission</span>
+        </button>
+
+        <div className="glass-card p-10 border-white/10 shadow-2xl animate-in zoom-in-95 duration-700">
+          <div className="mb-10 text-center md:text-left">
+            <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Application Protocol</span>
+            <h1 className="text-3xl font-black text-white tracking-tight leading-tight">
+               Apply for <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">{job.title}</span>
+            </h1>
+            <p className="text-white/40 mt-2 font-medium">{job.company_name} · {job.location}</p>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Resume (PDF or DOC)</label>
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx"
-              onChange={(e) => setResume(e.target.files[0])}
-              className="w-full border border-gray-300 rounded-lg p-2"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={submitting}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-xl font-medium transition disabled:opacity-60"
-          >
-            {submitting ? "Submitting..." : "Submit Application"}
-          </button>
-        </form>
+
+          {message && (
+            <div className="mb-8 p-6 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-2xl text-center font-bold animate-in fade-in slide-in-from-top-2 duration-300">
+              {message}
+            </div>
+          )}
+          {error && (
+            <div className="mb-8 p-6 bg-red-500/10 border border-red-200 text-red-400 rounded-2xl text-center font-bold animate-in fade-in slide-in-from-top-2 duration-300">
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div>
+              <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">Value Proposition (Cover Letter)</label>
+              <textarea
+                value={coverLetter}
+                onChange={(e) => setCoverLetter(e.target.value)}
+                required
+                rows={8}
+                placeholder="Detail your unique expertise and strategic alignment..."
+                className="w-full bg-white/5 border border-white/5 rounded-2xl p-6 text-white placeholder-white/10 focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all resize-none font-medium leading-relaxed"
+              />
+            </div>
+
+            <div className="p-8 rounded-2xl bg-white/5 border border-white/5 border-dashed hover:border-blue-500/30 transition-all group">
+              <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-4">Supporting Documentation (Resume)</label>
+              <div className="relative">
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx"
+                  onChange={(e) => setResume(e.target.files[0])}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                />
+                <div className="flex flex-col items-center justify-center py-4">
+                  <div className="w-12 h-12 rounded-full bg-white/5 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                    <svg className="w-6 h-6 text-white/20 group-hover:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+                  </div>
+                  <p className="text-white font-bold text-xs">{resume ? resume.name : "Select PDF or DOCX"}</p>
+                  <p className="text-white/20 text-[9px] mt-1 uppercase font-black tracking-tighter">Max file size 5MB</p>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={submitting}
+              className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 active:scale-95 disabled:opacity-50"
+            >
+              {submitting ? "Transmitting..." : "Initiate Application"}
+            </button>
+          </form>
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

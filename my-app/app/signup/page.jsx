@@ -37,13 +37,13 @@ export default function SignupPage() {
       const res = await api.post("/users/register/", formData);
 
       if (res.data.id) {
-        setSuccess("Account created successfully! Redirecting to login...");
+        setSuccess("Account created successfully! Securely redirecting...");
         setTimeout(() => router.push("/login"), 1000);
       } else {
         setError(
           res.data?.username?.[0] ||
           res.data?.email?.[0] ||
-          "Something went wrong. Please check your details."
+          "Registration failed. Please check your inputs."
         );
       }
     } catch (err) {
@@ -52,7 +52,7 @@ export default function SignupPage() {
         data?.username?.[0] ||
         data?.email?.[0] ||
         data?.detail ||
-        "Failed to sign up. Please try again later."
+        "Failed to sign up. Connection issue."
       );
     } finally {
       setLoading(false);
@@ -60,90 +60,79 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-green-800 mb-6">
-          Create an Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center px-4 pt-32 pb-20">
+      <div className="glass-card p-10 w-full max-w-lg border-white/10 shadow-blue-500/10">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl font-bold text-white mb-2">Join RemoteJobNG</h2>
+          <p className="text-white/40 text-sm">Empowering Nigerian talent for a global future.</p>
+        </div>
 
-        <form className="space-y-5" onSubmit={handleSignup}>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
-            </label>
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Your username"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
-              required
-            />
+        <form className="space-y-6" onSubmit={handleSignup}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+                Username
+              </label>
+              <input
+                type="text"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="UserHandle"
+                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+                Email
+              </label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@domain.com"
+                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                required
+              />
+            </div>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="you@example.com"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Create a password"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Role
-            </label>
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
-            >
-              <option value="job_seeker">Job Seeker</option>
-              <option value="employer">Employer</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Phone
-            </label>
-            <input
-              type="text"
-              name="phone"
-              value={formData.phone}
-              onChange={handleChange}
-              placeholder="+2348012345678"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+                Password
+              </label>
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="••••••••"
+                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                required
+              />
+            </div>
+            <div>
+              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+                Role
+              </label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 transition-colors"
+              >
+                <option value="job_seeker" className="bg-slate-900">Job Seeker</option>
+                <option value="employer" className="bg-slate-900">Employer</option>
+              </select>
+            </div>
           </div>
 
           {formData.role === "employer" && (
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
                 Company Name
               </label>
               <input
@@ -151,41 +140,50 @@ export default function SignupPage() {
                 name="company_name"
                 value={formData.company_name}
                 onChange={handleChange}
-                placeholder="Your company name"
-                className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
+                placeholder="Acme Global Inc."
+                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Bio
+            <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              Bio / Intro
             </label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
-              placeholder="Write something about yourself..."
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
+              rows="3"
+              placeholder="Tell the global market about your expertise..."
+              className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
             ></textarea>
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
-          {success && <p className="text-green-600 text-sm">{success}</p>}
+          {error && (
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-xs font-medium">
+              {error}
+            </div>
+          )}
+          {success && (
+            <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-xl text-blue-400 text-xs font-medium">
+              {success}
+            </div>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-700 text-white py-3 rounded-lg font-medium hover:bg-green-800 transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95 disabled:opacity-50"
           >
-            {loading ? "Creating Account..." : "Create Account"}
+            {loading ? "Initializing..." : "Create Account"}
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
-          Already have an account?{" "}
-          <Link href="/login" className="text-green-700 font-medium hover:underline">
-            Sign in
+        <p className="text-center text-white/40 text-sm mt-8">
+          Already a member?{" "}
+          <Link href="/login" className="text-blue-400 font-bold hover:text-blue-300 transition-colors">
+            Sign In
           </Link>
         </p>
       </div>

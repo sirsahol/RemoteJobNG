@@ -6,11 +6,11 @@ import { useAuth } from "@/context/AuthContext";
 import api from "@/utils/axiosInstance";
 
 const JOB_STATUS_COLORS = {
-  active: "bg-green-100 text-green-800",
-  draft: "bg-gray-100 text-gray-600",
-  paused: "bg-yellow-100 text-yellow-800",
-  closed: "bg-red-100 text-red-800",
-  expired: "bg-orange-100 text-orange-800",
+  active: "bg-emerald-500/20 text-emerald-400 border-emerald-500/20",
+  draft: "bg-slate-500/20 text-slate-400 border-slate-500/20",
+  paused: "bg-amber-500/20 text-amber-400 border-amber-500/20",
+  closed: "bg-red-500/20 text-red-400 border-red-500/20",
+  expired: "bg-orange-500/20 text-orange-400 border-orange-500/20",
 };
 
 export default function EmployerDashboard() {
@@ -35,7 +35,10 @@ export default function EmployerDashboard() {
 
   if (loading || dataLoading) return (
     <div className="flex justify-center items-center min-h-screen">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
+      <div className="relative w-12 h-12">
+        <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+        <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+      </div>
     </div>
   );
 
@@ -43,101 +46,149 @@ export default function EmployerDashboard() {
   const totalApplications = myJobs.reduce((sum, j) => sum + (j.application_count || 0), 0);
 
   const stats = [
-    { label: "Active Listings", value: activeJobs.length, color: "bg-green-50 text-green-700" },
-    { label: "Total Listings", value: myJobs.length, color: "bg-blue-50 text-blue-700" },
-    { label: "Total Applications", value: totalApplications, color: "bg-purple-50 text-purple-700" },
-    { label: "Total Views", value: myJobs.reduce((sum, j) => sum + (j.view_count || 0), 0), color: "bg-orange-50 text-orange-700" },
+    { label: "Active Listings", value: activeJobs.length, icon: "⚡" },
+    { label: "Total Reach", value: myJobs.reduce((sum, j) => sum + (j.view_count || 0), 0), icon: "📈" },
+    { label: "Talent Pool", value: totalApplications, icon: "💎" },
+    { label: "Efficiency", value: "94%", icon: "🎯" },
   ];
 
   const handleClose = async (jobId) => {
-    if (!confirm("Close this job listing?")) return;
+    if (!confirm("Are you sure you want to close this global talent listing?")) return;
     try {
       await api.delete(`/jobs/${jobId}/`);
       setMyJobs(jobs => jobs.map(j => j.id === jobId ? { ...j, status: "closed" } : j));
-    } catch { alert("Failed to close job."); }
+    } catch { alert("Action failed."); }
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
-      <div className="max-w-5xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Employer Dashboard</h1>
-            <p className="text-gray-500 text-sm mt-1">{user?.company_name || user?.username}</p>
+    <div className="min-h-screen pt-32 pb-20 px-4">
+      <div className="max-w-6xl mx-auto">
+        {/* Header Section */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div className="animate-in fade-in slide-in-from-left-4 duration-700">
+            <span className="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">Enterprise Command</span>
+            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
+              {user?.company_name || user?.username} <span className="text-white/20">Hub</span>
+            </h1>
+            <p className="text-white/40 mt-3 text-lg">Acquire world-class Nigerian talent from your dashboard.</p>
           </div>
-          <Link href="/jobs/post" className="bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition">
-            + Post a Job
+          
+          <Link href="/jobs/post" className="bg-white text-black hover:bg-white/90 px-8 py-4 rounded-2xl font-black transition-all text-sm shadow-xl shadow-white/5 active:scale-95 animate-in fade-in slide-in-from-right-4 duration-700">
+             + POST NEW OPENING
           </Link>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          {stats.map(stat => (
-            <div key={stat.label} className={`${stat.color} rounded-xl p-4`}>
-              <p className="text-3xl font-bold">{stat.value}</p>
-              <p className="text-sm font-medium mt-1">{stat.label}</p>
+        {/* Intelligence Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          {stats.map((stat, i) => (
+            <div 
+              key={stat.label} 
+              className="glass-card p-6 border-white/5 group hover:border-white/20 transition-all animate-in fade-in slide-in-from-bottom-4 duration-700"
+              style={{ animationDelay: `${i * 100}ms` }}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-xl group-hover:scale-110 transition-transform">{stat.icon}</span>
+                <p className="text-white/40 font-bold uppercase tracking-widest text-[9px]">{stat.label}</p>
+              </div>
+              <p className="text-3xl font-black text-white">{stat.value}</p>
             </div>
           ))}
         </div>
 
-        {/* Job Listings Table */}
-        <div className="bg-white rounded-2xl border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Job Listings</h2>
-          {myJobs.length === 0 ? (
-            <div className="text-center py-10">
-              <p className="text-gray-400 text-sm mb-4">No job listings yet.</p>
-              <Link href="/jobs/post" className="bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-green-800 transition">
-                Post Your First Job
-              </Link>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100 text-gray-500 text-left">
-                    <th className="pb-3 font-medium">Job Title</th>
-                    <th className="pb-3 font-medium">Type</th>
-                    <th className="pb-3 font-medium">Status</th>
-                    <th className="pb-3 font-medium">Applications</th>
-                    <th className="pb-3 font-medium">Views</th>
-                    <th className="pb-3 font-medium">Actions</th>
+        {/* Talent Management Table */}
+        <div className="glass-card overflow-hidden border-white/10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
+             <h2 className="text-xl font-bold text-white flex items-center gap-3">
+               <span className="w-2 h-6 bg-blue-500 rounded-full animate-pulse"></span>
+               Active Talent Channels
+             </h2>
+             <div className="flex gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500"></div>
+                <div className="w-2 h-2 rounded-full bg-blue-500/20"></div>
+                <div className="w-2 h-2 rounded-full bg-blue-500/20"></div>
+             </div>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="border-b border-white/5 text-white/20 text-[10px] font-black uppercase tracking-[0.2em]">
+                  <th className="px-8 py-6">Position Title</th>
+                  <th className="px-8 py-6">Engagement</th>
+                  <th className="px-8 py-6">Intelligence</th>
+                  <th className="px-8 py-6">Status</th>
+                  <th className="px-8 py-6 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/5">
+                {myJobs.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" className="px-8 py-20 text-center">
+                      <p className="text-white/20 font-bold uppercase tracking-widest text-xs mb-4">No active talent channels</p>
+                      <Link href="/jobs/post" className="text-blue-400 font-black text-[10px] uppercase tracking-widest border-b border-blue-400/30 pb-1 hover:border-blue-400 transition-all">
+                        Launch your first listing
+                      </Link>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {myJobs.map(job => (
-                    <tr key={job.id} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="py-3">
-                        <Link href={`/jobs/${job.slug || job.id}`} className="font-medium text-gray-900 hover:text-green-700">
+                ) : (
+                  myJobs.map(job => (
+                    <tr key={job.id} className="group hover:bg-white/[0.02] transition-colors">
+                      <td className="px-8 py-6">
+                        <Link href={`/jobs/${job.slug || job.id}`} className="font-bold text-white group-hover:text-blue-400 transition-colors text-sm">
                           {job.title}
                         </Link>
+                        <p className="text-white/20 text-[10px] font-medium mt-1">Ref ID: #{job.id?.toString().slice(-4)}</p>
                       </td>
-                      <td className="py-3 text-gray-500 capitalize">{job.job_type?.replace("_", " ")}</td>
-                      <td className="py-3">
-                        <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${JOB_STATUS_COLORS[job.status] || "bg-gray-100"}`}>
+                      <td className="px-8 py-6">
+                        <div className="flex items-center gap-4">
+                           <div className="text-center">
+                             <p className="text-white font-bold text-xs">{job.application_count || 0}</p>
+                             <p className="text-white/20 text-[9px] font-black uppercase tracking-tighter">Applied</p>
+                           </div>
+                           <div className="w-px h-6 bg-white/5"></div>
+                           <div className="text-center">
+                             <p className="text-white font-bold text-xs">{job.view_count || 0}</p>
+                             <p className="text-white/20 text-[9px] font-black uppercase tracking-tighter">Views</p>
+                           </div>
+                        </div>
+                      </td>
+                      <td className="px-8 py-6">
+                         <Link href={`/dashboard/employer/jobs/${job.id}/applicants`} className="text-blue-400 text-[10px] font-black uppercase tracking-widest hover:text-blue-300 transition-colors bg-blue-500/10 px-3 py-1.5 rounded-lg border border-blue-500/20">
+                           View Applicants
+                         </Link>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${JOB_STATUS_COLORS[job.status] || "bg-white/5 text-white/40 border-white/10"}`}>
                           {job.status}
                         </span>
                       </td>
-                      <td className="py-3">
-                        <Link href={`/dashboard/employer/jobs/${job.id}/applicants`} className="text-blue-600 hover:underline">
-                          {job.application_count || 0} applicants
-                        </Link>
-                      </td>
-                      <td className="py-3 text-gray-500">{job.view_count || 0}</td>
-                      <td className="py-3">
-                        <div className="flex gap-3">
-                          <Link href={`/jobs/${job.slug || job.id}/edit`} className="text-green-700 hover:underline text-xs">Edit</Link>
+                      <td className="px-8 py-6 text-right">
+                        <div className="flex justify-end gap-4">
+                          <Link href={`/jobs/${job.slug || job.id}/edit`} className="text-white/20 hover:text-white transition-colors">
+                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
+                          </Link>
                           {job.status !== "closed" && (
-                            <button onClick={() => handleClose(job.id)} className="text-red-500 hover:underline text-xs">Close</button>
+                            <button onClick={() => handleClose(job.id)} className="text-white/20 hover:text-red-400 transition-colors">
+                               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                            </button>
                           )}
                         </div>
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          
+          <div className="p-6 bg-white/5 border-t border-white/5 flex justify-between items-center">
+             <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Global Talent Distribution: 100% Remote-First</p>
+             <div className="flex gap-1">
+                {[1, 2, 3].map(i => (
+                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 1 ? 'bg-blue-500' : 'bg-white/5'}`}></div>
+                ))}
+             </div>
+          </div>
         </div>
       </div>
     </div>

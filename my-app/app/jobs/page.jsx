@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useCallback, Suspense } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import api from "@/utils/axiosInstance";
@@ -41,6 +42,7 @@ function AllJobsContent() {
 
   // Filter state
   const [search, setSearch] = useState(searchParams.get("search") || "");
+  const [searchMode, setSearchMode] = useState("standard"); // "standard" or "neural"
   const [jobType, setJobType] = useState(searchParams.get("job_type") || "");
   const [remoteType, setRemoteType] = useState(searchParams.get("remote_type") || "");
   const [experienceLevel, setExperienceLevel] = useState(searchParams.get("experience_level") || "");
@@ -51,15 +53,23 @@ function AllJobsContent() {
     setError("");
     try {
       const params = new URLSearchParams();
-      if (search) params.set("search", search);
+      if (search) params.set("q", search);
       if (jobType) params.set("job_type", jobType);
       if (remoteType) params.set("remote_type", remoteType);
       if (experienceLevel) params.set("experience_level", experienceLevel);
       params.set("page", page);
 
-      const res = await api.get(`/jobs/?${params.toString()}`);
-      setJobs(res.data.results || res.data);
-      setTotalCount(res.data.count || 0);
+      let endpoint = "/jobs/";
+      if (searchMode === "neural" && search) {
+        endpoint = "/intelligence/search/";
+      } else if (search) {
+        params.set("search", search);
+      }
+
+      const res = await api.get(`${endpoint}?${params.toString()}`);
+      const data = res.data.results || res.data || [];
+      setJobs(Array.isArray(data) ? data : []);
+      setTotalCount(res.data.count || (Array.isArray(data) ? data.length : 0));
       setNextPage(res.data.next);
       setPrevPage(res.data.previous);
     } catch (err) {
@@ -67,7 +77,7 @@ function AllJobsContent() {
     } finally {
       setLoading(false);
     }
-  }, [search, jobType, remoteType, experienceLevel, page]);
+  }, [search, searchMode, jobType, remoteType, experienceLevel, page]);
 
   useEffect(() => { fetchJobs(); }, [fetchJobs]);
 
@@ -80,115 +90,132 @@ function AllJobsContent() {
   const formatSalary = (job) => {
     if (!job.is_salary_public || (!job.salary_min && !job.salary_max)) return null;
     const currency = job.salary_currency || "USD";
-    const symbols = { USD: "$", GBP: "\u00a3", EUR: "\u20ac", NGN: "\u20a6", CAD: "CA$", AUD: "A$" };
+    const symbols = { USD: "$", GBP: "£", EUR: "€", NGN: "₦", CAD: "CA$", AUD: "A$" };
     const sym = symbols[currency] || currency;
-    if (job.salary_min && job.salary_max) return `${sym}${Number(job.salary_min).toLocaleString()} \u2013 ${sym}${Number(job.salary_max).toLocaleString()}`;
+    if (job.salary_min && job.salary_max) return `${sym}${Number(job.salary_min).toLocaleString()} – ${sym}${Number(job.salary_max).toLocaleString()}`;
     if (job.salary_min) return `From ${sym}${Number(job.salary_min).toLocaleString()}`;
     return `Up to ${sym}${Number(job.salary_max).toLocaleString()}`;
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Search & Filter Bar */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10 shadow-sm">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-3">
-            <input
-              type="text"
-              placeholder="Search jobs, skills, companies..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-600"
-            />
-            <select value={jobType} onChange={(e) => { setJobType(e.target.value); setPage(1); }}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
-              {JOB_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
-            <select value={remoteType} onChange={(e) => { setRemoteType(e.target.value); setPage(1); }}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
-              {REMOTE_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
-            <select value={experienceLevel} onChange={(e) => { setExperienceLevel(e.target.value); setPage(1); }}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-600">
-              {EXPERIENCE_LEVELS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
-            </select>
+    <div className="min-h-screen pt-28">
+      {/* Search & Filter Header */}
+      <section className="px-4 mb-12">
+        <div className="max-w-6xl mx-auto">
+          <div className="mb-8">
+            <h1 className="text-4xl font-bold text-white mb-2 tracking-tight">
+               Discover Your Next <span className="text-blue-400">Remote Move</span>
+            </h1>
+            <p className="text-white/40 font-medium">
+              {totalCount > 0 ? `${totalCount.toLocaleString()} verified roles found.` : "Explore high-impact remote careers."}
+            </p>
+          </div>
+
+          <form onSubmit={handleSearch} className="glass-card p-2 flex flex-col md:flex-row gap-2 border-white/10">
+            <div className="flex-1 relative flex items-center">
+              <input
+                type="text"
+                placeholder={searchMode === "neural" ? "Ask naturally: 'React jobs in Europe with high pay'..." : "Search jobs, skills, companies..."}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full bg-transparent px-6 py-4 text-white placeholder-white/20 focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={() => setSearchMode(searchMode === "standard" ? "neural" : "standard")}
+                className={`mr-4 px-3 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${searchMode === "neural" ? "bg-blue-600 text-white shadow-lg shadow-blue-600/40" : "bg-white/5 text-white/40 hover:text-white"}`}
+              >
+                {searchMode === "neural" ? "Neural Active" : "Standard"}
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 px-2 md:px-0">
+              <select value={jobType} onChange={(e) => { setJobType(e.target.value); setPage(1); }}
+                className="bg-white/5 border border-white/5 rounded-xl px-4 py-4 text-sm text-white/80 focus:outline-none focus:bg-white/10 transition-colors">
+                {JOB_TYPES.map(t => <option key={t.value} value={t.value} className="bg-slate-900">{t.label}</option>)}
+              </select>
+              <select value={remoteType} onChange={(e) => { setRemoteType(e.target.value); setPage(1); }}
+                className="bg-white/5 border border-white/5 rounded-xl px-4 py-4 text-sm text-white/80 focus:outline-none focus:bg-white/10 transition-colors">
+                {REMOTE_TYPES.map(t => <option key={t.value} value={t.value} className="bg-slate-900">{t.label}</option>)}
+              </select>
+              <select value={experienceLevel} onChange={(e) => { setExperienceLevel(e.target.value); setPage(1); }}
+                className="bg-white/5 border border-white/5 rounded-xl px-4 py-4 text-sm text-white/80 focus:outline-none focus:bg-white/10 transition-colors">
+                {EXPERIENCE_LEVELS.map(t => <option key={t.value} value={t.value} className="bg-slate-900">{t.label}</option>)}
+              </select>
+            </div>
+
             <button type="submit"
-              className="bg-green-700 text-white px-6 py-2 rounded-lg hover:bg-green-800 transition font-medium">
+              className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95">
               Search
             </button>
           </form>
         </div>
-      </div>
+      </section>
 
-      <div className="max-w-6xl mx-auto px-4 py-8">
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">
-            {totalCount > 0 ? `${totalCount.toLocaleString()} Remote Jobs` : "Remote Jobs"}
-          </h1>
-        </div>
-
+      <div className="max-w-6xl mx-auto px-4 pb-20">
         {error && (
-          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-6">{error}</div>
+          <div className="glass-card border-red-500/20 bg-red-500/5 text-red-400 px-6 py-4 mb-8 text-sm font-medium">{error}</div>
         )}
 
         {loading ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {[...Array(6)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl p-6 animate-pulse">
-                <div className="h-4 bg-gray-200 rounded mb-3 w-3/4" />
-                <div className="h-3 bg-gray-200 rounded mb-2 w-1/2" />
-                <div className="h-3 bg-gray-200 rounded w-1/3" />
+              <div key={i} className="glass-card p-8 animate-pulse border-white/5">
+                <div className="h-4 bg-white/5 rounded-full mb-4 w-3/4" />
+                <div className="h-3 bg-white/5 rounded-full mb-3 w-1/2" />
+                <div className="h-3 bg-white/5 rounded-full w-1/3" />
               </div>
             ))}
           </div>
         ) : jobs.length > 0 ? (
           <>
-            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job) => (
                 <div key={job.id}
-                  className={`bg-white p-6 rounded-2xl border transition-all duration-200 hover:shadow-md hover:-translate-y-0.5 ${job.is_featured ? "border-green-300 ring-1 ring-green-200" : "border-gray-100"}`}>
-                  {job.is_featured && (
-                    <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-0.5 rounded mb-2">Featured</span>
-                  )}
-                  <div className="flex items-start gap-3 mb-3">
-                    {job.company_logo_url ? (
-                      <img src={job.company_logo_url} alt={job.company_name} className="h-10 w-10 rounded-lg object-contain bg-gray-50 border" />
-                    ) : (
-                      <div className="h-10 w-10 rounded-lg bg-green-100 flex items-center justify-center text-green-700 font-bold text-sm flex-shrink-0">
-                        {job.company_name?.charAt(0) || "C"}
+                  className={`glass-card p-6 flex flex-col gap-4 group transition-all duration-300 hover:border-blue-500/40 ${job.is_featured ? "border-blue-500/30 ring-1 ring-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.1)]" : "border-white/5"}`}>
+                  
+                  <div className="flex items-start justify-between">
+                    <div className="flex gap-4">
+                      {job.company_logo_url ? (
+                        <Image src={job.company_logo_url} alt={job.company_name} width={48} height={48} className="h-12 w-12 rounded-xl object-contain bg-white/5 p-1.5 border border-white/10" />
+                      ) : (
+                        <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 font-bold text-lg">
+                          {job.company_name?.charAt(0) || "C"}
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <h3 className="font-bold text-white group-hover:text-blue-400 transition-colors truncate">{job.title}</h3>
+                        <p className="text-xs text-white/40 font-medium truncate uppercase tracking-wider">{job.company_name}</p>
                       </div>
-                    )}
-                    <div className="min-w-0">
-                      <h3 className="font-semibold text-gray-900 truncate">{job.title}</h3>
-                      <p className="text-sm text-gray-500 truncate">{job.company_name}</p>
                     </div>
                   </div>
 
-                  <div className="flex flex-wrap gap-1.5 mb-3">
-                    <span className="bg-blue-50 text-blue-700 px-2 py-0.5 rounded text-xs font-medium">
+                  <div className="flex flex-wrap gap-2">
+                    <span className="bg-white/5 border border-white/5 text-white/60 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                       {job.job_type?.replace("_", " ")}
                     </span>
-                    <span className="bg-purple-50 text-purple-700 px-2 py-0.5 rounded text-xs font-medium">
+                    <span className="bg-white/5 border border-white/5 text-white/60 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                       {job.remote_type?.replace("_", " ")}
                     </span>
                     {job.experience_level && job.experience_level !== "any" && (
-                      <span className="bg-orange-50 text-orange-700 px-2 py-0.5 rounded text-xs font-medium capitalize">
+                      <span className="bg-blue-500/5 border border-blue-500/10 text-blue-400 px-2.5 py-1 rounded-lg text-[10px] font-bold uppercase tracking-wider">
                         {job.experience_level}
                       </span>
                     )}
                   </div>
 
-                  {formatSalary(job) && (
-                    <p className="text-sm font-medium text-gray-700 mb-3">{formatSalary(job)}</p>
-                  )}
-
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs text-gray-400">
-                      {job.source_name ? `via ${job.source_name}` : job.location || "Remote"}
-                    </span>
+                  <div className="mt-auto pt-6 border-t border-white/5 flex items-center justify-between">
+                    <div className="flex flex-col">
+                      <span className="text-[10px] text-white/30 uppercase tracking-[0.2em] font-bold mb-1">Potential Pay</span>
+                      <span className="text-sm font-bold text-white">
+                        {formatSalary(job) || "Competitive"}
+                      </span>
+                    </div>
                     <Link href={`/jobs/${job.slug || job.id}`}
-                      className="text-sm font-medium text-green-700 hover:text-green-900 transition">
-                      View &rarr;
+                      className="bg-white/5 hover:bg-white/10 text-white p-3 rounded-xl transition-all border border-white/5 group-hover:border-blue-500/30 group-hover:scale-110">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                      </svg>
                     </Link>
                   </div>
                 </div>
@@ -196,22 +223,25 @@ function AllJobsContent() {
             </div>
 
             {/* Pagination */}
-            <div className="flex items-center justify-center gap-4 mt-10">
+            <div className="flex items-center justify-center gap-6 mt-16">
               <button onClick={() => setPage(p => p - 1)} disabled={!prevPage}
-                className="px-4 py-2 border rounded-lg text-sm disabled:opacity-40 hover:bg-gray-50">
-                &larr; Previous
+                className="glass-card px-6 py-3 text-sm font-bold text-white/60 disabled:opacity-20 hover:text-white transition-all active:scale-95">
+                ← Previous
               </button>
-              <span className="text-sm text-gray-500">Page {page}</span>
+              <div className="h-8 w-[1px] bg-white/10" />
+              <span className="text-xs font-black text-blue-400 uppercase tracking-widest">Page {page}</span>
+              <div className="h-8 w-[1px] bg-white/10" />
               <button onClick={() => setPage(p => p + 1)} disabled={!nextPage}
-                className="px-4 py-2 border rounded-lg text-sm disabled:opacity-40 hover:bg-gray-50">
-                Next &rarr;
+                className="glass-card px-6 py-3 text-sm font-bold text-white/60 disabled:opacity-20 hover:text-white transition-all active:scale-95">
+                Next →
               </button>
             </div>
           </>
         ) : (
-          <div className="text-center py-20">
-            <p className="text-gray-400 text-lg mb-2">No jobs found</p>
-            <p className="text-gray-300 text-sm">Try adjusting your filters</p>
+          <div className="text-center py-32 glass-card border-dashed border-white/10">
+            <div className="text-4xl mb-4 opacity-40">🔍</div>
+            <p className="text-white/40 text-lg font-bold mb-2">No matching roles found</p>
+            <p className="text-white/20 text-sm">Try broadening your filters or search terms.</p>
           </div>
         )}
       </div>
@@ -223,7 +253,7 @@ export default function AllJobsPage() {
   return (
     <Suspense fallback={
       <div className="flex justify-center items-center min-h-screen">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
       </div>
     }>
       <AllJobsContent />

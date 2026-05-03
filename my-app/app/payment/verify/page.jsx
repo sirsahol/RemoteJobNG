@@ -9,55 +9,72 @@ function VerifyContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const reference = searchParams.get("reference");
-  const [status, setStatus] = useState("verifying"); // verifying | success | failed
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState(reference ? "verifying" : "failed"); // verifying | success | failed
+  const [message, setMessage] = useState(reference ? "" : "Protocol error: No transmission reference found.");
 
   useEffect(() => {
-    if (!reference) {
-      setStatus("failed");
-      setMessage("No payment reference found.");
-      return;
-    }
+    if (!reference) return;
     api.get(`/payment/verify/?reference=${reference}`)
       .then(res => {
         setStatus("success");
-        setMessage(res.data?.message || "Payment verified successfully.");
+        setMessage(res.data?.message || "Transaction synchronized successfully.");
         setTimeout(() => router.push("/dashboard/employer"), 3000);
       })
       .catch(err => {
         setStatus("failed");
-        setMessage(err.response?.data?.detail || "Payment verification failed.");
+        setMessage(err.response?.data?.detail || "Transaction verification failed.");
       });
-  }, [reference]);
+  }, [reference, router]);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="bg-white rounded-2xl shadow-md p-10 max-w-md w-full text-center">
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="glass-card p-12 max-w-md w-full text-center border-white/10 relative overflow-hidden animate-in zoom-in-95 duration-700">
+        <div className="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+        
         {status === "verifying" && (
-          <>
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4" />
-            <h1 className="text-xl font-semibold text-gray-800">Verifying your payment...</h1>
-            <p className="text-gray-500 mt-2">Please wait, do not close this page.</p>
-          </>
+          <div className="relative z-10">
+            <div className="relative w-16 h-16 mx-auto mb-8">
+                <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+                <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+            </div>
+            <h1 className="text-xl font-black text-white uppercase tracking-[0.2em] mb-2">Synchronizing</h1>
+            <p className="text-white/40 text-xs font-medium uppercase tracking-widest">Verifying payment protocol. Do not interrupt transmission.</p>
+          </div>
         )}
+        
         {status === "success" && (
-          <>
-            <div className="text-5xl mb-4">✅</div>
-            <h1 className="text-2xl font-bold text-green-700 mb-2">Payment Successful</h1>
-            <p className="text-gray-600 mb-6">{message}</p>
-            <p className="text-sm text-gray-400">Redirecting to your dashboard...</p>
-          </>
+          <div className="relative z-10">
+            <div className="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-in zoom-in duration-500">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <h1 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">Protocol Verified</h1>
+            <p className="text-emerald-400/80 font-bold text-sm mb-8 leading-relaxed">{message}</p>
+            <div className="flex items-center justify-center gap-3">
+                <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Redirecting to Command Center</p>
+            </div>
+          </div>
         )}
+        
         {status === "failed" && (
-          <>
-            <div className="text-5xl mb-4">❌</div>
-            <h1 className="text-2xl font-bold text-red-700 mb-2">Payment Failed</h1>
-            <p className="text-gray-600 mb-6">{message}</p>
+          <div className="relative z-10">
+            <div className="w-16 h-16 bg-red-500/20 text-red-400 rounded-full flex items-center justify-center mx-auto mb-8 animate-in zoom-in duration-500">
+                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </div>
+            <h1 className="text-2xl font-black text-white uppercase tracking-tighter mb-4">Protocol Rejection</h1>
+            <p className="text-red-400/80 font-bold text-sm mb-8 leading-relaxed">{message}</p>
             <Link href="/pricing"
-              className="inline-block bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-medium transition">
-              Try Again
+              className="inline-block w-full bg-white/10 hover:bg-white text-white hover:text-black py-4 rounded-xl font-black text-xs uppercase tracking-widest transition-all">
+              Restart Protocol
             </Link>
-          </>
+          </div>
         )}
       </div>
     </div>
@@ -68,7 +85,10 @@ export default function PaymentVerifyPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600" />
+        <div className="relative w-12 h-12">
+            <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
       </div>
     }>
       <VerifyContent />

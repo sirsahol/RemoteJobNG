@@ -36,3 +36,9 @@ gunicorn==23.0.0
 python-slugify==8.0.4
 asgiref==3.11.0
 sqlparse==0.5.3
+
+# Phase 3 Intelligence (AI/Vector)
+openai==1.54.3
+pgvector==0.2.5
+sentence-transformers==2.7.0
+numpy==1.26.4

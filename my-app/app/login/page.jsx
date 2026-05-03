@@ -22,7 +22,6 @@ function LoginForm() {
     try {
       const res = await api.post("/token/", { username, password });
       await login(res.data.access, res.data.refresh);
-      // Wait for user to be fetched, then redirect
       const savedUser = localStorage.getItem("user");
       let role = "job_seeker";
       if (savedUser) {
@@ -32,68 +31,81 @@ function LoginForm() {
         (role === "employer" ? "/dashboard/employer" : "/dashboard/seeker");
       router.push(redirectTo);
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Protocol rejection: Invalid credentials.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="bg-white p-8 rounded-2xl shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-green-800 mb-6">
-          Welcome Back
-        </h2>
+    <div className="min-h-screen flex items-center justify-center px-4 pt-20">
+      <div className="glass-card p-12 w-full max-w-md border-white/10 relative overflow-hidden animate-in zoom-in-95 duration-700">
+        <div className="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
+        
+        <div className="text-center mb-12 relative z-10">
+          <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Secure Auth</span>
+          <h2 className="text-4xl font-black text-white tracking-tight leading-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Node</span></h2>
+          <p className="text-white/40 mt-3 font-medium text-sm">Synchronizing your professional trajectory.</p>
+        </div>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form className="space-y-8 relative z-10" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Username
+            <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">
+              Identity Identifier
             </label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter your username"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
+              placeholder="Username"
+              className="w-full bg-[#0a0c10] border border-white/5 rounded-xl p-4 text-white placeholder-white/10 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+                Secret Sequence
+              </label>
+              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-white transition-colors">Recover</Link>
+            </div>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
-              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-green-600"
+              placeholder="••••••••"
+              className="w-full bg-[#0a0c10] border border-white/5 rounded-xl p-4 text-white placeholder-white/10 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
               required
             />
           </div>
 
-          {error && <p className="text-red-500 text-sm">{error}</p>}
+          {error && (
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-[10px] font-black uppercase tracking-widest text-center animate-in fade-in duration-300">
+              {error}
+            </div>
+          )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-green-700 text-white py-3 rounded-lg font-medium hover:bg-green-800 transition disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-600/20 active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading ? "Authenticating..." : "Initiate Session"}
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
-          Don&apos;t have an account?{" "}
-          <Link
-            href="/signup"
-            className="text-green-700 font-medium hover:underline"
-          >
-            Create one
-          </Link>
-        </p>
+        <div className="mt-10 pt-10 border-t border-white/5 text-center relative z-10">
+          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+            Unregistered?{" "}
+            <Link
+              href="/signup"
+              className="text-blue-400 font-black hover:text-white transition-colors ml-2"
+            >
+              Establish Identity
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -102,8 +114,11 @@ function LoginForm() {
 export default function LoginPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-700" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="relative w-12 h-12">
+            <div className="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+            <div className="absolute inset-0 border-4 border-t-blue-500 rounded-full animate-spin"></div>
+        </div>
       </div>
     }>
       <LoginForm />
