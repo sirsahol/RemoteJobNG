@@ -40,7 +40,7 @@ export default function AdminVerificationPage() {
       await api.post(`/v1/verification/requests/${id}/approve/`);
       setRequests(prev => prev.map(r => r.id === id ? { ...r, status: 'VERIFIED' } : r));
     } catch (err) {
-      alert("Failed to approve node.");
+      alert("Failed to authorize node.");
     }
   };
 
@@ -68,12 +68,12 @@ export default function AdminVerificationPage() {
     <div className="min-h-screen pt-32 pb-20 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
-          <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Central Command</span>
+          <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Network Integrity Terminal</span>
           <h1 className="text-4xl md:text-6xl font-black text-text-main tracking-tight leading-tight">
-            Verification <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-400">Stream Audit.</span>
+            Node <br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-400">Verification Audit.</span>
           </h1>
-          <p className="text-text-muted mt-6 text-lg max-w-xl">Review and authorize global talent nodes within the integrity protocol.</p>
+          <p className="text-text-muted mt-6 text-lg max-w-xl">Processing authorization protocols for talent nodes within the integrity protocol.</p>
         </div>
 
         {error && (
@@ -87,8 +87,8 @@ export default function AdminVerificationPage() {
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="border-b border-glass-border/50">
-                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Node User</th>
-                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Protocol Type</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Node Identity</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Transmission Logic</th>
                   <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Status</th>
                   <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Timestamp</th>
                   <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest text-right">Actions</th>
@@ -141,13 +141,13 @@ export default function AdminVerificationPage() {
                               onClick={() => handleReject(req.id)}
                               className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-red-500 hover:text-white transition-all"
                             >
-                              Deny
+                              Reject
                             </button>
                             <button
                               onClick={() => handleApprove(req.id)}
-                              className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10"
+                              className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-emerald-500 hover:text-white transition-all shadow-signal"
                             >
-                              Verify
+                              Authorize
                             </button>
                           </div>
                         )}

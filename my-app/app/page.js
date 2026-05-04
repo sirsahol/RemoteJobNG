@@ -74,12 +74,12 @@ export default function HomePage() {
             </div>
           
           <h1 className="text-6xl md:text-9xl font-black mb-10 leading-[0.85] tracking-tighter text-text-main animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-200">
-            Work Globally.<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500">Stay Local.</span>
+            Global Execution.<br />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-400 to-blue-500">Local Sovereignty.</span>
           </h1>
           
           <p className="text-text-muted text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed font-medium animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
-            The authoritative interface connecting Nigeria&apos;s technical elite with the world&apos;s most ambitious decentralized organizations.
+            The authoritative interface integrating Nigeria&apos;s technical elite into high-bandwidth global organizations. Fixed for the 2026 talent economy.
           </p>
 
           {/* Search Protocol */}
@@ -99,7 +99,7 @@ export default function HomePage() {
               </div>
               <button type="submit"
                 className="bg-blue-600 hover:bg-blue-500 text-white font-black text-xs uppercase tracking-[0.3em] px-14 py-6 rounded-2xl transition-all shadow-xl shadow-blue-600/30 active:scale-95">
-                Explore Nodes
+                Query Nodes
               </button>
             </form>
           </div>
@@ -126,11 +126,11 @@ export default function HomePage() {
                 <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest">Global Verification Protocol</span>
               </div>
               <h2 className="text-4xl md:text-6xl font-black text-text-main tracking-tight leading-[0.95]">
-                Proof of <br />
-                <span className="text-blue-500">Reliability.</span>
+                Verified <br />
+                <span className="text-blue-500">Infrastructure.</span>
               </h2>
               <p className="text-text-muted text-xl font-medium leading-relaxed">
-                We&apos;ve established the world&apos;s first decentralized trust system for remote work. From Starlink-verified connectivity to Solar-backed infrastructure, we verify the signals that matter.
+                We enforce the standards of the modern remote stack. From Starlink-verified connectivity to active solar backup, we validate the hardware and the human behind it.
               </p>
               <div className="grid grid-cols-2 gap-6 pt-6">
                 {[
@@ -272,69 +272,20 @@ export default function HomePage() {
             <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] group-hover:bg-blue-500/20 transition-all duration-1000" />
             <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-[120px] group-hover:bg-indigo-500/20 transition-all duration-1000" />
             
-            <h2 className="text-6xl md:text-8xl font-black text-text-main mb-10 relative z-10 tracking-tighter leading-[0.85]">Expand Your <br /><span className="text-blue-500">Horizon.</span></h2>
-            <p className="text-text-muted mb-16 text-xl md:text-2xl relative z-10 max-w-2xl mx-auto font-medium leading-relaxed">Join 15,000+ elite technical nodes interfacing with the global decentralized economy.</p>
+            <h2 className="text-6xl md:text-8xl font-black text-text-main mb-10 relative z-10 tracking-tighter leading-[0.85]">Scale Your <br /><span className="text-blue-500">Execution.</span></h2>
+            <p className="text-text-muted mb-16 text-xl md:text-2xl relative z-10 max-w-2xl mx-auto font-medium leading-relaxed">Establish your node. Join 15,000+ engineers already deployed within the global technical network.</p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center relative z-10">
               <Link href="/signup" className="bg-text-main text-bg-page font-black text-xs uppercase tracking-[0.3em] px-16 py-7 rounded-2xl hover:scale-105 transition-all shadow-2xl shadow-blue-500/10 active:scale-95">
                 Establish Identity
               </Link>
               <Link href="/jobs" className="glass-card px-16 py-7 text-text-main font-black text-xs uppercase tracking-[0.3em] border-glass-border hover:bg-glass-surface transition-all active:scale-95 bg-glass-surface">
-                Explore Nodes
+                Query Nodes
               </Link>
             </div>
           </div>
         </div>
       </section>
-
-      {/* Advanced Footer */}
-      <footer className="py-32 px-4 border-t border-glass-border bg-bg-page/40">
-        <div className="max-w-6xl mx-auto">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-20 mb-20">
-                <div className="md:col-span-1">
-                    <h4 className="text-2xl font-black text-text-main mb-8 tracking-tighter italic">RemoteJob<span className="text-blue-400">NG</span></h4>
-                    <p className="text-sm font-medium text-text-muted/60 leading-relaxed">The authoritative talent interface for Nigerian engineering excellence in the global remote market. Engineered for 2026.</p>
-                </div>
-                <div>
-                    <h4 className="text-blue-400 font-bold mb-8 text-[10px] uppercase tracking-[0.4em]">Nodes</h4>
-                    <ul className="space-y-5 text-xs font-black uppercase tracking-widest">
-                        <li><Link href="/jobs" className="text-text-muted/60 hover:text-text-main transition-colors">Job Protocol</Link></li>
-                        <li><Link href="/pricing" className="text-text-muted/60 hover:text-text-main transition-colors">Deployment Plans</Link></li>
-                        <li><Link href="/signup" className="text-text-muted/60 hover:text-text-main transition-colors">Identity Setup</Link></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 className="text-blue-400 font-bold mb-8 text-[10px] uppercase tracking-[0.4em]">Corporate</h4>
-                    <ul className="space-y-5 text-xs font-black uppercase tracking-widest">
-                        <li><Link href="/about" className="text-text-muted/60 hover:text-text-main transition-colors">Vision Architecture</Link></li>
-                        <li><Link href="/contact" className="text-text-muted/60 hover:text-text-main transition-colors">Terminal Support</Link></li>
-                        <li><Link href="/terms" className="text-text-muted/60 hover:text-text-main transition-colors">Protocol Legal</Link></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 className="text-blue-500 font-bold mb-8 text-[10px] uppercase tracking-[0.4em]">Status</h4>
-                    <div className="p-6 rounded-2xl bg-glass-surface border border-glass-border">
-                        <div className="flex items-center gap-3 mb-2">
-                            <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
-                            <span className="text-[10px] font-black text-text-main uppercase tracking-widest">Network Online</span>
-                        </div>
-                        <p className="text-[9px] font-medium text-text-muted uppercase tracking-widest">Latency: 14ms Global</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div className="pt-10 border-t border-glass-border flex flex-col md:flex-row items-center justify-between gap-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/20">
-                    © 2026 RemoteJobNG. Transmitting from Lagos, NG.
-                </p>
-                <div className="flex gap-8">
-                    {["Twitter", "LinkedIn", "GitHub"].map(link => (
-                        <Link key={link} href="#" className="text-[10px] font-black uppercase tracking-[0.3em] text-text-muted/20 hover:text-blue-400 transition-colors">{link}</Link>
-                    ))}
-                </div>
-            </div>
-        </div>
-      </footer>
     </div>
   );
 }

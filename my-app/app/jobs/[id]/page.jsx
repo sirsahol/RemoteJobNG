@@ -75,12 +75,12 @@ export default function JobDetails() {
     if (!job || job.detail === "Not found.") {
         return (
             <div className="flex flex-col items-center justify-center min-h-screen text-text-muted">
-                <p className="text-xl font-bold">Opportunity not found.</p>
+                <p className="text-xl font-bold">Protocol Missing.</p>
                 <button
                     onClick={() => router.push("/jobs")}
                     className="text-blue-600 dark:text-blue-400 mt-4 hover:underline font-black uppercase text-xs tracking-widest"
                 >
-                    &larr; Return to Market
+                    &larr; Query Market
                 </button>
             </div>
         );
@@ -104,7 +104,7 @@ export default function JobDetails() {
                     className="text-text-muted hover:text-text-main transition-colors mb-8 flex items-center gap-2 group"
                 >
                     <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Market Feed</span>
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em]">Terminal Stream</span>
                 </button>
 
                 <div className="glass-card overflow-hidden border-glass-border animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -135,7 +135,7 @@ export default function JobDetails() {
                             <section>
                                 <h2 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
                                     <span className="w-2 h-4 bg-blue-500 rounded-full"></span>
-                                    Position intelligence
+                                    Node Requirements
                                 </h2>
                                 <div className="text-text-main/80 leading-relaxed whitespace-pre-wrap font-medium text-lg">
                                     {job.description}
@@ -152,13 +152,13 @@ export default function JobDetails() {
                                             : "bg-glass-surface text-text-muted border-glass-border hover:bg-text-muted/5"
                                     } disabled:opacity-50`}
                                 >
-                                    {saved ? "★ Saved to Watchlist" : "☆ Save Position"}
+                                    {saved ? "★ Saved to Watchlist" : "☆ Pin Protocol"}
                                 </button>
                                 <Link
                                     href={`/jobs/${job.slug || job.id}/apply`}
-                                    className="flex-[1.5] bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest text-center transition-all shadow-lg shadow-blue-600/20 active:scale-95"
+                                    className="flex-[1.5] bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-black text-xs uppercase tracking-widest text-center transition-all shadow-signal active:scale-95"
                                 >
-                                    Transmit Application
+                                    Broadcast Intent
                                 </Link>
                             </div>
                         </div>
@@ -166,7 +166,7 @@ export default function JobDetails() {
                         {/* Side Panel */}
                         <div className="p-8 md:p-12 bg-glass-surface space-y-10">
                             <section>
-                                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4">Metadata</h3>
+                                <h3 className="text-[10px] font-black text-text-muted uppercase tracking-[0.3em] mb-4">Protocol Parameters</h3>
                                 <div className="space-y-6">
                                     {formatSalary() && (
                                         <div>
@@ -190,7 +190,7 @@ export default function JobDetails() {
                             </section>
 
                             <section className="p-6 rounded-2xl bg-gradient-to-br from-blue-600/10 to-indigo-600/10 border border-glass-border">
-                                <h4 className="text-blue-600 dark:text-blue-400 font-black text-xs uppercase tracking-widest mb-2">Verified Opportunity</h4>
+                                <h4 className="text-blue-600 dark:text-blue-400 font-black text-xs uppercase tracking-widest mb-2">Verified Signal</h4>
                                 <p className="text-text-muted text-[10px] leading-relaxed font-medium">This listing has been indexed by our 2026 talent protocol. Verified Nigerian remote role.</p>
                             </section>
 

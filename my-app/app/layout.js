@@ -1,5 +1,7 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer";
+import CookieBanner from "./components/CookieBanner/CookieBanner";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -45,8 +47,12 @@ export default function RootLayout({ children }) {
       >
         <ThemeProvider>
           <AuthProvider>
-            <Navbar />
-            <main className="relative z-10">{children}</main>
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <main className="flex-grow relative z-10">{children}</main>
+              <Footer />
+              <CookieBanner />
+            </div>
           </AuthProvider>
         </ThemeProvider>
       </body>

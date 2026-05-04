@@ -114,7 +114,7 @@ export default function NotificationsPage() {
                             key={n.id}
                             onClick={() => !n.is_read && markRead(n.id)}
                             className={`glass-card p-6 border-glass-border cursor-pointer transition-all duration-500 group relative overflow-hidden ${
-                                !n.is_read ? "border-blue-500/30 bg-blue-500/5 shadow-[0_0_30px_-10px_rgba(59,130,246,0.2)]" : "opacity-60 hover:opacity-100"
+                                !n.is_read ? "border-blue-500/30 bg-blue-500/5 shadow-notification" : "opacity-60 hover:opacity-100"
                             }`}
                             style={{ animationDelay: `${idx * 50}ms` }}
                         >
@@ -247,7 +247,7 @@ export default function NotificationsPage() {
                                     </span>
                                 </div>
                             </div>
-                            <div className="w-2 h-2 rounded-full bg-blue-500/40 group-hover:bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)] transition-all"></div>
+                            <div className="w-2 h-2 rounded-full bg-blue-500/40 group-hover:bg-blue-500 shadow-signal transition-all"></div>
                         </div>
                     ))
                 )}

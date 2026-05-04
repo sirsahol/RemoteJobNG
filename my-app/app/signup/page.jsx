@@ -63,15 +63,15 @@ export default function SignupPage() {
     <div className="min-h-screen flex items-center justify-center px-4 pt-32 pb-20">
       <div className="glass-card p-10 w-full max-w-lg border-glass-border shadow-blue-500/10">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-text-main mb-2">Join RemoteJobNG</h2>
-          <p className="text-text-muted text-sm">Empowering Nigerian talent for a global future.</p>
+          <h2 className="text-3xl font-bold text-text-main mb-2">Establish Node Presence</h2>
+          <p className="text-text-muted text-sm font-medium">Interface for Nigerian Engineering Excellence.</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSignup}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-                Username
+                Identifier
               </label>
               <input
                 type="text"
@@ -85,7 +85,7 @@ export default function SignupPage() {
             </div>
             <div>
               <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-                Email
+                Communication Node
               </label>
               <input
                 type="email"
@@ -102,7 +102,7 @@ export default function SignupPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-                Password
+                Secret Sequence
               </label>
               <input
                 type="password"
@@ -116,7 +116,7 @@ export default function SignupPage() {
             </div>
             <div>
               <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-                Role
+                Operator Classification
               </label>
               <select
                 name="role"
@@ -124,8 +124,8 @@ export default function SignupPage() {
                 onChange={handleChange}
                 className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 transition-colors"
               >
-                <option value="job_seeker" className="bg-bg-page">Job Seeker</option>
-                <option value="employer" className="bg-bg-page">Employer</option>
+                <option value="job_seeker" className="bg-bg-page">Talent Node</option>
+                <option value="employer" className="bg-bg-page">Organization Entity</option>
               </select>
             </div>
           </div>
@@ -133,7 +133,7 @@ export default function SignupPage() {
           {formData.role === "employer" && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
               <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-                Company Name
+                Entity Title
               </label>
               <input
                 type="text"
@@ -148,14 +148,14 @@ export default function SignupPage() {
 
           <div>
             <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
-              Bio / Intro
+              Intelligence Brief
             </label>
             <textarea
               name="bio"
               value={formData.bio}
               onChange={handleChange}
               rows="3"
-              placeholder="Tell the global market about your expertise..."
+              placeholder="Define your technical capability..."
               className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
             ></textarea>
           </div>
@@ -176,15 +176,15 @@ export default function SignupPage() {
             disabled={loading}
             className="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95 disabled:opacity-50"
           >
-            {loading ? "Initializing..." : "Create Account"}
+            {loading ? "Initializing..." : "Initialize Identity"}
           </button>
         </form>
 
         <p className="text-center text-text-muted text-sm mt-8">
           Already a member?{" "}
-          <Link href="/login" className="text-blue-400 font-bold hover:text-text-main transition-colors">
-            Sign In
-          </Link>
+            <Link href="/login" className="text-blue-400 font-black hover:text-text-main transition-colors">
+              Synchronize
+            </Link>
         </p>
       </div>
     </div>

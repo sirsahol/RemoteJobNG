@@ -50,8 +50,8 @@ export default function PricingPage() {
 
   const TIER_STYLING = {
     basic: "border-glass-border bg-glass-surface",
-    featured: "border-blue-500/30 bg-blue-500/5 ring-1 ring-blue-500/20 shadow-xl shadow-blue-600/5",
-    premium: "border-indigo-500/30 bg-indigo-500/5 shadow-xl shadow-indigo-600/5",
+    featured: "border-blue-500/30 bg-blue-500/5 ring-1 ring-blue-500/20 shadow-featured",
+    premium: "border-indigo-500/30 bg-indigo-500/5 shadow-neural",
   };
 
   if (loading) return (
@@ -69,10 +69,10 @@ export default function PricingPage() {
         <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
           <span className="text-blue-400 font-bold tracking-[0.4em] text-[10px] uppercase mb-4 block">Deployment Plans</span>
           <h1 className="text-4xl md:text-6xl font-black text-text-main tracking-tight leading-none mb-6">
-            Scale your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Engineering Velocity.</span>
+            Amplify <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Technical Transmission.</span>
           </h1>
           <p className="text-text-muted text-lg max-w-2xl mx-auto font-medium">
-            Acquire world-class Nigerian remote talent through our verified listing protocols.
+            Interface with high-fidelity Nigerian talent nodes through our verified listing protocols.
           </p>
         </div>
 
@@ -85,7 +85,7 @@ export default function PricingPage() {
             >
               {plan.tier === "featured" && (
                 <div className="absolute -top-4 left-1/2 -translate-x-1/2">
-                  <span className="bg-blue-600 text-white text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-lg shadow-blue-600/20">Optimal Choice</span>
+                   <span className="bg-blue-600 text-white text-[9px] font-black uppercase tracking-[0.2em] px-4 py-1.5 rounded-full shadow-signal">Featured Protocol</span>
                 </div>
               )}
               
@@ -118,11 +118,11 @@ export default function PricingPage() {
                 disabled={initiating === plan.id}
                 className={`w-full py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 disabled:opacity-50 ${
                   plan.tier === "featured"
-                    ? "bg-blue-600 text-white hover:bg-blue-500 shadow-xl shadow-blue-600/20"
+                    ? "bg-blue-600 text-white hover:bg-blue-500 shadow-signal"
                     : "bg-glass-surface text-text-main/80 hover:bg-glass-surface/80 border border-glass-border"
                 }`}
               >
-                {initiating === plan.id ? "Initializing..." : "Acquire Tier"}
+                {initiating === plan.id ? "Initializing..." : "Commit Protocol"}
               </button>
             </div>
           ))}

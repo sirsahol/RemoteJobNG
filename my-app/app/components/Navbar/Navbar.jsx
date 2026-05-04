@@ -37,7 +37,11 @@ export default function Navbar() {
 
   return (
     <div className={`fixed top-0 left-0 w-full z-50 transition-all duration-700 px-4 md:px-8 ${scrolled ? 'py-4' : 'py-8'}`}>
-      <nav className={`max-w-7xl mx-auto glass-card px-6 py-3 flex items-center justify-between transition-all duration-500 ${scrolled ? 'shadow-2xl' : ''}`}>
+      <nav className={`max-w-7xl mx-auto glass-card px-6 py-3 flex items-center justify-between transition-all duration-500 ${
+        scrolled 
+          ? 'shadow-2xl bg-bg-page border-glass-border/50 backdrop-blur-2xl' 
+          : 'bg-glass-surface/90 border-glass-border/20'
+      }`}>
         {/* Technical Logo */}
         <Link
           href="/"
@@ -59,7 +63,7 @@ export default function Navbar() {
               href={link.href}
               className={`px-5 py-2 rounded-xl text-[10px] font-black tracking-[0.2em] transition-all duration-300 ${
                 pathname === link.href
-                  ? "bg-blue-600/10 text-blue-500 shadow-[inset_0_0_20px_rgba(59,130,246,0.1)] border border-blue-500/20"
+                  ? "bg-blue-600/10 text-blue-500 shadow-nav-active border border-blue-500/20"
                   : "text-text-muted hover:text-text-main hover:bg-glass-surface"
               }`}
             >

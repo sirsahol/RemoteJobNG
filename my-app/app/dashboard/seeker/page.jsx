@@ -114,15 +114,15 @@ export default function SeekerDashboard() {
           <div className="animate-in fade-in slide-in-from-left-4 duration-700">
             <span className="text-blue-600 dark:text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">Command Center</span>
             <h1 className="text-4xl md:text-5xl font-black text-text-main tracking-tight">
-              Welcome, <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-indigo-400">{profile?.username || user?.username}</span>
+              Identity <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-400 dark:to-indigo-400">{profile?.username || user?.username}</span> Synchronized
             </h1>
-            <p className="text-text-muted mt-3 text-lg">Your global career trajectory is active.</p>
+            <p className="text-text-muted mt-3 text-lg uppercase tracking-widest font-black text-xs">Global Trajectory: ACTIVE</p>
           </div>
           
           <div className="flex gap-3 animate-in fade-in slide-in-from-right-4 duration-700">
              <Link href="/jobs" className="glass-card px-6 py-3 border-glass-border hover:bg-glass-surface text-text-main font-bold transition-all text-sm flex items-center gap-2">
                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
-               Signal Search
+               Query Market Nodes
              </Link>
              <button onClick={() => setShowAlertForm(true)} className="bg-blue-600 hover:bg-blue-500 text-white px-6 py-3 rounded-2xl font-bold transition-all text-sm shadow-lg shadow-blue-600/20">
                + Establish Alert
@@ -198,7 +198,7 @@ export default function SeekerDashboard() {
             <section className="glass-card p-8 border-glass-border relative overflow-hidden">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="text-xl font-bold text-text-main flex items-center gap-3">
-                  <span className="w-2 h-6 bg-indigo-500 rounded-full shadow-[0_0_10px_rgba(99,102,241,0.5)]"></span>
+                  <span className="w-2 h-6 bg-indigo-500 rounded-full shadow-neural"></span>
                   Neural Matches
                 </h2>
                 <span className="bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-indigo-500/20">AI Synchronized</span>
@@ -349,7 +349,7 @@ export default function SeekerDashboard() {
                       <span className="text-text-muted text-[9px] font-black uppercase tracking-[0.1em]">{alert.frequency} · {alert.is_active ? "Active" : "Offline"}</span>
                       <button
                         onClick={() => handleToggleAlert(alert.id)}
-                        className={`w-9 h-5 rounded-full relative transition-all duration-500 ${alert.is_active ? "bg-blue-600 shadow-[0_0_15px_rgba(37,99,235,0.4)]" : "bg-text-muted/20"}`}
+                        className={`w-9 h-5 rounded-full relative transition-all duration-500 ${alert.is_active ? "bg-blue-600 shadow-signal" : "bg-text-muted/20"}`}
                       >
                         <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all duration-500 shadow-sm ${alert.is_active ? "left-5" : "left-1"}`}></div>
                       </button>

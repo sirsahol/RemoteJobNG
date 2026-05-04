@@ -10,12 +10,12 @@ export default function AboutPage() {
     <main className="min-h-screen pt-32 pb-20">
       {/* Narrative Hero */}
       <section className="max-w-5xl mx-auto px-4 text-center mb-24 animate-in fade-in slide-in-from-top-4 duration-700">
-        <span className="text-blue-400 font-bold tracking-[0.4em] text-[10px] uppercase mb-4 block">The Vision</span>
+        <span className="text-blue-400 font-bold tracking-[0.4em] text-[10px] uppercase mb-4 block">Core Architecture</span>
         <h1 className="text-5xl md:text-7xl font-black text-text-main tracking-tighter leading-none mb-8">
-          The Hub of <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Nigerian Talent.</span>
+          Nigeria&apos;s Authoritative <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Talent Interface.</span>
         </h1>
         <p className="text-xl md:text-2xl text-text-muted/60 max-w-3xl mx-auto font-medium leading-relaxed">
-          RemoteJobNG is an advanced talent protocol engineered to connect elite Nigerian professionals with the world&apos;s most innovative remote opportunities.
+          RemoteJobNG is an advanced talent protocol engineered to integrate Nigeria&apos;s technical elite into high-bandwidth global opportunities.
         </p>
       </section>
 
@@ -27,7 +27,7 @@ export default function AboutPage() {
             <div>
               <h2 className="text-3xl font-black text-text-main mb-6 tracking-tight">Our Mission</h2>
               <p className="text-text-muted text-lg leading-relaxed font-medium mb-6">
-                We exist to bridge the gap between Nigeria&apos;s untapped expertise and the global digital economy. In a world without borders, location should never be a constraint for brilliance.
+                We integrate Nigeria&apos;s technical expertise into the global digital economy. In a borderless market, geography is no longer a valid technical constraint.
               </p>
               <div className="flex gap-4">
                 <div className="w-12 h-1 bg-blue-500 rounded-full"></div>
@@ -90,15 +90,15 @@ export default function AboutPage() {
       {/* CTA Final */}
       <section className="max-w-4xl mx-auto px-4 text-center">
         <div className="glass-card p-16 border-glass-border bg-gradient-to-br from-blue-600/20 to-indigo-700/20">
-          <h2 className="text-3xl font-black text-text-main mb-6 tracking-tight">Ready to initiate your next career phase?</h2>
+          <h2 className="text-3xl font-black text-text-main mb-6 tracking-tight">Ready to initiate your next career trajectory?</h2>
           <div className="flex flex-col md:flex-row gap-4 justify-center">
             <Link href="/jobs"
               className="bg-blue-600 hover:bg-blue-500 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 active:scale-95">
-              Launch Search
+              Initiate Market Query
             </Link>
             <Link href="/signup"
               className="glass-card px-10 py-4 border-glass-border hover:bg-bg-page/5 text-text-main font-black text-xs uppercase tracking-widest transition-all">
-              Join Protocol
+              Establish Node
             </Link>
           </div>
         </div>

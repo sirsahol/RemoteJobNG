@@ -43,15 +43,15 @@ function LoginForm() {
         <div className="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
         
         <div className="text-center mb-12 relative z-10">
-          <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Secure Auth</span>
-          <h2 className="text-4xl font-black text-text-main tracking-tight leading-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Node</span></h2>
-          <p className="text-text-muted mt-3 font-medium text-sm">Synchronizing your professional trajectory.</p>
+          <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Auth Protocol</span>
+          <h2 className="text-4xl font-black text-text-main tracking-tight leading-tight">Initiate <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Session</span></h2>
+          <p className="text-text-muted mt-3 font-medium text-sm">Authenticating Node Presence.</p>
         </div>
 
         <form className="space-y-8 relative z-10" onSubmit={handleSubmit}>
           <div>
             <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em] mb-3">
-              Identity Identifier
+              Neural ID
             </label>
             <input
               type="text"
@@ -66,9 +66,9 @@ function LoginForm() {
           <div>
             <div className="flex items-center justify-between mb-3">
               <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em]">
-                Secret Sequence
+                Access Key
               </label>
-              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-text-main transition-colors">Recover</Link>
+              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-text-main transition-colors">Reset Protocol</Link>
             </div>
             <input
               type="password"
@@ -89,9 +89,9 @@ function LoginForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-xl shadow-blue-600/20 active:scale-[0.98] disabled:opacity-50"
+            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-signal active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? "Authenticating..." : "Initiate Session"}
+            {loading ? "Processing..." : "Commit Session"}
           </button>
         </form>
 
@@ -102,7 +102,7 @@ function LoginForm() {
               href="/signup"
               className="text-blue-400 font-black hover:text-text-main transition-colors ml-2"
             >
-              Establish Identity
+              Create Node
             </Link>
           </p>
         </div>

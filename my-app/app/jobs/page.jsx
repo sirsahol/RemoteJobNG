@@ -104,10 +104,10 @@ function AllJobsContent() {
         <div className="max-w-6xl mx-auto">
           <div className="mb-8">
             <h1 className="text-4xl font-bold text-text-main mb-2 tracking-tight">
-               Discover Your Next <span className="text-blue-600 dark:text-blue-400">Remote Move</span>
+               Identify Your Next <span className="text-blue-600 dark:text-blue-400">Remote Pivot</span>
             </h1>
             <p className="text-text-muted font-medium">
-              {totalCount > 0 ? `${totalCount.toLocaleString()} verified roles found.` : "Explore high-impact remote careers."}
+              {totalCount > 0 ? `${totalCount.toLocaleString()} verified nodes identified.` : "Access high-impact remote roles."}
             </p>
           </div>
 
@@ -115,7 +115,7 @@ function AllJobsContent() {
             <div className="flex-1 relative flex items-center">
               <input
                 type="text"
-                placeholder={searchMode === "neural" ? "Ask naturally: 'React jobs in Europe with high pay'..." : "Search jobs, skills, companies..."}
+                placeholder={searchMode === "neural" ? "Ask naturally: 'React jobs in Europe with high pay'..." : "Filter by role, stack, or organization..."}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full bg-transparent px-6 py-4 text-text-main placeholder-text-muted focus:outline-none"
@@ -146,7 +146,7 @@ function AllJobsContent() {
 
             <button type="submit"
               className="bg-blue-600 hover:bg-blue-500 text-white px-8 py-4 rounded-xl font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95">
-              Search
+              Execute
             </button>
           </form>
         </div>
@@ -172,7 +172,7 @@ function AllJobsContent() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
               {jobs.map((job) => (
                 <div key={job.id}
-                  className={`glass-card p-6 flex flex-col gap-4 group transition-all duration-300 hover:border-blue-500/40 ${job.is_featured ? "border-blue-500/30 ring-1 ring-blue-500/10 shadow-[0_0_20px_rgba(59,130,246,0.1)]" : "border-glass-border"}`}>
+                  className={`glass-card p-6 flex flex-col gap-4 group transition-all duration-300 hover:border-blue-500/40 ${job.is_featured ? "border-blue-500/30 ring-1 ring-blue-500/10 shadow-featured" : "border-glass-border"}`}>
                   
                   <div className="flex items-start justify-between">
                     <div className="flex gap-4">
@@ -206,9 +206,9 @@ function AllJobsContent() {
 
                   <div className="mt-auto pt-6 border-t border-glass-border flex items-center justify-between">
                     <div className="flex flex-col">
-                      <span className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-bold mb-1">Potential Pay</span>
+                      <span className="text-[10px] text-text-muted uppercase tracking-[0.2em] font-bold mb-1">Resource Allocation</span>
                       <span className="text-sm font-bold text-text-main">
-                        {formatSalary(job) || "Competitive"}
+                        {formatSalary(job) || "Competitive Protocol"}
                       </span>
                     </div>
                     <Link href={`/jobs/${job.slug || job.id}`}
@@ -240,8 +240,8 @@ function AllJobsContent() {
         ) : (
           <div className="text-center py-32 glass-card border-dashed border-glass-border">
             <div className="text-4xl mb-4 opacity-40">🔍</div>
-            <p className="text-text-muted text-lg font-bold mb-2">No matching roles found</p>
-            <p className="text-text-muted/60 text-sm">Try broadening your filters or search terms.</p>
+            <p className="text-text-muted text-lg font-bold mb-2">Zero matching nodes identified</p>
+            <p className="text-text-muted/60 text-sm">Adjust parameters to expand search radius.</p>
           </div>
         )}
       </div>

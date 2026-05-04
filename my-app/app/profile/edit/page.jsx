@@ -112,13 +112,13 @@ export default function EditProfilePage() {
             className="text-text-muted hover:text-text-main transition-colors mb-8 flex items-center gap-2 group"
         >
             <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exit Editor</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.2em]">Terminate Session</span>
         </button>
 
         <div className="glass-card p-10 border-glass-border animate-in zoom-in-95 duration-700">
           <div className="mb-12">
-            <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Personal Identity</span>
-            <h1 className="text-4xl font-black text-text-main tracking-tight leading-tight">Configure <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Profile Protocol</span></h1>
+            <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Identity Protocol</span>
+            <h1 className="text-4xl font-black text-text-main tracking-tight leading-tight">Configure <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Node Parameters</span></h1>
             <p className="text-text-muted mt-3 font-medium">Calibrate your professional presence for the global market.</p>
           </div>
 
@@ -142,12 +142,12 @@ export default function EditProfilePage() {
                </h2>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Given Name</label>
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Primary Identifier</label>
                   <input type="text" name="first_name" value={form.first_name} onChange={handleChange}
                     className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Family Name</label>
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Secondary Identifier</label>
                   <input type="text" name="last_name" value={form.last_name} onChange={handleChange}
                     className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                 </div>
@@ -169,12 +169,12 @@ export default function EditProfilePage() {
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Geographic Location</label>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Spatial Coordinate</label>
                       <input type="text" name="location" value={form.location} onChange={handleChange}
                         className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Professional Tenure (Years)</label>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Operational Lifecycle (Years)</label>
                       <input type="number" name="years_of_experience" value={form.years_of_experience} onChange={handleChange}
                         className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                     </div>
@@ -309,7 +309,7 @@ export default function EditProfilePage() {
             <section className="space-y-6">
                <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
                  <span className="w-4 h-px bg-glass-border/20"></span>
-                 Digital Footprint
+                 Neural Links
                </h2>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {["website", "linkedin_url", "github_url"].map(name => (
@@ -324,7 +324,7 @@ export default function EditProfilePage() {
 
             {/* Intelligence Bio */}
             <section className="space-y-6">
-              <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Identity Narrative (Bio)</label>
+              <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Dossier Metadata (Bio)</label>
               <textarea name="bio" value={form.bio} onChange={handleChange} rows={6}
                 placeholder="Compose a compelling narrative of your technical expertise and career achievements..."
                 className="w-full bg-glass-surface border border-glass-border rounded-2xl p-6 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all resize-none leading-relaxed font-medium" />
@@ -347,7 +347,7 @@ export default function EditProfilePage() {
 
             <div className="flex gap-4 pt-4">
               <button type="submit" disabled={saving}
-                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-blue-600/20 active:scale-95 disabled:opacity-50">
+                className="flex-1 bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-signal active:scale-95 disabled:opacity-50">
                 {saving ? "Synchronizing..." : "Commit Protocol"}
               </button>
             </div>

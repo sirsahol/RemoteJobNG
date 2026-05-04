@@ -57,19 +57,19 @@ export default function PublicProfilePage() {
               {profile.profile_picture ? (
                 <Image src={profile.profile_picture} alt={profile.full_name || profile.username}
                   width={128} height={128}
-                  className="w-32 h-32 rounded-[2.5rem] object-cover border-2 border-glass-border p-1 shadow-2xl" />
+                  className="w-32 h-32 rounded-[2.5rem] object-cover border-2 border-glass-border p-1 shadow-neural" />
               ) : (
-                <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-2xl">
+                <div className="w-32 h-32 rounded-[2.5rem] bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-4xl font-black shadow-neural">
                   {(profile.full_name || profile.username)?.[0]?.toUpperCase()}
                 </div>
               )}
               <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-emerald-500 rounded-full border-4 border-bg-page flex items-center justify-center">
-                 <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                 <div className="w-2 h-2 bg-white rounded-full animate-pulse shadow-signal"></div>
               </div>
             </div>
 
             <div className="flex-1 text-center md:text-left">
-              <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Talent Identity verified</span>
+              <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Node Identity: Verified</span>
               <h1 className="text-4xl font-black text-text-main tracking-tight leading-tight mb-2">
                 {profile.full_name || profile.username}
               </h1>
@@ -96,13 +96,13 @@ export default function PublicProfilePage() {
                 {profile.linkedin_url && (
                   <a href={profile.linkedin_url} target="_blank" rel="noopener noreferrer"
                     className="px-6 py-3 bg-[#0077b5]/10 hover:bg-[#0077b5]/20 border border-[#0077b5]/20 rounded-xl text-[10px] font-black uppercase tracking-widest text-[#00a0dc] transition-all">
-                    Professional
+                    Neural ID
                   </a>
                 )}
                 {profile.github_url && (
                   <a href={profile.github_url} target="_blank" rel="noopener noreferrer"
                     className="px-6 py-3 bg-glass-surface hover:bg-glass-surface/80 border border-glass-border rounded-xl text-[10px] font-black uppercase tracking-widest text-text-main transition-all">
-                    Repository
+                    Source Protocol
                   </a>
                 )}
               </div>
@@ -123,18 +123,18 @@ export default function PublicProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Experience Card */}
             <div className="glass-card p-8 border-glass-border md:col-span-1">
-                <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] mb-6">Service Tenure</h2>
+                <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] mb-6">Operational Lifecycle</h2>
                 <div className="flex items-baseline gap-2">
                     <span className="text-5xl font-black text-text-main">{profile.years_of_experience || "0"}</span>
                     <span className="text-xs font-bold text-text-muted/60 uppercase tracking-widest">Years</span>
                 </div>
-                <p className="text-text-muted/30 text-[9px] font-medium uppercase tracking-widest mt-4">Verified Professional cycle</p>
+                <p className="text-text-muted/30 text-[9px] font-medium uppercase tracking-widest mt-4">Verified Protocol Cycle</p>
             </div>
 
             {/* Skills Card */}
             {profile.skills?.length > 0 && (
                 <div className="glass-card p-8 border-glass-border md:col-span-2">
-                    <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] mb-6">Core Competencies</h2>
+                    <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] mb-6">Functional Units</h2>
                     <div className="flex flex-wrap gap-3">
                         {profile.skills.map((skill) => (
                             <span key={skill.id || skill.name}

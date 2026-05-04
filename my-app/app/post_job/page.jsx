@@ -65,12 +65,12 @@ export default function PostJobPage() {
       <div className="max-w-5xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
         <div className="lg:col-span-2">
           <div className="mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
-            <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Employer Terminal</span>
+            <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Broadcast Node</span>
             <h1 className="text-5xl md:text-8xl font-black text-text-main tracking-tighter leading-[0.85] mb-8">
-              Broadcast <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-500 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-500">New Opening.</span>
+              Initiate <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-500 to-blue-500 dark:from-blue-400 dark:via-indigo-400 dark:to-blue-500">Protocol Broadcast.</span>
             </h1>
-            <p className="text-text-muted text-xl max-w-xl leading-relaxed font-medium">Interface your opportunity with the highest density of technical excellence in the region.</p>
+            <p className="text-text-muted text-xl max-w-xl leading-relaxed font-medium">Transmitting requirements to the neural talent market.</p>
           </div>
 
           <div className="glass-card p-1 md:p-1.5 border-glass-border bg-glass-surface/50 animate-in fade-in slide-in-from-bottom-8 duration-1000">
@@ -117,7 +117,7 @@ export default function PostJobPage() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
                   <div className="space-y-3">
-                    <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Engagement Model</label>
+                    <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Contract Protocol</label>
                     <div className="relative group">
                       <select 
                         name="job_type" 
@@ -126,7 +126,7 @@ export default function PostJobPage() {
                         required
                         className="w-full bg-glass-surface border border-glass-border rounded-xl p-5 text-text-main focus:outline-none focus:bg-glass-surface/80 transition-all appearance-none ring-1 ring-glass-border"
                       >
-                        <option value="" className="bg-bg-page">Select Model</option>
+                        <option value="" className="bg-bg-page">Select Protocol</option>
                         <option value="full_time" className="bg-bg-page">Full Time</option>
                         <option value="part_time" className="bg-bg-page">Part Time</option>
                         <option value="contract" className="bg-bg-page">Contract</option>
@@ -139,7 +139,7 @@ export default function PostJobPage() {
                     </div>
                   </div>
                   <div className="space-y-3">
-                    <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Geographic Preference</label>
+                    <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Spatial Requirement</label>
                     <input 
                       type="text" 
                       name="location" 
@@ -152,7 +152,7 @@ export default function PostJobPage() {
                 </div>
 
                 <div className="p-8 rounded-2xl bg-glass-surface/30 border border-glass-border ring-1 ring-glass-border space-y-6">
-                  <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Compensation Architecture</label>
+                  <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Resource Allocation</label>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <input 
                       type="number" 
@@ -184,7 +184,7 @@ export default function PostJobPage() {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Position Intelligence</label>
+                  <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-[0.2em]">Requirement Parameters</label>
                   <textarea 
                     name="description" 
                     value={formData.description} 
@@ -199,7 +199,7 @@ export default function PostJobPage() {
                 <button 
                   type="submit" 
                   disabled={submitting}
-                  className="w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all shadow-2xl shadow-blue-600/30 active:scale-[0.98] disabled:opacity-50 group"
+                  className="w-full bg-blue-600 hover:bg-blue-500 text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all shadow-signal active:scale-[0.98] disabled:opacity-50 group"
                 >
                   <span className="flex items-center justify-center gap-3">
                     {submitting ? "Broadcasting..." : "Establish Role Transmission"}
@@ -216,12 +216,12 @@ export default function PostJobPage() {
           <div className="glass-card p-8 border-blue-500/20 bg-blue-500/5 animate-in fade-in slide-in-from-right-4 duration-700 delay-300">
             <h3 className="text-blue-500 dark:text-blue-400 font-bold text-[10px] uppercase tracking-[0.3em] mb-6 flex items-center gap-3">
               <span className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></span>
-              Verification Nudge
+              Authority Signal
             </h3>
-            <p className="text-text-main font-bold text-sm mb-4">Verified Employers get 3x more Elite applicants.</p>
-            <p className="text-text-muted text-xs leading-relaxed mb-6">Organizations with the &quot;Verified Employer&quot; trust badge are prioritized in neural matching and receive higher-quality signal transmissions from top-tier talent.</p>
+            <p className="text-text-main font-bold text-sm mb-4">Nodes with verified status receive 3x higher signal density.</p>
+            <p className="text-text-muted text-xs leading-relaxed mb-6">Verified entities are prioritized in market queries and receive higher-quality signal transmissions from top-tier talent.</p>
             <Link href="/profile/edit" className="text-[10px] font-black text-text-main uppercase tracking-widest bg-glass-surface border border-glass-border px-6 py-3 rounded-xl hover:bg-text-main hover:text-bg-page transition-all block text-center">
-              Acquire Badge
+              Elevate Status
             </Link>
           </div>
 
