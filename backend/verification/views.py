@@ -6,6 +6,7 @@ import os
 import mimetypes
 from .models import VerificationRequest, TrustBadge, UserBadge
 from .serializers import VerificationRequestSerializer, TrustBadgeSerializer, UserBadgeSerializer
+from notifications.utils import send_user_notification
 
 class VerificationRequestViewSet(viewsets.ModelViewSet):
     serializer_class = VerificationRequestSerializer
@@ -62,6 +63,12 @@ class VerificationRequestViewSet(viewsets.ModelViewSet):
                 UserBadge.objects.get_or_create(user=verification_request.user, badge=badge)
             except TrustBadge.DoesNotExist:
                 pass
+        
+        # Real-time notification
+        send_user_notification(
+            user.id, 
+            f"Your {verification_request.get_request_type_display()} has been approved!"
+        )
                 
         return Response({'status': 'verified'})
 
@@ -71,6 +78,13 @@ class VerificationRequestViewSet(viewsets.ModelViewSet):
         verification_request.status = 'REJECTED'
         verification_request.notes = request.data.get('notes', '')
         verification_request.save()
+
+        # Real-time notification
+        send_user_notification(
+            verification_request.user.id, 
+            f"Your {verification_request.get_request_type_display()} was not approved. Check feedback for details."
+        )
+
         return Response({'status': 'rejected'})
 
     @action(detail=True, methods=['get'])

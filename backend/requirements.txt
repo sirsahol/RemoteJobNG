@@ -42,3 +42,8 @@ openai==1.54.3
 pgvector==0.2.5
 sentence-transformers==2.7.0
 numpy==1.26.4
+
+# Real-time Infrastructure
+channels==4.2.0
+channels-redis==4.2.1
+daphne==4.1.2

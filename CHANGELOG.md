@@ -6,14 +6,33 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 
 ---
 
+## [1.2.0-rc.1] — 2026-05-04
+
+Finalization of the "Trust & Intelligence" phase, introducing real-time interactions and advanced matching metrics.
+
+### Added — Real-time & Interaction
+- **WebSocket Infrastructure**: Integrated Django Channels and Daphne for bi-directional real-time communication.
+- **Live Notifications**: Implemented `NotificationConsumer` for instant delivery of verification status updates and job matches.
+- **Notification Center**: New frontend UI for managing real-time alerts and deployment triggers.
+
+### Added — Intelligence & Analytics
+- **Employer Insights**: Advanced dashboard for employers featuring candidate match breakdown and integrity scoring.
+- **Batch Indexing**: Management command `index_intelligence` for retroactively generating embeddings for all existing jobs and users.
+- **Neural Matching 2.0**: Refined the matching engine to include a 30% reputation weight alongside 70% semantic similarity.
+
+### Added — Verification Portal
+- **Seeker Verification Portal**: Dedicated interface for users to upload identity, skill, and infrastructure evidence.
+- **Real-time Approval Loop**: Administrative verification actions now trigger immediate WebSocket broadcasts to the seeker's dashboard.
+
+---
+
 ## [Unreleased]
 
-### Planned (Phase 3)
-
-- Real-time job matching notifications (WebSockets)
-- Advanced analytics dashboard for employers
-- Multi-currency support for job postings
-- Integration with Nigerian professional associations for automated verification
+### Planned (Phase 4)
+- Multi-currency support for job postings (NGN/USD/EUR)
+- Integration with Nigerian professional associations (COREN, ICAN, etc.) for automated verification
+- AI-generated interview prep for top-matched candidates
+- Employer "Trust Score" based on payment history and verified company status
 
 ---
 

@@ -1,6 +1,6 @@
 "use client";
 import { useEmployerDashboard } from "@/hooks/useEmployerDashboard";
-import { EmployerHeader, EmployerStats, JobsTable } from "@/app/components/employer";
+import { EmployerHeader, EmployerStats, JobsTable, EmployerInsights } from "@/app/components/employer";
 import LoadingScreen from "@/app/components/LoadingScreen";
 
 /**
@@ -34,6 +34,8 @@ export default function EmployerDashboard() {
           myJobs={myJobs} 
           handleCloseJob={handleCloseJob} 
         />
+
+        <EmployerInsights />
       </div>
     </div>
   );

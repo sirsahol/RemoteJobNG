@@ -35,6 +35,7 @@ CSRF_TRUSTED_ORIGINS = config(
 # INSTALLED APPS
 # ──────────────────────────────────────────────
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'drf_spectacular',
+    'channels',
     # Local apps
     'users',
     'jobs',
@@ -216,3 +218,25 @@ CLOUDINARY_STORAGE = {
 if USE_CLOUDINARY:
     INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+# ──────────────────────────────────────────────
+# REAL-TIME INFRASTRUCTURE (CHANNELS)
+# ──────────────────────────────────────────────
+ASGI_APPLICATION = 'remotejobs_backend.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+# Production: Use Redis
+if not DEBUG:
+    CHANNEL_LAYERS = {
+        'default': {
+            'BACKEND': 'channels_redis.core.RedisChannelLayer',
+            'CONFIG': {
+                "hosts": [config('REDIS_URL', default='redis://localhost:6379')],
+            },
+        },
+    }

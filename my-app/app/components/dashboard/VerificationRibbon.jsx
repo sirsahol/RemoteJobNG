@@ -29,7 +29,7 @@ const VerificationRibbon = ({ badges, integrityScore }) => {
               ))}
             </div>
           </div>
-          <Link href="/profile/edit" className="text-[9px] font-black text-blue-600 dark:text-blue-400 hover:text-text-main transition-colors uppercase tracking-widest flex items-center gap-2">
+          <Link href="/dashboard/verification" className="text-[9px] font-black text-blue-600 dark:text-blue-400 hover:text-text-main transition-colors uppercase tracking-widest flex items-center gap-2">
             Optimize Dossier <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg>
           </Link>
         </div>

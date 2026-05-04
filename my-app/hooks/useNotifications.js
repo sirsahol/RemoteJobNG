@@ -1,90 +1,56 @@
-import { useState, useEffect, useCallback } from "react";
-import { useAuth } from "@/context/AuthContext";
-import { useRouter } from "next/navigation";
-import api from "@/utils/axiosInstance";
+/**
+ * useNotifications.js
+ * Hook for handling real-time WebSocket notifications.
+ */
+import { useEffect, useState } from 'react';
+import { useAuth } from '@/hooks/useAuth';
 
 export function useNotifications() {
-  const { isAuthenticated, loading: authLoading } = useAuth();
-  const router = useRouter();
+  const { user } = useAuth();
   const [notifications, setNotifications] = useState([]);
-  const [dataLoading, setDataLoading] = useState(true);
-  const [alerts, setAlerts] = useState([]);
-  const [showAlertForm, setShowAlertForm] = useState(false);
-  const [newAlert, setNewAlert] = useState({ 
-    name: "", 
-    keywords: "", 
-    job_type: "", 
-    frequency: "daily" 
-  });
+  const [unreadCount, setUnreadCount] = useState(0);
 
   useEffect(() => {
-    if (!authLoading && !isAuthenticated) {
-      router.push("/login");
-    }
-  }, [authLoading, isAuthenticated, router]);
+    if (!user) return;
 
-  const fetchData = useCallback(async () => {
-    if (!isAuthenticated) return;
-    setDataLoading(true);
-    try {
-      const [notifRes, alertRes] = await Promise.all([
-        api.get("/notifications/"),
-        api.get("/job-alerts/"),
-      ]);
-      setNotifications(notifRes.data.results || notifRes.data || []);
-      setAlerts(alertRes.data.results || alertRes.data || []);
-    } catch (err) {
-      console.error("Failed to fetch notification data:", err);
-    } finally {
-      setDataLoading(false);
-    }
-  }, [isAuthenticated]);
+    // Use wss if on https
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const host = process.env.NEXT_PUBLIC_WS_URL || 'localhost:8000';
+    const wsUrl = `${protocol}//${host}/ws/notifications/`;
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    const socket = new WebSocket(wsUrl);
 
-  const markAllRead = async () => {
-    try {
-      await api.post("/notifications/mark-all-read/");
-      setNotifications(prev => prev.map(n => ({ ...n, is_read: true })));
-    } catch (err) {
-      console.error("Failed to mark all as read:", err);
-    }
+    socket.onmessage = (event) => {
+      const data = json.parse(event.data);
+      if (data.type === 'notification') {
+        const newNotification = {
+          id: Date.now(),
+          message: data.message,
+          timestamp: new Date().toISOString(),
+          read: false
+        };
+        setNotifications(prev => [newNotification, ...prev]);
+        setUnreadCount(prev => prev + 1);
+        
+        // Show browser notification if permitted
+        if (Notification.permission === 'granted') {
+          new Notification('RemoteWorkNaija', { body: data.message });
+        }
+      }
+    };
+
+    socket.onopen = () => console.log('WebSocket Connected');
+    socket.onclose = () => console.log('WebSocket Disconnected');
+
+    return () => {
+      socket.close();
+    };
+  }, [user]);
+
+  const markAsRead = () => {
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+    setUnreadCount(0);
   };
 
-  const markRead = async (id) => {
-    try {
-      await api.patch(`/notifications/${id}/read/`);
-      setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n));
-    } catch (err) {
-      console.error(`Failed to mark notification ${id} as read:`, err);
-    }
-  };
-
-  const handleCreateAlert = async (e) => {
-    if (e) e.preventDefault();
-    try {
-      const res = await api.post("/job-alerts/", newAlert);
-      setAlerts(prev => [res.data, ...prev]);
-      setShowAlertForm(false);
-      setNewAlert({ name: "", keywords: "", job_type: "", frequency: "daily" });
-    } catch (err) {
-      console.error("Failed to create job alert:", err);
-    }
-  };
-
-  return {
-    notifications,
-    alerts,
-    loading: authLoading || dataLoading,
-    showAlertForm,
-    setShowAlertForm,
-    newAlert,
-    setNewAlert,
-    markAllRead,
-    markRead,
-    handleCreateAlert,
-    refresh: fetchData
-  };
+  return { notifications, unreadCount, markAsRead };
 }
