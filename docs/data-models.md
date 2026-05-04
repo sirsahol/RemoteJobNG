@@ -291,3 +291,81 @@ Records every payment transaction. Stores full Paystack response for audit.
 | `paid_at` | DateTimeField | null, blank | Timestamp of confirmed payment |
 
 **Meta:** `ordering = ['-created_at']` · Indexes on `['reference']`, `['status']`, `['employer']`
+
+---
+
+## intelligence.JobEmbedding
+
+Stores the semantic vector representation of a job listing for semantic search.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `job` | OneToOneField(Job) | CASCADE, related_name='embedding' | Link to the job |
+| `vector` | VectorField(384) | pgvector field | 384-dimension semantic embedding |
+| `last_synced_at` | DateTimeField | auto_now | Tracking for embedding freshness |
+
+---
+
+## intelligence.UserEmbedding
+
+Stores the semantic vector representation of a user's professional profile.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `user` | OneToOneField(User) | CASCADE, related_name='embedding' | Link to the user |
+| `vector` | VectorField(384) | pgvector field | 384-dimension semantic embedding |
+
+---
+
+## intelligence.ATSMatch
+
+Pre-calculated match score and analysis between a user and a job.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `user` | ForeignKey(User) | CASCADE, related_name='ats_matches' | The job seeker |
+| `job` | ForeignKey(Job) | CASCADE, related_name='ats_matches' | The target job |
+| `score` | FloatField | 0.0 to 1.0 | Cosine similarity match score |
+| `analysis` | JSONField | default=dict | Detailed breakdown of match quality |
+
+---
+
+## verification.VerificationRequest
+
+Manages the lifecycle of a user or company verification attempt.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `user` | ForeignKey(User) | CASCADE, related_name='verification_requests' | The requester |
+| `request_type` | CharField(20) | choices: IDENTITY, SKILL, INFRASTRUCTURE, COMPANY | Type of verification |
+| `status` | CharField(20) | choices: PENDING, IN_PROGRESS, VERIFIED, REJECTED | Status of request |
+| `evidence` | FileField | upload_to='verification/evidence/', blank, null | Uploaded proof document |
+| `document_url` | URLField(500) | blank, null | External proof link |
+| `metadata` | JSONField | default=dict | Structured verification data |
+| `rejection_reason` | TextField | blank | Why the request was denied |
+
+---
+
+## verification.TrustBadge
+
+Global definition of a trust or achievement badge.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `name` | CharField(100) | unique | Display name e.g. "Solar Powered" |
+| `slug` | SlugField(100) | unique | URL-safe identifier |
+| `icon` | CharField(50) | — | Emoji or SVG identifier |
+| `description` | TextField | — | Badge description |
+
+---
+
+## verification.UserBadge
+
+The association between a user and their earned trust badges.
+
+| Field | Type | Constraints | Description |
+|---|---|---|---|
+| `user` | ForeignKey(User) | CASCADE, related_name='badges' | The badge holder |
+| `badge` | ForeignKey(TrustBadge) | CASCADE | The specific badge |
+| `verified_at` | DateTimeField | auto_now_add | When the badge was awarded |
+| `metadata` | JSONField | default=dict | Specifics of the award |

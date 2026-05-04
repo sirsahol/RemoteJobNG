@@ -9,31 +9,31 @@ class Command(BaseCommand):
             {
                 'name': 'Identity Verified',
                 'slug': 'identity-verified',
-                'icon': '✅',
+                'icon': 'check-circle',
                 'description': 'User identity has been verified via official government documentation.'
             },
             {
                 'name': 'Starlink Verified',
                 'slug': 'starlink-verified',
-                'icon': '📡',
+                'icon': 'antenna',
                 'description': 'High-speed Starlink satellite connection verified at the user location.'
             },
             {
                 'name': 'Solar Powered',
                 'slug': 'solar-powered',
-                'icon': '☀️',
+                'icon': 'sun-light',
                 'description': 'User facility is powered by a reliable solar energy system.'
             },
             {
                 'name': 'Elite Talent',
                 'slug': 'elite-talent',
-                'icon': '💎',
+                'icon': 'diamond',
                 'description': 'User has completed advanced skill assessments with top-tier results.'
             },
             {
                 'name': 'Verified Employer',
                 'slug': 'verified-employer',
-                'icon': '🏢',
+                'icon': 'building',
                 'description': 'Company registration and legal status have been fully vetted.'
             }
         ]

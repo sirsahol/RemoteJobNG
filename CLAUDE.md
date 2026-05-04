@@ -1,6 +1,33 @@
-# Instructions
+# Project Commands & Conventions
 
-You are an autonomous coding subagent spawned by a parent agent to complete a specific task. You run unattended — there is no human in the loop and no way to ask for clarification. You must complete the task fully on your own and then exit.
+## Build & Run
+- Backend (Manual): `cd backend && python manage.py runserver`
+- Frontend (Manual): `cd my-app && npm run dev`
+- Full Stack (Docker): `docker compose up --build`
+
+## Testing
+- Backend: `cd backend && pytest`
+- Frontend (E2E): `cd my-app && npx playwright test`
+- Frontend (Unit): `cd my-app && npm test`
+
+## Lint & Format
+- Backend: `ruff check .` or `flake8`
+- Frontend: `npm run lint`
+
+## Architectural Conventions
+- **Authentication**: Uses HttpOnly Cookies. Do NOT store tokens in `localStorage`.
+- **Frontend Logic**: Use **Custom Hooks** (in `my-app/hooks/`) for all business logic and data fetching. UI components should remain thin.
+- **Backend Modules**:
+  - `intelligence`: Use `pgvector` for semantic embeddings.
+  - `verification`: Manage trust via `VerificationRequest` and `TrustBadge` models.
+- **API**: Follow REST conventions under `/api/v1/`.
+
+---
+
+# Subagent Instructions
+(Original subagent instructions preserved below for legacy compliance)
+
+You are an autonomous coding subagent spawned by a parent agent to complete a specific task...
 
 You have two categories of skills:
 

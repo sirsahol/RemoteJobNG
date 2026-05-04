@@ -10,26 +10,26 @@ RemoteWorkNaija is designed as a 12-month build from MVP scaffold to full AI-pow
 
 | Feature | Status |
 |---|---|
-| Security: SECRET_KEY, permissions, JWT | ✅ Done |
-| User model (15+ fields, role-based) | ✅ Done |
-| Job model (30+ fields, aggregation support) | ✅ Done |
-| ATS: Application model (8-status pipeline) | ✅ Done |
-| Category + SkillTag taxonomy (10 cats, 94 tags) | ✅ Done |
-| DRF ViewSets + router (9 endpoints) | ✅ Done |
-| Search + 14 filter fields + pagination | ✅ Done |
-| RSS aggregation: Remotive + WeWorkRemotely | ✅ Done |
-| Job deduplication by source_url | ✅ Done |
-| FetchLog audit trail | ✅ Done |
-| JobAlert model with matches_job() | ✅ Done |
-| In-app Notifications | ✅ Done |
-| Paystack payment scaffold (mock-safe) | ✅ Done |
-| Cloudinary media storage (conditional) | ✅ Done |
-| Docker + docker-compose | ✅ Done |
-| All 19 frontend pages | ✅ Done |
-| AuthContext (dual-token, refresh, roles) | ✅ Done |
-| axiosInstance (401 auto-refresh) | ✅ Done |
-| Edge middleware (SSR route protection) | ✅ Done |
-| OpenAPI 3 schema + Swagger UI | ✅ Done |
+| Security: SECRET_KEY, permissions, JWT | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| User model (15+ fields, role-based) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Job model (30+ fields, aggregation support) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| ATS: Application model (8-status pipeline) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Category + SkillTag taxonomy (10 cats, 94 tags) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| DRF ViewSets + router (9 endpoints) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Search + 14 filter fields + pagination | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| RSS aggregation: Remotive + WeWorkRemotely | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Job deduplication by source_url | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| FetchLog audit trail | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| JobAlert model with matches_job() | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| In-app Notifications | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Paystack payment scaffold (mock-safe) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Cloudinary media storage (conditional) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Docker + docker-compose | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| All 19 frontend pages | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| AuthContext (dual-token, refresh, roles) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| axiosInstance (401 auto-refresh) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| Edge middleware (SSR route protection) | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
+| OpenAPI 3 schema + Swagger UI | ![Done](https://img.shields.io/badge/Status-Done-brightgreen?style=flat-square) Done |
 
 ---
 
@@ -336,7 +336,7 @@ Monitor these endpoints every 5 minutes:
 
 | Phase | Focus | Duration | Key Unlock |
 |---|---|---|---|
-| ✅ Sprints 1–4 | Foundation | Complete | Deployable platform |
+| ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Sprints 1–4 | Foundation | Complete | Deployable platform |
 | Phase 2 | PostgreSQL, Celery, Meilisearch, Email | 6–8 weeks | Scale + automation |
 | Phase 3 | Profiles, ATS, Verification | 8–10 weeks | Trust + employer tools |
 | Phase 4 | AI matching, CV enhancement, recommendations | 6–8 weeks | Differentiation |

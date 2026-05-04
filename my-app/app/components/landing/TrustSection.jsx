@@ -1,4 +1,4 @@
-import React from "react";
+import { ShieldCheck, Antenna, SunLight, Trophy } from "iconoir-react";
 
 export function TrustSection() {
   return (
@@ -20,13 +20,13 @@ export function TrustSection() {
               </p>
               <div className="grid grid-cols-2 gap-6 pt-6">
                 {[
-                  { icon: "🛡️", label: "Identity Verified" },
-                  { icon: "📡", label: "Starlink Proof" },
-                  { icon: "☀️", label: "Solar Powered" },
-                  { icon: "🏆", label: "Elite Talent" },
+                  { icon: <ShieldCheck width={20} height={20} strokeWidth={1.5} />, label: "Identity Verified" },
+                  { icon: <Antenna width={20} height={20} strokeWidth={1.5} />, label: "Starlink Proof" },
+                  { icon: <SunLight width={20} height={20} strokeWidth={1.5} />, label: "Solar Powered" },
+                  { icon: <Trophy width={20} height={20} strokeWidth={1.5} />, label: "Elite Talent" },
                 ].map(badge => (
                   <div key={badge.label} className="flex items-center gap-3 p-4 rounded-2xl bg-glass-surface border border-glass-border group hover:border-blue-500/20 transition-all">
-                    <span className="text-2xl">{badge.icon}</span>
+                    <span className="text-blue-500/60 group-hover:text-blue-500 transition-colors">{badge.icon}</span>
                     <span className="text-[10px] font-black text-text-muted uppercase tracking-widest">{badge.label}</span>
                   </div>
                 ))}

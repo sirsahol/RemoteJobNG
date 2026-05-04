@@ -490,4 +490,4 @@ We respond to PRs and issues within 3 business days. Community contributors are 
 
 ---
 
-*RemoteWorkNaija is built with ❤️ for Nigerian professionals navigating the global remote work economy.*
+*RemoteWorkNaija is built with ![Passion](https://img.shields.io/badge/Built%20with-Passion-blue?style=flat-square) for Nigerian professionals navigating the global remote work economy.*

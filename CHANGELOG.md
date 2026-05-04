@@ -8,14 +8,49 @@ Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version
 
 ## [Unreleased]
 
-### Planned (Phase 2)
-- PostgreSQL migration from SQLite for production
-- Redis + Celery for background job aggregation scheduling
-- Meilisearch for full-text job search
-- Email notifications for job alerts (SMTP + SendGrid)
-- Rate limiting on API endpoints (django-ratelimit)
-- RemoteOK + LinkedIn Jobs + Jobspresso RSS parsers
-- Sentry error tracking integration
+### Planned (Phase 3)
+
+- Real-time job matching notifications (WebSockets)
+- Advanced analytics dashboard for employers
+- Multi-currency support for job postings
+- Integration with Nigerian professional associations for automated verification
+
+---
+
+## [1.1.0] — 2026-05-03
+
+Major architectural overhaul focused on security hardening, semantic intelligence, and developer experience.
+
+### Added — Security & Authentication
+
+- **HttpOnly Cookie Auth**: Fully migrated from Bearer JWTs in localStorage to secure, browser-managed HttpOnly cookies for `access_token` and `refresh_token`.
+- **Auth Hardening**: Implemented `set_auth_cookies` and `clear_auth_cookies` utilities in backend views.
+- **CSRF Protection**: Enhanced CSRF protection for all state-changing operations.
+
+### Added — Intelligence & Matching
+
+- **Semantic Search**: Integrated `pgvector` for high-performance vector similarity search across job listings and user profiles.
+- **ATS Matching**: Implemented `ATSMatch` model and matching pipeline to rank candidates against job requirements using semantic embeddings.
+- **Embeddings Pipeline**: Automatic generation of OpenAI-compatible embeddings for jobs and profiles.
+
+### Added — Verification & Trust
+
+- **Trust Badges**: Added `TrustBadge` and `UserBadge` models to provide visual indicators of verified identity and skills.
+- **Verification Workflow**: Dedicated `VerificationRequest` system for administrative review of user credentials.
+- **Security Nodes**: Implemented verification-gated access to premium employer features.
+
+### Added — Frontend & DX
+
+- **Hook-Driven Architecture**: Standardized the use of custom hooks in `my-app/hooks/` for all business logic, data fetching, and state management.
+- **E2E Testing Suite**: Integrated Playwright for comprehensive end-to-end testing, including automated UI flows and API mocking.
+- **Railway Deployment**: Finalized `railway.json` and production environment configurations for the Railway cloud platform.
+
+### Changed — Documentation Overhaul
+
+- **System Docs**: Created `docs/intelligence.md` and `docs/verification.md`.
+- **API Reference**: Updated `docs/api-reference.md` with new endpoints and cookie-auth details.
+- **Data Models**: Updated `docs/data-models.md` with definitions for the Intelligence and Verification models.
+- **README/CLAUDE**: Synchronized root documentation with the new 8-app backend structure and hook-driven development rules.
 
 ---
 
@@ -26,7 +61,7 @@ First production-grade release of RemoteWorkNaija. Complete platform rebuild fro
 ### Added — Sprint 1: Security Hardening & Foundation
 
 - **Security**: Removed hardcoded `SECRET_KEY` from settings; all secrets moved to environment variables
-- **Security**: Replaced `DEBUG=True` hardcoded with `os.environ.get('DEBUG', 'False')` 
+- **Security**: Replaced `DEBUG=True` hardcoded with `os.environ.get('DEBUG', 'False')`
 - **Security**: Replaced global `AllowAny` permissions with `IsAuthenticated` default + explicit public overrides
 - **Security**: Added `ALLOWED_HOSTS`, `CORS_ALLOWED_ORIGINS`, `SECURE_*` headers for production
 - **Custom User model**: Extended `AbstractUser` with 15 additional fields — `is_employer`, `bio`, `location`, `website`, `linkedin_url`, `github_url`, `avatar`, `resume`, `skills_text`, `experience_years`, `preferred_job_type`, `availability`, `salary_expectation`, `is_verified`, `slug`
@@ -130,6 +165,7 @@ First production-grade release of RemoteWorkNaija. Complete platform rebuild fro
 Initial fork of [RemoteJobNG](https://github.com/Rafiu-Olajumoke01/RemoteJobNG).
 
 ### State at fork
+
 - Basic Django project with SQLite
 - Hardcoded `SECRET_KEY` in `settings.py`
 - `DEBUG=True` hardcoded

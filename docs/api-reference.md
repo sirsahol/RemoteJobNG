@@ -1,7 +1,7 @@
 # API Reference
 
 Base URL: `/api/v1/`  
-Authentication: `Authorization: Bearer <access_token>`  
+Authentication: **HttpOnly Cookies** (recommended) or `Authorization: Bearer <access_token>`  
 Pagination: `?page=N` (20 results per page)  
 Interactive docs: `/api/docs/` (Swagger UI)  
 Schema download: `/api/schema/`
@@ -22,6 +22,7 @@ POST /api/token/
 }
 ```
 **Response 200:**
+Sets `access_token` and `refresh_token` in **HttpOnly Cookies**.
 ```json
 {
   "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
@@ -34,13 +35,14 @@ Access tokens expire after 60 minutes. Refresh tokens expire after 7 days.
 ```
 POST /api/token/refresh/
 ```
-**Body:**
-```json
-{ "refresh": "<refresh_token>" }
-```
+**Body:** `{}` (Reads `refresh_token` from cookies)
 **Response 200:**
+Sets new `access_token` and `refresh_token` in **HttpOnly Cookies**.
 ```json
-{ "access": "<new_access_token>" }
+{
+  "access": "<new_access_token>",
+  "refresh": "<new_refresh_token>"
+}
 ```
 Each refresh issues a new refresh token (rotation enabled). Old refresh token is blacklisted.
 
@@ -503,6 +505,57 @@ GET /api/v1/my-payments/
 Authorization: Bearer <employer_token>
 ```
 Returns payment history for the authenticated employer.
+
+---
+
+## Intelligence
+
+### Job Matches (AI)
+```
+GET /api/v1/intelligence/jobs/match/
+```
+Returns jobs matched to the user's profile using semantic similarity (pgvector).
+**Response 200:** Paginated list of jobs.
+
+### Semantic Search
+```
+GET /api/v1/intelligence/jobs/search/?q=python developer
+```
+Natural language search for jobs.
+**Response 200:** List of jobs.
+
+### Candidate Match (Employer Only)
+```
+GET /api/v1/intelligence/candidates/match/?q=react expert
+```
+Rank candidates for a specific query, weighting verified trust badges.
+**Response 200:** List of users.
+
+---
+
+## Verification
+
+### Submit Verification Request
+```
+POST /api/v1/verification/requests/
+Content-Type: multipart/form-data
+```
+**Fields:** `request_type` (IDENTITY, SKILL, INFRASTRUCTURE, COMPANY), `evidence` (file), `document_url` (optional).
+
+### List My Requests
+```
+GET /api/v1/verification/requests/
+```
+
+### List All Badges
+```
+GET /api/v1/verification/badges/
+```
+
+### List My Badges
+```
+GET /api/v1/verification/badges/my_badges/
+```
 
 ---
 

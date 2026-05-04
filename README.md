@@ -37,6 +37,8 @@ RemoteJobNG/
 │   ├── aggregation/                  # RSS parsers, ingestor, FetchLog, management cmds
 │   ├── notifications/                # Notification + JobAlert models
 │   ├── payments/                     # PaymentPlan + JobPayment + Paystack service
+│   ├── intelligence/                 # pgvector-based semantic matching & ATS scoring
+│   ├── verification/                 # Identity, Skill, and Infrastructure verification
 │   ├── requirements.txt
 │   ├── Dockerfile
 │   └── .env.example
@@ -51,10 +53,11 @@ RemoteJobNG/
 │   │   ├── pricing/
 │   │   ├── post_job/
 │   │   ├── about/
-│   │   └── components/Navbar/
-│   ├── context/AuthContext.js        # Auth state (tokens, user obj, refresh)
-│   ├── utils/axiosInstance.js        # Axios with JWT + 401 auto-refresh
-│   ├── middleware.js                 # Edge route protection (SSR)
+│   │   ├── components/Navbar/
+│   ├── hooks/                        # Business logic, fetching, and state hooks
+│   ├── context/AuthContext.jsx       # Auth state (Hydration via cookies)
+│   ├── utils/axiosInstance.js        # Axios with withCredentials: true
+│   ├── middleware.js                 # Edge route protection via cookies
 │   ├── Dockerfile
 │   └── .env.example
 ├── docker-compose.yml                # Local dev orchestration
@@ -64,6 +67,8 @@ RemoteJobNG/
     ├── data-models.md
     ├── aggregation.md
     ├── authentication.md
+    ├── intelligence.md
+    ├── verification.md
     ├── payments.md
     ├── deployment.md
     ├── roadmap.md
@@ -173,7 +178,7 @@ python manage.py expire_jobs
 ## API Overview
 
 Base URL: `/api/v1/`  
-Authentication: Bearer JWT (obtain via `POST /api/token/`)  
+Authentication: **HttpOnly Cookies** (recommended) or Bearer JWT  
 Pagination: 20 results per page (`?page=2`)  
 Docs: `/api/docs/` (Swagger UI)
 
@@ -189,6 +194,8 @@ Docs: `/api/docs/` (Swagger UI)
 | Job Alerts | `/api/v1/job-alerts/` | Auth |
 | My Payments | `/api/v1/my-payments/` | Auth |
 | Payment Plans | `/api/v1/payment/plans/` | Public |
+| Intelligence | `/api/v1/intelligence/` | Auth |
+| Verification | `/api/v1/verification/` | Auth |
 
 See [docs/api-reference.md](docs/api-reference.md) for the full reference.
 
@@ -199,9 +206,10 @@ See [docs/api-reference.md](docs/api-reference.md) for the full reference.
 | Layer | Technology |
 |---|---|
 | Backend | Django 5.2 + Django REST Framework 3.16 |
-| Auth | SimpleJWT (refresh rotation + blacklisting) |
+| Database | PostgreSQL + **pgvector** (for semantic search) |
+| Auth | SimpleJWT + HttpOnly Cookies |
 | API Docs | drf-spectacular (OpenAPI 3 + Swagger UI) |
-| Search/Filter | django-filter + DRF SearchFilter |
+| Search/Filter | django-filter + Vector Similarity Search |
 | Frontend | Next.js 16 + React 19 |
 | Styling | Tailwind CSS v4 |
 | HTTP Client | axios 1.11 with interceptors |
@@ -221,11 +229,13 @@ See [docs/api-reference.md](docs/api-reference.md) for the full reference.
 | [docs/api-reference.md](docs/api-reference.md) | Every endpoint documented with params and responses |
 | [docs/data-models.md](docs/data-models.md) | All 12 database models with field reference |
 | [docs/aggregation.md](docs/aggregation.md) | RSS parser system, dedup strategy, adding new sources |
-| [docs/authentication.md](docs/authentication.md) | JWT flow, AuthContext, interceptors, middleware |
+| [docs/authentication.md](docs/authentication.md) | Secure HttpOnly cookie flow & middleware |
+| [docs/intelligence.md](docs/intelligence.md) | Semantic matching, pgvector, & ATS scoring |
+| [docs/verification.md](docs/verification.md) | Trust badges & Identity/Skill verification |
 | [docs/payments.md](docs/payments.md) | Paystack integration, payment flow, webhook |
-| [docs/deployment.md](docs/deployment.md) | Docker, env vars, PostgreSQL, production checklist |
-| [docs/roadmap.md](docs/roadmap.md) | Planned phases: search, AI, profiles, community |
-| [docs/contributing.md](docs/contributing.md) | Dev workflow, conventions, PR process |
+| [docs/deployment.md](docs/deployment.md) | Docker, env vars, Railway, production checklist |
+| [docs/roadmap.md](docs/roadmap.md) | Planned phases: community & scaling |
+| [docs/contributing.md](docs/contributing.md) | Dev workflow, hooks convention, PR process |
 
 ---
 
@@ -233,12 +243,12 @@ See [docs/api-reference.md](docs/api-reference.md) for the full reference.
 
 | Sprint | Focus | Status |
 |---|---|---|
-| Sprint 1 | Security hardening, model upgrades, repo hygiene | ✅ Merged |
-| Sprint 2 | ViewSets, search/filter, auth upgrade, dashboards | ✅ Merged |
-| Sprint 3 | Aggregation pipeline, RSS parsers, alerts, notifications | ✅ Merged |
-| Sprint 4 | Payments scaffold, Cloudinary, Docker, homepage | ✅ Merged |
-| Phase 2 | PostgreSQL, Redis, Celery, Meilisearch, email | 🔜 Planned |
-| Phase 3 | AI matching, professional profiles, ATS upgrades | 🔜 Planned |
-| Phase 4 | Community, blog, salary transparency | 🔜 Planned |
+| Sprint 1 | Security hardening, model upgrades, repo hygiene | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Sprint 2 | ViewSets, search/filter, auth upgrade, dashboards | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Sprint 3 | Aggregation pipeline, RSS parsers, alerts, notifications | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Sprint 4 | Payments scaffold, Cloudinary, Docker, homepage | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Phase 2 | PostgreSQL, Redis, Celery, Meilisearch, email | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Phase 3 | AI matching, professional profiles, ATS upgrades | ![Completed](https://img.shields.io/badge/Status-Completed-brightgreen?style=flat-square) Merged |
+| Phase 4 | Community, blog, salary transparency | ![Planned](https://img.shields.io/badge/Status-Planned-blue?style=flat-square) Planned |
 
 See [docs/roadmap.md](docs/roadmap.md) for detailed phase plans.

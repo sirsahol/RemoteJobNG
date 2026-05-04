@@ -4,8 +4,8 @@
 
 | Version | Supported |
 |---|---|
-| 1.x (current) | ✅ Active security support |
-| 0.x (original fork) | ❌ Not supported — please upgrade |
+| 1.x (current) | ![Active](https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square) Active security support |
+| 0.x (original fork) | ![Deprecated](https://img.shields.io/badge/Status-Deprecated-red?style=flat-square) Not supported — please upgrade |
 
 ---
 

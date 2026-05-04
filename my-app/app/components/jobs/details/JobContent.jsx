@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Star } from "iconoir-react";
 
 export function JobContent({ job, saved, saving, onSave }) {
   return (
@@ -23,7 +24,17 @@ export function JobContent({ job, saved, saving, onSave }) {
               : "bg-glass-surface text-text-muted border-glass-border hover:bg-text-muted/5"
           } disabled:opacity-50`}
         >
-          {saved ? "★ Saved to Watchlist" : "☆ Pin Protocol"}
+          {saved ? (
+            <>
+              <Star strokeWidth={2.5} width={14} height={14} className="fill-current" />
+              <span>Saved to Watchlist</span>
+            </>
+          ) : (
+            <>
+              <Star strokeWidth={1.5} width={14} height={14} />
+              <span>Pin Protocol</span>
+            </>
+          )}
         </button>
         <Link
           href={`/jobs/${job.slug || job.id}/apply`}

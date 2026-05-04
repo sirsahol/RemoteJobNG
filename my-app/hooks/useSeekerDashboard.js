@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/utils/axiosInstance";
+import { Bookmark, Page, Bell } from "iconoir-react";
 
 export const useSeekerDashboard = () => {
   const { user, isAuthenticated, loading: authLoading } = useAuth();
@@ -24,15 +25,41 @@ export const useSeekerDashboard = () => {
   useEffect(() => {
     if (!isAuthenticated) return;
     
-    setDataLoading(true);
-    Promise.all([
-      api.get("/users/me/").then(res => setProfile(res.data)).catch(console.error),
-      api.get("/jobs/saved-jobs/").then(res => setSavedJobs(res.data.results || res.data)).catch(console.error),
-      api.get("/applications/").then(res => setApplications(res.data.results || res.data)).catch(console.error),
-      api.get("/job-alerts/").then(res => setAlerts(res.data.results || res.data)).catch(console.error),
-      api.get("/v1/intelligence/matches/").then(res => setNeuralMatches(res.data)).catch(() => setNeuralMatches([])),
-      api.get("/v1/verification/badges/my_badges/").then(res => setBadges(res.data)).catch(() => setBadges([])),
-    ]).finally(() => setDataLoading(false));
+    let isMounted = true;
+
+    const fetchData = async () => {
+      // We don't call setDataLoading(true) synchronously here because it's already true by default
+      // or set to true when the user logs in via the initial state or a reset.
+      try {
+        const [me, saved, apps, alertsRes, matches, badgesRes] = await Promise.all([
+          api.get("/users/me/"),
+          api.get("/jobs/saved-jobs/"),
+          api.get("/applications/"),
+          api.get("/job-alerts/"),
+          api.get("/v1/intelligence/matches/").catch(() => ({ data: [] })),
+          api.get("/v1/verification/badges/my_badges/").catch(() => ({ data: [] })),
+        ]);
+
+        if (!isMounted) return;
+
+        setProfile(me.data);
+        setSavedJobs(saved.data.results || saved.data);
+        setApplications(apps.data.results || apps.data);
+        setAlerts(alertsRes.data.results || alertsRes.data);
+        setNeuralMatches(matches.data);
+        setBadges(badgesRes.data);
+      } catch (err) {
+        console.error("Dashboard data fetch failed:", err);
+      } finally {
+        if (isMounted) setDataLoading(false);
+      }
+    };
+
+    fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [isAuthenticated]);
 
   const handleCreateAlert = async (e) => {
@@ -61,9 +88,9 @@ export const useSeekerDashboard = () => {
   };
 
   const stats = [
-    { label: "Saved Jobs", value: savedJobs.length, icon: "🔖", color: "from-blue-500/20 to-indigo-500/20" },
-    { label: "Applications", value: applications.length, icon: "📄", color: "from-emerald-500/20 to-teal-500/20" },
-    { label: "Active Alerts", value: alerts.filter(a => a.is_active).length, icon: "🔔", color: "from-purple-500/20 to-pink-500/20" },
+    { label: "Saved Jobs", value: savedJobs.length, icon: <Bookmark strokeWidth={1.5} />, color: "from-blue-500/20 to-indigo-500/20" },
+    { label: "Applications", value: applications.length, icon: <Page strokeWidth={1.5} />, color: "from-emerald-500/20 to-teal-500/20" },
+    { label: "Active Alerts", value: alerts.filter(a => a.is_active).length, icon: <Bell strokeWidth={1.5} />, color: "from-purple-500/20 to-pink-500/20" },
   ];
 
   const integrityScore = Math.min(40 + (badges.length * 12), 100);

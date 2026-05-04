@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import api from "@/utils/axiosInstance";
 
+import { Flash, GraphUp, Diamond, Target } from "iconoir-react";
+
 /**
  * Hook to manage Employer Dashboard logic.
  * Handles fetching employer-specific jobs and calculating dashboard metrics.
@@ -40,10 +42,10 @@ export function useEmployerDashboard() {
     const totalViews = myJobs.reduce((sum, j) => sum + (j.view_count || 0), 0);
 
     return [
-      { label: "Active Listings", value: activeJobs.length, icon: "⚡" },
-      { label: "Total Reach", value: totalViews, icon: "📈" },
-      { label: "Talent Pool", value: totalApplications, icon: "💎" },
-      { label: "Efficiency", value: "94%", icon: "🎯" },
+      { label: "Active Listings", value: activeJobs.length, icon: <Flash strokeWidth={1.5} /> },
+      { label: "Total Reach", value: totalViews, icon: <GraphUp strokeWidth={1.5} /> },
+      { label: "Talent Pool", value: totalApplications, icon: <Diamond strokeWidth={1.5} /> },
+      { label: "Efficiency", value: "94%", icon: <Target strokeWidth={1.5} /> },
     ];
   }, [myJobs]);
 

@@ -5,6 +5,8 @@ export const metadata = {
   description: "Redefining the Nigerian remote career trajectory through 2026-ready talent matching.",
 };
 
+import { Globe, Flash, Building } from "iconoir-react";
+
 export default function AboutPage() {
   return (
     <main className="min-h-screen pt-32 pb-20">
@@ -65,21 +67,21 @@ export default function AboutPage() {
             { 
               title: "Global Aggregation", 
               desc: "Deep indexing of top remote platforms including Remotive, WWR, and specialized venture feeds.",
-              icon: "🌐"
+              icon: <Globe width={32} height={32} strokeWidth={1.5} className="text-blue-500" />
             },
             { 
               title: "Intelligence Alerts", 
               desc: "Real-time notification engine that matches your technical stack with fresh global opportunities.",
-              icon: "⚡"
+              icon: <Flash width={32} height={32} strokeWidth={1.5} className="text-blue-500" />
             },
             { 
               title: "Enterprise Direct", 
               desc: "Direct channel for Nigerian employers to broadcast high-impact roles to a verified talent pool.",
-              icon: "🏢"
+              icon: <Building width={32} height={32} strokeWidth={1.5} className="text-blue-500" />
             },
           ].map(({ title, desc, icon }) => (
             <div key={title} className="glass-card p-10 border-glass-border hover:border-blue-500/30 transition-all group">
-              <div className="text-4xl mb-6 group-hover:scale-110 transition-transform">{icon}</div>
+              <div className="mb-6 group-hover:scale-110 transition-transform">{icon}</div>
               <h3 className="text-xl font-bold text-text-main mb-4">{title}</h3>
               <p className="text-text-muted text-sm font-medium leading-relaxed">{desc}</p>
             </div>

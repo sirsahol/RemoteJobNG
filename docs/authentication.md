@@ -1,12 +1,14 @@
 # Authentication & Security
 
-RemoteWorkNaija uses JWT (JSON Web Tokens) for stateless authentication across both the Django backend and Next.js frontend.
+RemoteWorkNaija uses secure, HttpOnly cookie-based JWT (JSON Web Tokens) for authentication. This shift from Bearer tokens in localStorage provides better protection against XSS (Cross-Site Scripting) and simplifies Server-Side Rendering (SSR) authorization.
 
 ---
 
-## JWT Configuration
+## Backend Configuration
 
-Configured in `backend/remotejobs_backend/settings.py`:
+### JWT Settings (`backend/remotejobs_backend/settings.py`)
+
+The platform uses `CustomJWTAuthentication` to support reading tokens from both headers (fallback) and cookies (primary).
 
 ```python
 SIMPLE_JWT = {
@@ -15,197 +17,103 @@ SIMPLE_JWT = {
     "ROTATE_REFRESH_TOKENS": True,
     "BLACKLIST_AFTER_ROTATION": True,
     "UPDATE_LAST_LOGIN": True,
+    
+    # Cookie Configuration
+    "AUTH_COOKIE": "access_token",
+    "REFRESH_COOKIE": "refresh_token",
+    "AUTH_COOKIE_HTTP_ONLY": True,
+    "AUTH_COOKIE_SECURE": True, # Enabled in production
+    "AUTH_COOKIE_SAMESITE": "Lax",
 }
 ```
 
-| Setting | Value | Why |
-|---|---|---|
-| Access token lifetime | 60 minutes | Short enough to limit exposure if leaked |
-| Refresh token lifetime | 7 days | Keeps users logged in across sessions |
-| Rotate refresh tokens | True | Each refresh call issues a NEW refresh token |
-| Blacklist after rotation | True | Old refresh tokens cannot be reused after rotation |
-| Update last login | True | Tracks active users via `User.last_login` |
+### Custom Authentication (`backend/users/authenticate.py`)
+
+The `CustomJWTAuthentication` class extends DRF SimpleJWT to extract the token from the `access_token` cookie if the `Authorization` header is missing.
+
+```python
+class CustomJWTAuthentication(JWTAuthentication):
+    def authenticate(self, request):
+        header = self.get_header(request)
+        if header is None:
+            raw_token = request.COOKIES.get("access_token")
+        else:
+            raw_token = self.get_raw_token(header)
+        # ... validation logic
+```
 
 ---
 
 ## Token Endpoints
 
 ```
-POST /api/token/           → obtain {access, refresh}
-POST /api/token/refresh/   → exchange refresh → new {access}
-POST /api/token/verify/    → validate any token
+POST /api/token/           → Returns {access, refresh} AND sets HttpOnly cookies
+POST /api/token/refresh/   → Reads refresh cookie → Sets new access/refresh cookies
+POST /api/v1/users/logout/ → Clears all authentication cookies
 ```
-
-The `DEFAULT_AUTHENTICATION_CLASSES` in REST_FRAMEWORK is set to `JWTAuthentication` only — no session auth, no basic auth.
 
 ---
 
-## Default Permissions
+## Frontend Implementation
 
-```python
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": (
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
-    ),
-}
-```
+### withCredentials Configuration
 
-This means:
-- **GET requests** to any endpoint are public (unauthenticated users can browse jobs, categories, profiles)
-- **POST/PATCH/DELETE requests** require a valid access token
+All API requests made via `axiosInstance` or `fetch` must include `withCredentials: true` (or `credentials: 'include'`) to ensure cookies are sent automatically by the browser.
 
-Individual ViewSets override this for more restrictive endpoints (e.g. notifications require full auth for GET too).
+### AuthContext (`context/AuthContext.jsx`)
 
----
-
-## Frontend Auth Flow
-
-### AuthContext (`context/AuthContext.js`)
-
-React Context wrapping the entire app via `layout.js`. Provides authentication state and methods to all pages.
-
-**State:**
-```javascript
-{
-  user: Object|null,          // Full user profile from /users/me/
-  token: String|null,         // Current access token
-  refreshToken: String|null,  // Current refresh token
-  loading: Boolean,           // True during initial hydration
-  isAuthenticated: Boolean,   // Derived: !!token
-  isEmployer: Boolean,        // Derived: user?.role === 'employer'
-  isSeeker: Boolean,          // Derived: user?.role === 'job_seeker'
-}
-```
+The `AuthContext` no longer stores tokens in `localStorage`. Instead, it manages the user profile state and provides methods that interact with cookie-setting endpoints.
 
 **Methods:**
-```javascript
-login(access, refresh)
-// 1. Saves both tokens to localStorage
-// 2. Calls GET /users/me/ to hydrate user object
-// 3. Sets access_token cookie for SSR middleware
-// 4. Updates all state
+- `login(access, refresh)`: Updates local state after the backend has set the cookies.
+- `logout()`: Calls the backend logout endpoint to clear cookies and resets local state.
+- `refreshAccessToken()`: Calls the refresh endpoint; the browser handles sending and receiving the HttpOnly refresh cookie.
 
-logout()
-// 1. Removes access_token, refresh_token, user from localStorage
-// 2. Clears access_token cookie
-// 3. Resets all state to null/false
+### Hydration & Verification
 
-refreshAccessToken()
-// 1. Reads refresh_token from localStorage
-// 2. Calls POST /api/token/refresh/
-// 3. On success: updates access_token in localStorage and state, returns new token
-// 4. On failure: calls logout(), returns null
-```
-
-**Hydration on mount:**
-```javascript
-useEffect(() => {
-  const savedToken = localStorage.getItem("access_token");
-  const savedRefresh = localStorage.getItem("refresh_token");
-  const savedUser = localStorage.getItem("user");
-  if (savedToken) setToken(savedToken);
-  if (savedRefresh) setRefreshToken(savedRefresh);
-  if (savedUser) setUser(JSON.parse(savedUser));
-  setLoading(false);
-}, []);
-```
-
-`loading=true` during this phase. All auth-gated pages check `if (loading) return <spinner>` to avoid redirect flashes before hydration completes.
+On mount, `AuthContext` calls `GET /api/v1/users/me/`. 
+- **Success**: Cookies were valid; the user is logged in. State is hydrated with the profile.
+- **Failure (401)**: Cookies expired or missing; the user is logged out.
 
 ---
 
 ## axiosInstance (`utils/axiosInstance.js`)
 
-All API calls go through a single axios instance. Never use `fetch()` or `axios.create()` directly in page components.
-
-### Request Interceptor
+The centralized axios instance handles automatic token refreshing transparently using a response interceptor.
 
 ```javascript
-api.interceptors.request.use((config) => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem("access_token");
-    if (token) config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
+const api = axios.create({
+  baseURL: `${API_URL}/api/v1`,
+  withCredentials: true, // Crucial for cookie transmission
 });
-```
 
-The `typeof window !== "undefined"` guard makes this SSR-safe — during server-side rendering, localStorage is not available.
-
-### Response Interceptor (401 auto-refresh)
-
-```javascript
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      originalRequest._retry = true;         // Prevent infinite retry loop
-      const refresh = localStorage.getItem("refresh_token");
-      if (refresh) {
-        try {
-          const res = await axios.post(`${API_URL}/api/token/refresh/`, { refresh });
-          const newAccess = res.data.access;
-          localStorage.setItem("access_token", newAccess);
-          originalRequest.headers.Authorization = `Bearer ${newAccess}`;
-          return api(originalRequest);         // Retry original request
-        } catch {
-          // Refresh failed — force logout
-          localStorage.removeItem("access_token");
-          localStorage.removeItem("refresh_token");
-          localStorage.removeItem("user");
-          if (typeof window !== "undefined") window.location.href = "/login";
-        }
-      }
+    if (error.response?.status === 401) {
+      // Backend reads refresh_token cookie and sets new cookies
+      await axios.post(`${API_URL}/api/token/refresh/`, {}, { withCredentials: true });
+      return api(error.config); // Retry original request
     }
     return Promise.reject(error);
   }
 );
 ```
 
-This is completely transparent to page components — they never need to handle token refresh manually.
-
 ---
 
 ## Next.js Middleware (`middleware.js`)
 
-Runs at the **Edge** before every SSR page render. Uses the `access_token` cookie (set by `AuthContext.login()`) to protect routes.
+Since `access_token` is a cookie, the Edge Middleware can read it directly during SSR to protect routes without needing client-side hydration.
 
-**Protected routes:**
-```javascript
-const PROTECTED = [
-  "/dashboard/seeker",
-  "/dashboard/employer",
-  "/post_job",
-  "/profile/edit",
-  "/notifications",
-];
-```
-
-**Logic:**
 ```javascript
 export function middleware(request) {
-  const { pathname } = request.nextUrl;
-  const isProtected = PROTECTED.some(route => pathname.startsWith(route));
-  if (!isProtected) return NextResponse.next();
-
   const token = request.cookies.get("access_token")?.value;
-  if (!token) {
-    const url = request.nextUrl.clone();
-    url.pathname = "/login";
-    url.searchParams.set("redirect", pathname);
-    return NextResponse.redirect(url);
+  if (!token && isProtectedRoute(request.nextUrl.pathname)) {
+    return NextResponse.redirect(new URL("/login", request.url));
   }
-  return NextResponse.next();
 }
 ```
-
-The `?redirect=` parameter is used by the login page to send the user back where they came from after authenticating.
-
-**Why a cookie AND localStorage?**
-- `localStorage` is used by the axiosInstance (client-side API calls)
-- `cookie` is used by the middleware (server-side route protection)
-- `AuthContext.login()` sets both simultaneously
 
 ---
 

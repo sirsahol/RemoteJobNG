@@ -6,6 +6,8 @@ import { JobCard } from "@/app/components/jobs/JobCard";
 import { JobsPagination } from "@/app/components/jobs/JobsPagination";
 import { JobsSkeleton } from "@/app/components/jobs/JobsSkeleton";
 
+import { Search } from "iconoir-react";
+
 function AllJobsContent() {
   const {
     jobs,
@@ -85,7 +87,9 @@ function AllJobsContent() {
           </>
         ) : (
           <div className="text-center py-32 glass-card border-dashed border-glass-border">
-            <div className="text-4xl mb-4 opacity-40">🔍</div>
+            <div className="flex justify-center mb-4 opacity-40">
+              <Search width={48} height={48} strokeWidth={1.5} />
+            </div>
             <p className="text-text-muted text-lg font-bold mb-2">Zero matching nodes identified</p>
             <p className="text-text-muted/60 text-sm">Adjust parameters to expand search radius.</p>
           </div>

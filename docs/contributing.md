@@ -80,15 +80,21 @@ chore(deps): bump django to 5.2.1
 
 ## Frontend Conventions
 
+### Hook-Driven Architecture
+- **Mandatory**: All business logic, data fetching, and state management must be extracted into **custom hooks** in `my-app/hooks/`.
+- UI components should be "thin" and only responsible for layout and rendering.
+- Hooks should return `{ data, loading, error, ...actions }` for consistency.
+
 ### API Calls
-- **Always** use `axiosInstance` from `utils/axiosInstance.js`
-- Never use `fetch()` or `axios` directly in components
-- Handle loading and error states in every component that makes API calls
+- **Always** use `axiosInstance` from `utils/axiosInstance.js`.
+- Set `withCredentials: true` (default in `axiosInstance`) to allow cookie transmission.
+- Handle loading and error states within the custom hook.
 
 ### Authentication
-- Use `useAuth()` from `context/AuthContext.js` for all auth state
-- Check `loading` before acting on `isAuthenticated` (prevents hydration flashes)
-- Set up useEffect guards for protected pages:
+- Use `useAuth()` from `context/AuthContext.jsx` for all auth state.
+- Authentication is handled via **HttpOnly Cookies**. Access tokens and refresh tokens are managed by the browser.
+- Do NOT store tokens in `localStorage` or `sessionStorage`.
+- Check `loading` before acting on `isAuthenticated` (prevents hydration flashes).
   ```javascript
   useEffect(() => {
     if (!loading && !isAuthenticated) router.push("/login");
@@ -119,16 +125,19 @@ See [aggregation.md](aggregation.md#adding-a-new-job-source) for the step-by-ste
 cd backend
 python manage.py test
 
-# Or with pytest (if pytest-django is installed)
+# Or with pytest
 pytest
 
-# Frontend
+# Frontend Unit Tests
 cd my-app
-npm run lint
-npm run build  # Also catches type/import errors
+npm test
+
+# Frontend E2E Tests (Playwright)
+cd my-app
+npx playwright test
 ```
 
-Currently, test coverage is minimal (scaffolded `tests.py` files in each app). Writing tests is a priority in Phase 2.
+Test coverage is mandatory for all new features. Ensure backend views have integration tests and frontend hooks have corresponding E2E or unit tests.
 
 ---
 
