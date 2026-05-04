@@ -12,6 +12,43 @@ export function AuthProvider({ children }) {
   const [refreshToken, setRefreshToken] = useState(null);
   const [loading, setLoading] = useState(true);     // initial hydration
 
+  const logout = useCallback(async () => {
+    try {
+      await fetch(`${API_URL}/api/v1/users/logout/`, {
+        method: "POST",
+        credentials: 'include',
+      });
+    } catch (e) {
+      console.error("Logout request failed", e);
+    }
+    
+    localStorage.removeItem("user");
+    setToken(null);
+    setRefreshToken(null);
+    setUser(null);
+  }, []);
+
+  const login = useCallback(async (access, refresh) => {
+    // access and refresh are still in response body for now, 
+    // but they are also set as HttpOnly cookies by the backend.
+    setToken("PRESENT");
+    setRefreshToken("PRESENT");
+    
+    // Fetch user profile immediately after login
+    try {
+      const res = await fetch(`${API_URL}/api/v1/users/me/`, {
+        credentials: 'include',
+      });
+      if (res.ok) {
+        const userData = await res.json();
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+    } catch (e) {
+      console.error("Failed to fetch user profile after login", e);
+    }
+  }, []);
+
   // Hydrate from localStorage on mount (only user object, tokens are in HttpOnly cookies)
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
@@ -44,44 +81,8 @@ export function AuthProvider({ children }) {
     verifyAuth();
   }, [logout]);
 
-  const login = useCallback(async (access, refresh) => {
-    // access and refresh are still in response body for now, 
-    // but they are also set as HttpOnly cookies by the backend.
-    setToken("PRESENT");
-    setRefreshToken("PRESENT");
-    
-    // Fetch user profile immediately after login
-    try {
-      const res = await fetch(`${API_URL}/api/v1/users/me/`, {
-        credentials: 'include',
-      });
-      if (res.ok) {
-        const userData = await res.json();
-        setUser(userData);
-        localStorage.setItem("user", JSON.stringify(userData));
-      }
-    } catch (e) {
-      console.error("Failed to fetch user profile after login", e);
-    }
-  }, []);
-
-  const logout = useCallback(async () => {
-    try {
-      await fetch(`${API_URL}/api/v1/users/logout/`, {
-        method: "POST",
-        credentials: 'include',
-      });
-    } catch (e) {
-      console.error("Logout request failed", e);
-    }
-    
-    localStorage.removeItem("user");
-    setToken(null);
-    setRefreshToken(null);
-    setUser(null);
-  }, []);
-
   const refreshAccessToken = useCallback(async () => {
+
     try {
       const res = await fetch(`${API_URL}/api/token/refresh/`, {
         method: "POST",

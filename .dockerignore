@@ -1,0 +1,10 @@
+backend/venv/
+backend/__pycache__/
+my-app/node_modules/
+my-app/.next/
+.git/
+.vercel/
+.claude/
+.vscode/
+*.sqlite3
+.env
