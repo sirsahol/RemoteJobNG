@@ -110,7 +110,7 @@ class JobAPITest(TestCase):
         self.assertIn('results', resp.data)
 
     def test_job_detail_public(self):
-        response = self.client.get(f'/api/v1/jobs/{self.job.id}/')
+        response = self.client.get(f'/api/v1/jobs/{self.job.slug}/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['title'], 'API Job')
 

@@ -1,111 +1,41 @@
+// @dsp obj-l05
 "use client";
 
-import { useState, Suspense } from "react";
-import Link from "next/link";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
-import api from "@/utils/axiosInstance";
+import React, { Suspense } from "react";
+import { useLogin } from "@/hooks/useLogin";
+import { LoginHeader } from "@/app/components/auth/login/LoginHeader";
+import { LoginForm } from "@/app/components/auth/login/LoginForm";
+import { LoginFooter } from "@/app/components/auth/login/LoginFooter";
 
-function LoginForm() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const { login } = useAuth();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    setLoading(true);
-    try {
-      const res = await api.post("/token/", { username, password });
-      await login(res.data.access, res.data.refresh);
-      const savedUser = localStorage.getItem("user");
-      let role = "job_seeker";
-      if (savedUser) {
-        try { role = JSON.parse(savedUser).role; } catch {}
-      }
-      const redirectTo = searchParams.get("redirect") ||
-        (role === "employer" ? "/dashboard/employer" : "/dashboard/seeker");
-      router.push(redirectTo);
-    } catch (err) {
-      setError(err.message || "Protocol rejection: Invalid credentials.");
-    } finally {
-      setLoading(false);
-    }
-  };
+function LoginContainer() {
+  const {
+    username,
+    setUsername,
+    password,
+    setPassword,
+    loading,
+    error,
+    handleSubmit
+  } = useLogin();
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-20">
       <div className="glass-card p-12 w-full max-w-md border-glass-border relative overflow-hidden animate-in zoom-in-95 duration-700">
         <div className="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
         
-        <div className="text-center mb-12 relative z-10">
-          <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Auth Protocol</span>
-          <h2 className="text-4xl font-black text-text-main tracking-tight leading-tight">Initiate <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Session</span></h2>
-          <p className="text-text-muted mt-3 font-medium text-sm">Authenticating Node Presence.</p>
-        </div>
+        <LoginHeader />
+        
+        <LoginForm 
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+          loading={loading}
+          error={error}
+          onSubmit={handleSubmit}
+        />
 
-        <form className="space-y-8 relative z-10" onSubmit={handleSubmit}>
-          <div>
-            <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em] mb-3">
-              Neural ID
-            </label>
-            <input
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username"
-              className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/20 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
-              required
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em]">
-                Access Key
-              </label>
-              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-text-main transition-colors">Reset Protocol</Link>
-            </div>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
-              className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/20 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
-              required
-            />
-          </div>
-
-          {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-[10px] font-black uppercase tracking-widest text-center animate-in fade-in duration-300">
-              {error}
-            </div>
-          )}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-blue-600 hover:bg-blue-500 text-white py-5 rounded-xl font-black text-xs uppercase tracking-[0.2em] transition-all shadow-signal active:scale-[0.98] disabled:opacity-50"
-          >
-            {loading ? "Processing..." : "Commit Session"}
-          </button>
-        </form>
-
-        <div className="mt-10 pt-10 border-t border-glass-border text-center relative z-10">
-          <p className="text-text-muted text-[10px] font-bold uppercase tracking-widest">
-            Unregistered?{" "}
-            <Link
-              href="/signup"
-              className="text-blue-400 font-black hover:text-text-main transition-colors ml-2"
-            >
-              Create Node
-            </Link>
-          </p>
-        </div>
+        <LoginFooter />
       </div>
     </div>
   );
@@ -121,7 +51,7 @@ export default function LoginPage() {
         </div>
       </div>
     }>
-      <LoginForm />
+      <LoginContainer />
     </Suspense>
   );
 }

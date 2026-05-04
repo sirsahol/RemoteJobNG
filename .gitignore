@@ -4,3 +4,34 @@
 .env.*
 !.env.example
 .vercel
+
+# Agent Memory
+.dsp/
+
+# Dependencies
+node_modules/
+
+# Next.js Build
+my-app/.next/
+my-app/out/
+
+# Testing
+my-app/coverage/
+my-app/junit.xml
+
+# Local Env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Playwright
+my-app/playwright-report/
+my-app/test-results/
+
+# Misc
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

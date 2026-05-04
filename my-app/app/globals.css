@@ -118,3 +118,14 @@
     text-shadow: 0 0 20px var(--color-brand-blue);
   }
 }
+
+@keyframes scan {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(1000%); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
