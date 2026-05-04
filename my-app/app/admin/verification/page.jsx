@@ -68,50 +68,50 @@ export default function AdminVerificationPage() {
     <div className="min-h-screen pt-32 pb-20 px-4">
       <div className="max-w-6xl mx-auto">
         <div className="mb-12 animate-in fade-in slide-in-from-left-4 duration-700">
-          <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Central Command</span>
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-tight">
+          <span className="text-blue-500 dark:text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Central Command</span>
+          <h1 className="text-4xl md:text-6xl font-black text-text-main tracking-tight leading-tight">
             Verification <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Stream Audit.</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-500 dark:from-blue-400 dark:to-indigo-400">Stream Audit.</span>
           </h1>
-          <p className="text-white/40 mt-6 text-lg max-w-xl">Review and authorize global talent nodes within the integrity protocol.</p>
+          <p className="text-text-muted mt-6 text-lg max-w-xl">Review and authorize global talent nodes within the integrity protocol.</p>
         </div>
 
         {error && (
-          <div className="mb-8 p-6 bg-red-500/10 border border-red-500/20 text-red-400 rounded-2xl text-center font-bold">
+          <div className="mb-8 p-6 bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400 rounded-2xl text-center font-bold">
             {error}
           </div>
         )}
 
-        <div className="glass-card border-white/5 bg-white/2 p-1 overflow-hidden">
-          <div className="bg-slate-950/40 backdrop-blur-3xl rounded-[1.4rem] overflow-x-auto">
+        <div className="glass-card border-glass-border bg-glass-surface/50 p-1 overflow-hidden">
+          <div className="bg-glass-surface backdrop-blur-3xl rounded-[1.4rem] overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="border-b border-white/5">
-                  <th className="px-8 py-6 text-[10px] font-black text-white/20 uppercase tracking-widest">Node User</th>
-                  <th className="px-8 py-6 text-[10px] font-black text-white/20 uppercase tracking-widest">Protocol Type</th>
-                  <th className="px-8 py-6 text-[10px] font-black text-white/20 uppercase tracking-widest">Status</th>
-                  <th className="px-8 py-6 text-[10px] font-black text-white/20 uppercase tracking-widest">Timestamp</th>
-                  <th className="px-8 py-6 text-[10px] font-black text-white/20 uppercase tracking-widest text-right">Actions</th>
+                <tr className="border-b border-glass-border/50">
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Node User</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Protocol Type</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Status</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest">Timestamp</th>
+                  <th className="px-8 py-6 text-[10px] font-black text-text-muted/30 uppercase tracking-widest text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-glass-border/50">
                 {requests.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-8 py-20 text-center text-white/20 font-bold italic">No pending transmissions detected.</td>
+                    <td colSpan="5" className="px-8 py-20 text-center text-text-muted/20 font-bold italic">No pending transmissions detected.</td>
                   </tr>
                 ) : (
                   requests.map(req => (
-                    <tr key={req.id} className="group hover:bg-white/[0.02] transition-colors">
+                    <tr key={req.id} className="group hover:bg-glass-surface/40 transition-colors">
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/20 flex items-center justify-center text-blue-400 font-black text-[10px]">
+                          <div className="w-8 h-8 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-500 dark:text-blue-400 font-black text-[10px]">
                             {req.user?.username?.charAt(0) || "U"}
                           </div>
-                          <span className="text-sm font-bold text-white">{req.user?.username || "Unknown Node"}</span>
+                          <span className="text-sm font-bold text-text-main">{req.user?.username || "Unknown Node"}</span>
                         </div>
                       </td>
                       <td className="px-8 py-6">
-                        <span className="text-[10px] font-black text-white/60 uppercase tracking-widest bg-white/5 px-3 py-1 rounded-md border border-white/5">
+                        <span className="text-[10px] font-black text-text-muted/60 uppercase tracking-widest bg-glass-surface px-3 py-1 rounded-md border border-glass-border">
                           {req.request_type}
                         </span>
                       </td>
@@ -123,15 +123,15 @@ export default function AdminVerificationPage() {
                             'bg-amber-500 animate-pulse'
                           }`}></span>
                           <span className={`text-[9px] font-black uppercase tracking-widest ${
-                            req.status === 'VERIFIED' ? 'text-emerald-400' :
-                            req.status === 'REJECTED' ? 'text-red-400' :
-                            'text-amber-400'
+                            req.status === 'VERIFIED' ? 'text-emerald-500 dark:text-emerald-400' :
+                            req.status === 'REJECTED' ? 'text-red-500 dark:text-red-400' :
+                            'text-amber-500 dark:text-amber-400'
                           }`}>
                             {req.status}
                           </span>
                         </div>
                       </td>
-                      <td className="px-8 py-6 text-[10px] font-medium text-white/20 uppercase tracking-tighter">
+                      <td className="px-8 py-6 text-[10px] font-medium text-text-muted/20 uppercase tracking-tighter">
                         {new Date(req.created_at).toLocaleString()}
                       </td>
                       <td className="px-8 py-6 text-right">
@@ -139,20 +139,20 @@ export default function AdminVerificationPage() {
                           <div className="flex justify-end gap-3">
                             <button
                               onClick={() => handleReject(req.id)}
-                              className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-red-500 hover:text-white transition-all"
+                              className="px-4 py-2 bg-red-500/10 border border-red-500/20 text-red-500 dark:text-red-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-red-500 hover:text-white transition-all"
                             >
                               Deny
                             </button>
                             <button
                               onClick={() => handleApprove(req.id)}
-                              className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10"
+                              className="px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 dark:text-emerald-400 text-[9px] font-black uppercase tracking-widest rounded-lg hover:bg-emerald-500 hover:text-white transition-all shadow-lg shadow-emerald-500/10"
                             >
                               Verify
                             </button>
                           </div>
                         )}
                         {req.status !== 'PENDING' && (
-                          <span className="text-[9px] font-black text-white/10 uppercase tracking-widest">Logged</span>
+                          <span className="text-[9px] font-black text-text-muted/10 uppercase tracking-widest">Logged</span>
                         )}
                       </td>
                     </tr>

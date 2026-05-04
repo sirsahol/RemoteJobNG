@@ -89,12 +89,12 @@ export default function NotificationsPage() {
         <div className="flex items-end justify-between">
             <div>
                 <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">System Comms</span>
-                <h1 className="text-4xl font-black text-white tracking-tight leading-tight">Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Stream</span></h1>
+                <h1 className="text-4xl font-black text-text-main tracking-tight leading-tight">Intelligence <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Stream</span></h1>
             </div>
             {notifications.some(n => !n.is_read) && (
                 <button 
                     onClick={markAllRead} 
-                    className="text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-white transition-colors pb-1 border-b border-blue-400/20 hover:border-white/40"
+                    className="text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-text-main transition-colors pb-1 border-b border-blue-400/20 hover:border-text-muted"
                 >
                     Clear All Frequency
                 </button>
@@ -104,8 +104,8 @@ export default function NotificationsPage() {
         {/* Notifications Feed */}
         <section className="space-y-4">
             {notifications.length === 0 ? (
-                <div className="glass-card p-20 text-center border-white/5">
-                    <p className="text-white/20 font-black text-xs uppercase tracking-[0.3em]">Zero signals detected.</p>
+                <div className="glass-card p-20 text-center border-glass-border">
+                    <p className="text-text-muted/20 font-black text-xs uppercase tracking-[0.3em]">Zero signals detected.</p>
                 </div>
             ) : (
                 <div className="space-y-4">
@@ -113,7 +113,7 @@ export default function NotificationsPage() {
                         <div
                             key={n.id}
                             onClick={() => !n.is_read && markRead(n.id)}
-                            className={`glass-card p-6 border-white/5 cursor-pointer transition-all duration-500 group relative overflow-hidden ${
+                            className={`glass-card p-6 border-glass-border cursor-pointer transition-all duration-500 group relative overflow-hidden ${
                                 !n.is_read ? "border-blue-500/30 bg-blue-500/5 shadow-[0_0_30px_-10px_rgba(59,130,246,0.2)]" : "opacity-60 hover:opacity-100"
                             }`}
                             style={{ animationDelay: `${idx * 50}ms` }}
@@ -122,27 +122,27 @@ export default function NotificationsPage() {
                             
                             <div className="flex items-start gap-6 relative z-10">
                                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center transition-colors ${
-                                    !n.is_read ? "bg-blue-500/20 text-blue-400" : "bg-white/5 text-white/20"
+                                    !n.is_read ? "bg-blue-500/20 text-blue-400" : "bg-glass-surface text-text-muted/40"
                                 }`}>
                                     {TYPE_ICONS[n.notification_type] || TYPE_ICONS.job_alert}
                                 </div>
                                 
                                 <div className="flex-1">
                                     <div className="flex items-center justify-between mb-1">
-                                        <h3 className={`text-sm font-black uppercase tracking-widest ${!n.is_read ? "text-white" : "text-white/40"}`}>
+                                        <h3 className={`text-sm font-black uppercase tracking-widest ${!n.is_read ? "text-text-main" : "text-text-muted"}`}>
                                             {n.title}
                                         </h3>
-                                        <span className="text-[10px] font-medium text-white/20 uppercase tracking-widest">
+                                        <span className="text-[10px] font-medium text-text-muted/40 uppercase tracking-widest">
                                             {new Date(n.created_at).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <p className={`text-sm leading-relaxed font-medium ${!n.is_read ? "text-white/70" : "text-white/30"}`}>
+                                    <p className={`text-sm leading-relaxed font-medium ${!n.is_read ? "text-text-main/70" : "text-text-muted/50"}`}>
                                         {n.message}
                                     </p>
                                     {n.link && (
                                         <Link 
                                             href={n.link} 
-                                            className="inline-flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-white transition-all group/link"
+                                            className="inline-flex items-center gap-2 mt-4 text-[10px] font-black uppercase tracking-widest text-blue-400 hover:text-text-main transition-all group/link"
                                             onClick={e => e.stopPropagation()}
                                         >
                                             Access Node <span className="group-hover/link:translate-x-1 transition-transform">→</span>
@@ -157,15 +157,15 @@ export default function NotificationsPage() {
         </section>
 
         {/* Job Alert Deployment Section */}
-        <section className="pt-10 border-t border-white/5">
+        <section className="pt-10 border-t border-glass-border">
             <div className="flex items-center justify-between mb-8">
                 <div>
-                    <h2 className="text-xl font-black text-white tracking-tight">Deployment <span className="text-blue-400">Triggers</span></h2>
-                    <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] mt-1">Automated role detection protocols.</p>
+                    <h2 className="text-xl font-black text-text-main tracking-tight">Deployment <span className="text-blue-400">Triggers</span></h2>
+                    <p className="text-[10px] font-bold text-text-muted/40 uppercase tracking-[0.2em] mt-1">Automated role detection protocols.</p>
                 </div>
                 <button
                     onClick={() => setShowAlertForm(!showAlertForm)}
-                    className="px-6 py-3 bg-white/10 hover:bg-white text-white hover:text-black rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
+                    className="px-6 py-3 bg-bg-page/10 hover:bg-text-main text-text-main hover:text-bg-page rounded-xl font-black text-[10px] uppercase tracking-widest transition-all"
                 >
                     {showAlertForm ? "Abort" : "+ Configure Alert"}
                 </button>
@@ -176,32 +176,32 @@ export default function NotificationsPage() {
                     <form onSubmit={handleCreateAlert} className="space-y-6">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="md:col-span-2">
-                                <label className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-3">Protocol Label</label>
+                                <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-widest mb-3">Protocol Label</label>
                                 <input
                                     type="text"
                                     placeholder="e.g. Distributed Systems Remote"
                                     value={newAlert.name}
                                     onChange={e => setNewAlert({...newAlert, name: e.target.value})}
-                                    className="w-full bg-[#0a0c10] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-all text-sm font-medium"
+                                    className="w-full bg-bg-page/50 border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:border-blue-500/50 transition-all text-sm font-medium"
                                 />
                             </div>
                             <div className="md:col-span-2">
-                                <label className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-3">Filter Keywords (CSV)</label>
+                                <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-widest mb-3">Filter Keywords (CSV)</label>
                                 <input
                                     type="text"
                                     placeholder="React, Rust, AWS, Architecture"
                                     value={newAlert.keywords}
                                     onChange={e => setNewAlert({...newAlert, keywords: e.target.value})}
-                                    className="w-full bg-[#0a0c10] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-all text-sm font-medium"
+                                    className="w-full bg-bg-page/50 border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:border-blue-500/50 transition-all text-sm font-medium"
                                     required
                                 />
                             </div>
                             <div>
-                                <label className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-3">Engagement Model</label>
+                                <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-widest mb-3">Engagement Model</label>
                                 <select
                                     value={newAlert.job_type}
                                     onChange={e => setNewAlert({...newAlert, job_type: e.target.value})}
-                                    className="w-full bg-[#0a0c10] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-all text-sm font-black uppercase tracking-widest"
+                                    className="w-full bg-bg-page/50 border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:border-blue-500/50 transition-all text-sm font-black uppercase tracking-widest"
                                 >
                                     <option value="">Agnostic</option>
                                     <option value="full_time">Full Time</option>
@@ -210,11 +210,11 @@ export default function NotificationsPage() {
                                 </select>
                             </div>
                             <div>
-                                <label className="block text-[10px] font-black text-white/40 uppercase tracking-widest mb-3">Sync Frequency</label>
+                                <label className="block text-[10px] font-black text-text-muted/60 uppercase tracking-widest mb-3">Sync Frequency</label>
                                 <select
                                     value={newAlert.frequency}
                                     onChange={e => setNewAlert({...newAlert, frequency: e.target.value})}
-                                    className="w-full bg-[#0a0c10] border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:border-blue-500/50 transition-all text-sm font-black uppercase tracking-widest"
+                                    className="w-full bg-bg-page/50 border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:border-blue-500/50 transition-all text-sm font-black uppercase tracking-widest"
                                 >
                                     <option value="daily">Daily Cycle</option>
                                     <option value="weekly">Weekly Cycle</option>
@@ -231,18 +231,18 @@ export default function NotificationsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {alerts.length === 0 ? (
-                    <div className="md:col-span-2 p-10 rounded-2xl border border-white/5 bg-white/2 text-center">
-                         <p className="text-white/20 font-black text-[10px] uppercase tracking-widest">No active triggers detected.</p>
+                    <div className="md:col-span-2 p-10 rounded-2xl border border-glass-border bg-bg-page/2 text-center">
+                         <p className="text-text-muted/20 font-black text-[10px] uppercase tracking-widest">No active triggers detected.</p>
                     </div>
                 ) : (
                     alerts.map(alert => (
-                        <div key={alert.id} className="glass-card p-5 border-white/5 flex items-center justify-between group hover:border-white/20 transition-all">
+                        <div key={alert.id} className="glass-card p-5 border-glass-border flex items-center justify-between group hover:border-text-muted/20 transition-all">
                             <div>
-                                <h4 className="font-black text-white text-xs uppercase tracking-widest mb-1">{alert.name || alert.keywords}</h4>
+                                <h4 className="font-black text-text-main text-xs uppercase tracking-widest mb-1">{alert.name || alert.keywords}</h4>
                                 <div className="flex items-center gap-3">
-                                    <span className="text-[9px] font-bold text-white/30 uppercase tracking-[0.2em]">{alert.frequency}</span>
-                                    <span className="w-1 h-1 bg-white/10 rounded-full"></span>
-                                    <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${alert.is_active ? "text-emerald-400" : "text-white/20"}`}>
+                                    <span className="text-[9px] font-bold text-text-muted/40 uppercase tracking-[0.2em]">{alert.frequency}</span>
+                                    <span className="w-1 h-1 bg-text-muted/10 rounded-full"></span>
+                                    <span className={`text-[9px] font-black uppercase tracking-[0.2em] ${alert.is_active ? "text-emerald-400" : "text-text-muted/20"}`}>
                                         {alert.is_active ? "Operational" : "Offline"}
                                     </span>
                                 </div>

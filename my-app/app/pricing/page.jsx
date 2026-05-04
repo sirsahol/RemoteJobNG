@@ -49,7 +49,7 @@ export default function PricingPage() {
   };
 
   const TIER_STYLING = {
-    basic: "border-white/5 bg-white/[0.02]",
+    basic: "border-glass-border bg-glass-surface",
     featured: "border-blue-500/30 bg-blue-500/5 ring-1 ring-blue-500/20 shadow-xl shadow-blue-600/5",
     premium: "border-indigo-500/30 bg-indigo-500/5 shadow-xl shadow-indigo-600/5",
   };
@@ -68,10 +68,10 @@ export default function PricingPage() {
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-16 animate-in fade-in slide-in-from-top-4 duration-700">
           <span className="text-blue-400 font-bold tracking-[0.4em] text-[10px] uppercase mb-4 block">Deployment Plans</span>
-          <h1 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-none mb-6">
+          <h1 className="text-4xl md:text-6xl font-black text-text-main tracking-tight leading-none mb-6">
             Scale your <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">Engineering Velocity.</span>
           </h1>
-          <p className="text-white/40 text-lg max-w-2xl mx-auto font-medium">
+          <p className="text-text-muted text-lg max-w-2xl mx-auto font-medium">
             Acquire world-class Nigerian remote talent through our verified listing protocols.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function PricingPage() {
           {plans.map((plan, i) => (
             <div 
               key={plan.id}
-              className={`glass-card p-10 flex flex-col border animate-in fade-in slide-in-from-bottom-8 duration-700 ${TIER_STYLING[plan.tier] || "border-white/5"}`}
+              className={`glass-card p-10 flex flex-col border animate-in fade-in slide-in-from-bottom-8 duration-700 ${TIER_STYLING[plan.tier] || "border-glass-border"}`}
               style={{ animationDelay: `${i * 150}ms` }}
             >
               {plan.tier === "featured" && (
@@ -90,21 +90,21 @@ export default function PricingPage() {
               )}
               
               <div className="mb-8">
-                <h3 className="text-2xl font-black text-white mb-2 tracking-tight">{plan.name}</h3>
-                <p className="text-white/40 text-xs font-medium leading-relaxed">{plan.description}</p>
+                <h3 className="text-2xl font-black text-text-main mb-2 tracking-tight">{plan.name}</h3>
+                <p className="text-text-muted/60 text-xs font-medium leading-relaxed">{plan.description}</p>
               </div>
 
               <div className="mb-10">
                 <div className="flex items-baseline gap-1">
-                  <span className="text-4xl font-black text-white tracking-tighter">₦{Number(plan.price_ngn).toLocaleString()}</span>
-                  <span className="text-white/20 text-[10px] font-black uppercase tracking-widest">/ Listing</span>
+                  <span className="text-4xl font-black text-text-main tracking-tighter">₦{Number(plan.price_ngn).toLocaleString()}</span>
+                  <span className="text-text-muted/40 text-[10px] font-black uppercase tracking-widest">/ Listing</span>
                 </div>
-                <p className="text-white/20 text-[9px] font-bold uppercase tracking-tighter mt-1">≈ ${Number(plan.price_usd).toFixed(0)} USD Global Rate</p>
+                <p className="text-text-muted/40 text-[9px] font-bold uppercase tracking-tighter mt-1">≈ ${Number(plan.price_usd).toFixed(0)} USD Global Rate</p>
               </div>
 
               <ul className="space-y-4 mb-12 flex-1">
                 {(plan.features || []).map((feature, i) => (
-                  <li key={i} className="flex items-start gap-3 text-sm text-white/60 font-medium">
+                  <li key={i} className="flex items-start gap-3 text-sm text-text-muted font-medium">
                     <span className="text-blue-500 mt-1">
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7" /></svg>
                     </span>
@@ -119,7 +119,7 @@ export default function PricingPage() {
                 className={`w-full py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] transition-all active:scale-95 disabled:opacity-50 ${
                   plan.tier === "featured"
                     ? "bg-blue-600 text-white hover:bg-blue-500 shadow-xl shadow-blue-600/20"
-                    : "bg-white/5 text-white/80 hover:bg-white/10 border border-white/5"
+                    : "bg-glass-surface text-text-main/80 hover:bg-glass-surface/80 border border-glass-border"
                 }`}
               >
                 {initiating === plan.id ? "Initializing..." : "Acquire Tier"}
@@ -129,11 +129,11 @@ export default function PricingPage() {
         </div>
 
         <div className="text-center animate-in fade-in duration-1000 delay-500">
-          <p className="text-white/20 text-[9px] font-black uppercase tracking-[0.3em] flex flex-wrap justify-center items-center gap-x-6 gap-y-4">
+          <p className="text-text-muted/40 text-[9px] font-black uppercase tracking-[0.3em] flex flex-wrap justify-center items-center gap-x-6 gap-y-4">
             <span>SECURED BY PAYSTACK PROTOCOL</span>
-            <span className="w-1 h-1 rounded-full bg-white/10"></span>
+            <span className="w-1 h-1 rounded-full bg-glass-border"></span>
             <span>VAT APPLICABLE AT SOURCE</span>
-            <span className="w-1 h-1 rounded-full bg-white/10"></span>
+            <span className="w-1 h-1 rounded-full bg-glass-border"></span>
             <a href="mailto:ops@remotejobng.com" className="text-blue-500/50 hover:text-blue-500 transition-colors">DIRECT CHANNEL SUPPORT</a>
           </p>
         </div>

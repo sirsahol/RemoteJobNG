@@ -109,17 +109,17 @@ export default function EditProfilePage() {
       <div className="max-w-3xl mx-auto">
         <button
             onClick={() => router.back()}
-            className="text-white/40 hover:text-white transition-colors mb-8 flex items-center gap-2 group"
+            className="text-text-muted hover:text-text-main transition-colors mb-8 flex items-center gap-2 group"
         >
             <span className="text-lg group-hover:-translate-x-1 transition-transform">←</span>
             <span className="text-[10px] font-black uppercase tracking-[0.2em]">Exit Editor</span>
         </button>
 
-        <div className="glass-card p-10 border-white/10 animate-in zoom-in-95 duration-700">
+        <div className="glass-card p-10 border-glass-border animate-in zoom-in-95 duration-700">
           <div className="mb-12">
             <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Personal Identity</span>
-            <h1 className="text-4xl font-black text-white tracking-tight leading-tight">Configure <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Profile Protocol</span></h1>
-            <p className="text-white/40 mt-3 font-medium">Calibrate your professional presence for the global market.</p>
+            <h1 className="text-4xl font-black text-text-main tracking-tight leading-tight">Configure <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Profile Protocol</span></h1>
+            <p className="text-text-muted mt-3 font-medium">Calibrate your professional presence for the global market.</p>
           </div>
 
           {success && (
@@ -136,47 +136,47 @@ export default function EditProfilePage() {
           <form onSubmit={handleSubmit} className="space-y-12">
             {/* Base Identity Group */}
             <section className="space-y-6">
-               <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-3">
-                 <span className="w-4 h-px bg-white/10"></span>
+               <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
+                 <span className="w-4 h-px bg-glass-border/20"></span>
                  Base Parameters
                </h2>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Given Name</label>
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Given Name</label>
                   <input type="text" name="first_name" value={form.first_name} onChange={handleChange}
-                    className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                    className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Family Name</label>
+                  <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Family Name</label>
                   <input type="text" name="last_name" value={form.last_name} onChange={handleChange}
-                    className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                    className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                 </div>
               </div>
             </section>
 
             {/* Career Signal Group */}
             <section className="space-y-6">
-               <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-3">
-                 <span className="w-4 h-px bg-white/10"></span>
+               <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
+                 <span className="w-4 h-px bg-glass-border/20"></span>
                  Career Signal
                </h2>
                <div className="space-y-6">
                   <div>
-                    <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Professional Headline</label>
+                    <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Professional Headline</label>
                     <input type="text" name="headline" value={form.headline} onChange={handleChange}
                       placeholder="e.g. Lead Distributed Systems Engineer"
-                      className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                      className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Geographic Location</label>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Geographic Location</label>
                       <input type="text" name="location" value={form.location} onChange={handleChange}
-                        className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                        className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                     </div>
                     <div>
-                      <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Professional Tenure (Years)</label>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Professional Tenure (Years)</label>
                       <input type="number" name="years_of_experience" value={form.years_of_experience} onChange={handleChange}
-                        className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                        className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                     </div>
                   </div>
                </div>
@@ -184,11 +184,11 @@ export default function EditProfilePage() {
 
             {/* Infrastructure Assets - New Section */}
             <section className="space-y-6">
-               <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-3">
-                 <span className="w-4 h-px bg-white/10"></span>
+               <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
+                 <span className="w-4 h-px bg-glass-border/20"></span>
                  Infrastructure Assets
                </h2>
-               <p className="text-white/40 text-[11px] mb-4 font-medium leading-relaxed">Attest to your workspace reliability to increase employer confidence.</p>
+               <p className="text-text-muted text-[11px] mb-4 font-medium leading-relaxed">Attest to your workspace reliability to increase employer confidence.</p>
                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   {[
                     { key: "solar", label: "Solar" },
@@ -200,7 +200,7 @@ export default function EditProfilePage() {
                       key={item.key}
                       type="button"
                       onClick={() => handleInfraToggle(item.key)}
-                      className={`p-4 rounded-xl border transition-all text-center group ${infra[item.key] ? "bg-blue-600/20 border-blue-500/50 text-blue-400" : "bg-white/5 border-white/5 text-white/40 hover:border-white/10"}`}
+                      className={`p-4 rounded-xl border transition-all text-center group ${infra[item.key] ? "bg-blue-600/20 border-blue-500/50 text-blue-400" : "bg-glass-surface border-glass-border text-text-muted hover:border-text-muted/50"}`}
                     >
                       <span className="block text-[10px] font-black uppercase tracking-widest">{item.label}</span>
                     </button>
@@ -210,8 +210,8 @@ export default function EditProfilePage() {
 
             {/* Verification Protocol - Functional */}
             <section className="space-y-6">
-               <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-3">
-                 <span className="w-4 h-px bg-white/10"></span>
+               <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
+                 <span className="w-4 h-px bg-glass-border/20"></span>
                  Verification Protocol
                </h2>
                 {/* Badges Display */}
@@ -233,8 +233,8 @@ export default function EditProfilePage() {
                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                      </div>
                      <div>
-                       <span className="text-[11px] font-bold text-white block">Identity Verification</span>
-                       <p className="text-white/20 text-[9px] font-black uppercase tracking-widest">
+                       <span className="text-[11px] font-bold text-text-main block">Identity Verification</span>
+                       <p className="text-text-muted text-[9px] font-black uppercase tracking-widest">
                          {badges.find(b => b.badge.slug === 'identity-verified') ? "Verified" : "Elevate your trust score by 40%"}
                        </p>
                      </div>
@@ -243,7 +243,7 @@ export default function EditProfilePage() {
                      <button 
                        type="button" 
                        onClick={() => handleRequestVerification('IDENTITY')}
-                       className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-white transition-colors"
+                       className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-text-main transition-colors"
                      >
                        Request Link
                      </button>
@@ -255,14 +255,14 @@ export default function EditProfilePage() {
                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                        </div>
                        <div>
-                         <span className="text-[11px] font-bold text-white block">Infrastructure Audit</span>
-                         <p className="text-white/20 text-[9px] font-black uppercase tracking-widest">
+                         <span className="text-[11px] font-bold text-text-main block">Infrastructure Audit</span>
+                         <p className="text-text-muted text-[9px] font-black uppercase tracking-widest">
                            {badges.find(b => b.badge.slug === 'starlink-verified' || b.badge.slug === 'solar-powered') ? "Verified Assets" : "Verify Starlink/Solar Reliability"}
                          </p>
                        </div>
                      </div>
                      {!verificationStatus || verificationStatus.status === 'REJECTED' ? (
-                       <label className="cursor-pointer text-[9px] font-black text-indigo-400 uppercase tracking-widest hover:text-white transition-colors">
+                       <label className="cursor-pointer text-[9px] font-black text-indigo-400 uppercase tracking-widest hover:text-text-main transition-colors">
                          Upload Evidence
                          <input 
                            type="file" 
@@ -272,7 +272,7 @@ export default function EditProfilePage() {
                          />
                        </label>
                      ) : (
-                       <span className="text-[9px] font-black text-white/20 uppercase tracking-widest">{verificationStatus.status}</span>
+                       <span className="text-[9px] font-black text-text-muted/40 uppercase tracking-widest">{verificationStatus.status}</span>
                      )}
                    </div>
                    {verificationStatus?.rejection_reason && verificationStatus.status === 'REJECTED' && (
@@ -281,17 +281,16 @@ export default function EditProfilePage() {
                      </p>
                    )}
                  </div>
-                 &gt;
 
                 {/* Skill Verification */}
-                <div className="p-6 rounded-2xl bg-purple-600/5 border border-purple-500/10 flex items-center justify-between group">
+                <div className="p-6 rounded-2xl bg-glass-surface border border-glass-border flex items-center justify-between group">
                    <div className="flex gap-4 items-center">
                      <div className="w-10 h-10 rounded-full bg-purple-500/20 flex items-center justify-center text-purple-400">
                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
                      </div>
                      <div>
-                       <span className="text-[11px] font-bold text-white block">Elite Skill Certification</span>
-                       <p className="text-white/20 text-[9px] font-black uppercase tracking-widest">
+                       <span className="text-[11px] font-bold text-text-main block">Elite Skill Certification</span>
+                       <p className="text-text-muted text-[9px] font-black uppercase tracking-widest">
                          {badges.find(b => b.badge.slug === 'elite-talent') ? "Certified" : "Verify Technical Dominance"}
                        </p>
                      </div>
@@ -299,7 +298,7 @@ export default function EditProfilePage() {
                    <button 
                      type="button" 
                      onClick={() => handleRequestVerification('SKILL')}
-                     className="text-[9px] font-black text-purple-400 uppercase tracking-widest hover:text-white transition-colors"
+                     className="text-[9px] font-black text-purple-400 uppercase tracking-widest hover:text-text-main transition-colors"
                    >
                      Request Exam
                    </button>
@@ -308,16 +307,16 @@ export default function EditProfilePage() {
 
             {/* External Links Group */}
             <section className="space-y-6">
-               <h2 className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] flex items-center gap-3">
-                 <span className="w-4 h-px bg-white/10"></span>
+               <h2 className="text-[10px] font-black text-text-muted/40 uppercase tracking-[0.3em] flex items-center gap-3">
+                 <span className="w-4 h-px bg-glass-border/20"></span>
                  Digital Footprint
                </h2>
                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {["website", "linkedin_url", "github_url"].map(name => (
                     <div key={name} className={name === "website" ? "md:col-span-2" : ""}>
-                      <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">{name.replace("_", " ")}</label>
+                      <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">{name.replace("_", " ")}</label>
                       <input type="text" name={name} value={form[name]} onChange={handleChange}
-                        className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all" />
+                        className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all" />
                     </div>
                   ))}
                </div>
@@ -325,24 +324,24 @@ export default function EditProfilePage() {
 
             {/* Intelligence Bio */}
             <section className="space-y-6">
-              <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">Identity Narrative (Bio)</label>
+              <label className="block text-[10px] font-black text-text-muted uppercase tracking-[0.2em] mb-3">Identity Narrative (Bio)</label>
               <textarea name="bio" value={form.bio} onChange={handleChange} rows={6}
                 placeholder="Compose a compelling narrative of your technical expertise and career achievements..."
-                className="w-full bg-white/5 border border-white/5 rounded-2xl p-6 text-white focus:outline-none focus:bg-white/10 focus:border-blue-500/50 transition-all resize-none leading-relaxed font-medium" />
+                className="w-full bg-glass-surface border border-glass-border rounded-2xl p-6 text-text-main focus:outline-none focus:bg-glass-surface/80 focus:border-blue-500/50 transition-all resize-none leading-relaxed font-medium" />
             </section>
 
             {/* Visibility Toggle */}
-            <div className="p-6 rounded-2xl bg-white/5 border border-white/5 flex items-center justify-between group">
+            <div className="p-6 rounded-2xl bg-glass-surface border border-glass-border flex items-center justify-between group">
               <div>
-                <label htmlFor="is_profile_public" className="text-xs font-bold text-white mb-1 block">Public Visibility Protocol</label>
-                <p className="text-white/20 text-[9px] font-medium uppercase tracking-widest">Allow global search engines to index your profile.</p>
+                <label htmlFor="is_profile_public" className="text-xs font-bold text-text-main mb-1 block">Public Visibility Protocol</label>
+                <p className="text-text-muted text-[9px] font-medium uppercase tracking-widest">Allow global search engines to index your profile.</p>
               </div>
               <button
                 type="button"
                 onClick={() => setForm(f => ({...f, is_profile_public: !f.is_profile_public}))}
-                className={`w-12 h-6 rounded-full relative transition-colors ${form.is_profile_public ? "bg-blue-600" : "bg-white/10"}`}
+                className={`w-12 h-6 rounded-full relative transition-colors ${form.is_profile_public ? "bg-blue-600" : "bg-glass-border/30"}`}
               >
-                <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${form.is_profile_public ? "left-7" : "left-1"}`}></div>
+                <div className={`absolute top-1 w-4 h-4 bg-text-main rounded-full transition-all ${form.is_profile_public ? "left-7" : "left-1"}`}></div>
               </button>
             </div>
 

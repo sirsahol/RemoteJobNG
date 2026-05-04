@@ -61,16 +61,16 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-32 pb-20">
-      <div className="glass-card p-10 w-full max-w-lg border-white/10 shadow-blue-500/10">
+      <div className="glass-card p-10 w-full max-w-lg border-glass-border shadow-blue-500/10">
         <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-white mb-2">Join RemoteJobNG</h2>
-          <p className="text-white/40 text-sm">Empowering Nigerian talent for a global future.</p>
+          <h2 className="text-3xl font-bold text-text-main mb-2">Join RemoteJobNG</h2>
+          <p className="text-text-muted text-sm">Empowering Nigerian talent for a global future.</p>
         </div>
 
         <form className="space-y-6" onSubmit={handleSignup}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
                 Username
               </label>
               <input
@@ -79,12 +79,12 @@ export default function SignupPage() {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="UserHandle"
-                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
                 Email
               </label>
               <input
@@ -93,7 +93,7 @@ export default function SignupPage() {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="you@domain.com"
-                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
                 required
               />
             </div>
@@ -101,7 +101,7 @@ export default function SignupPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
                 Password
               </label>
               <input
@@ -110,29 +110,29 @@ export default function SignupPage() {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="••••••••"
-                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
                 Role
               </label>
               <select
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white focus:outline-none focus:bg-white/10 transition-colors"
+                className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main focus:outline-none focus:bg-glass-surface/80 transition-colors"
               >
-                <option value="job_seeker" className="bg-slate-900">Job Seeker</option>
-                <option value="employer" className="bg-slate-900">Employer</option>
+                <option value="job_seeker" className="bg-bg-page">Job Seeker</option>
+                <option value="employer" className="bg-bg-page">Employer</option>
               </select>
             </div>
           </div>
 
           {formData.role === "employer" && (
             <div className="animate-in fade-in slide-in-from-top-2 duration-300">
-              <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+              <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
                 Company Name
               </label>
               <input
@@ -141,13 +141,13 @@ export default function SignupPage() {
                 value={formData.company_name}
                 onChange={handleChange}
                 placeholder="Acme Global Inc."
-                className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+                className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
               />
             </div>
           )}
 
           <div>
-            <label className="block text-xs font-bold text-white/40 uppercase tracking-[0.2em] mb-2">
+            <label className="block text-xs font-bold text-text-muted uppercase tracking-[0.2em] mb-2">
               Bio / Intro
             </label>
             <textarea
@@ -156,7 +156,7 @@ export default function SignupPage() {
               onChange={handleChange}
               rows="3"
               placeholder="Tell the global market about your expertise..."
-              className="w-full bg-white/5 border border-white/5 rounded-xl p-4 text-white placeholder-white/20 focus:outline-none focus:bg-white/10 transition-colors"
+              className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/40 focus:outline-none focus:bg-glass-surface/80 transition-colors"
             ></textarea>
           </div>
 
@@ -180,9 +180,9 @@ export default function SignupPage() {
           </button>
         </form>
 
-        <p className="text-center text-white/40 text-sm mt-8">
+        <p className="text-center text-text-muted text-sm mt-8">
           Already a member?{" "}
-          <Link href="/login" className="text-blue-400 font-bold hover:text-blue-300 transition-colors">
+          <Link href="/login" className="text-blue-400 font-bold hover:text-text-main transition-colors">
             Sign In
           </Link>
         </p>

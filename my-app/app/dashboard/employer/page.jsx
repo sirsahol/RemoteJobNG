@@ -67,13 +67,13 @@ export default function EmployerDashboard() {
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div className="animate-in fade-in slide-in-from-left-4 duration-700">
             <span className="text-blue-400 font-bold tracking-widest text-xs uppercase mb-2 block">Enterprise Command</span>
-            <h1 className="text-4xl md:text-5xl font-black text-white tracking-tight">
-              {user?.company_name || user?.username} <span className="text-white/20">Hub</span>
+            <h1 className="text-4xl md:text-5xl font-black text-text-main tracking-tight">
+              {user?.company_name || user?.username} <span className="text-text-muted/30">Hub</span>
             </h1>
-            <p className="text-white/40 mt-3 text-lg">Acquire world-class Nigerian talent from your dashboard.</p>
+            <p className="text-text-muted mt-3 text-lg">Acquire world-class Nigerian talent from your dashboard.</p>
           </div>
           
-          <Link href="/jobs/post" className="bg-white text-black hover:bg-white/90 px-8 py-4 rounded-2xl font-black transition-all text-sm shadow-xl shadow-white/5 active:scale-95 animate-in fade-in slide-in-from-right-4 duration-700">
+          <Link href="/jobs/post" className="bg-text-main text-bg-page hover:opacity-90 px-8 py-4 rounded-2xl font-black transition-all text-sm shadow-xl shadow-glass active:scale-95 animate-in fade-in slide-in-from-right-4 duration-700">
              + POST NEW OPENING
           </Link>
         </div>
@@ -83,22 +83,22 @@ export default function EmployerDashboard() {
           {stats.map((stat, i) => (
             <div 
               key={stat.label} 
-              className="glass-card p-6 border-white/5 group hover:border-white/20 transition-all animate-in fade-in slide-in-from-bottom-4 duration-700"
+              className="glass-card p-6 border-glass-border/30 group hover:border-glass-border transition-all animate-in fade-in slide-in-from-bottom-4 duration-700"
               style={{ animationDelay: `${i * 100}ms` }}
             >
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-xl group-hover:scale-110 transition-transform">{stat.icon}</span>
-                <p className="text-white/40 font-bold uppercase tracking-widest text-[9px]">{stat.label}</p>
+                <p className="text-text-muted font-bold uppercase tracking-widest text-[9px]">{stat.label}</p>
               </div>
-              <p className="text-3xl font-black text-white">{stat.value}</p>
+              <p className="text-3xl font-black text-text-main">{stat.value}</p>
             </div>
           ))}
         </div>
 
         {/* Talent Management Table */}
-        <div className="glass-card overflow-hidden border-white/10 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <div className="p-8 border-b border-white/5 flex items-center justify-between bg-white/5">
-             <h2 className="text-xl font-bold text-white flex items-center gap-3">
+        <div className="glass-card overflow-hidden border-glass-border/50 animate-in fade-in slide-in-from-bottom-8 duration-1000">
+          <div className="p-8 border-b border-glass-border/30 flex items-center justify-between bg-glass-surface/50">
+             <h2 className="text-xl font-bold text-text-main flex items-center gap-3">
                <span className="w-2 h-6 bg-blue-500 rounded-full animate-pulse"></span>
                Active Talent Channels
              </h2>
@@ -112,7 +112,7 @@ export default function EmployerDashboard() {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-white/5 text-white/20 text-[10px] font-black uppercase tracking-[0.2em]">
+                <tr className="border-b border-glass-border/30 text-text-muted/50 text-[10px] font-black uppercase tracking-[0.2em]">
                   <th className="px-8 py-6">Position Title</th>
                   <th className="px-8 py-6">Engagement</th>
                   <th className="px-8 py-6">Intelligence</th>
@@ -120,11 +120,11 @@ export default function EmployerDashboard() {
                   <th className="px-8 py-6 text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-white/5">
+              <tbody className="divide-y divide-glass-border/30">
                 {myJobs.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="px-8 py-20 text-center">
-                      <p className="text-white/20 font-bold uppercase tracking-widest text-xs mb-4">No active talent channels</p>
+                      <p className="text-text-muted/50 font-bold uppercase tracking-widest text-xs mb-4">No active talent channels</p>
                       <Link href="/jobs/post" className="text-blue-400 font-black text-[10px] uppercase tracking-widest border-b border-blue-400/30 pb-1 hover:border-blue-400 transition-all">
                         Launch your first listing
                       </Link>
@@ -132,23 +132,23 @@ export default function EmployerDashboard() {
                   </tr>
                 ) : (
                   myJobs.map(job => (
-                    <tr key={job.id} className="group hover:bg-white/[0.02] transition-colors">
+                    <tr key={job.id} className="group hover:bg-glass-surface/40 transition-colors">
                       <td className="px-8 py-6">
-                        <Link href={`/jobs/${job.slug || job.id}`} className="font-bold text-white group-hover:text-blue-400 transition-colors text-sm">
+                        <Link href={`/jobs/${job.slug || job.id}`} className="font-bold text-text-main group-hover:text-blue-400 transition-colors text-sm">
                           {job.title}
                         </Link>
-                        <p className="text-white/20 text-[10px] font-medium mt-1">Ref ID: #{job.id?.toString().slice(-4)}</p>
+                        <p className="text-text-muted/30 text-[10px] font-medium mt-1">Ref ID: #{job.id?.toString().slice(-4)}</p>
                       </td>
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-4">
                            <div className="text-center">
-                             <p className="text-white font-bold text-xs">{job.application_count || 0}</p>
-                             <p className="text-white/20 text-[9px] font-black uppercase tracking-tighter">Applied</p>
+                             <p className="text-text-main font-bold text-xs">{job.application_count || 0}</p>
+                             <p className="text-text-muted/50 text-[9px] font-black uppercase tracking-tighter">Applied</p>
                            </div>
-                           <div className="w-px h-6 bg-white/5"></div>
+                           <div className="w-px h-6 bg-glass-border/20"></div>
                            <div className="text-center">
-                             <p className="text-white font-bold text-xs">{job.view_count || 0}</p>
-                             <p className="text-white/20 text-[9px] font-black uppercase tracking-tighter">Views</p>
+                             <p className="text-text-main font-bold text-xs">{job.view_count || 0}</p>
+                             <p className="text-text-muted/50 text-[9px] font-black uppercase tracking-tighter">Views</p>
                            </div>
                         </div>
                       </td>
@@ -158,17 +158,17 @@ export default function EmployerDashboard() {
                          </Link>
                       </td>
                       <td className="px-8 py-6">
-                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${JOB_STATUS_COLORS[job.status] || "bg-white/5 text-white/40 border-white/10"}`}>
+                        <span className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border ${JOB_STATUS_COLORS[job.status] || "bg-glass-surface text-text-muted border-glass-border"}`}>
                           {job.status}
                         </span>
                       </td>
                       <td className="px-8 py-6 text-right">
                         <div className="flex justify-end gap-4">
-                          <Link href={`/jobs/${job.slug || job.id}/edit`} className="text-white/20 hover:text-white transition-colors">
+                          <Link href={`/jobs/${job.slug || job.id}/edit`} className="text-text-muted/40 hover:text-text-main transition-colors">
                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" /></svg>
                           </Link>
                           {job.status !== "closed" && (
-                            <button onClick={() => handleClose(job.id)} className="text-white/20 hover:text-red-400 transition-colors">
+                            <button onClick={() => handleClose(job.id)} className="text-text-muted/40 hover:text-red-400 transition-colors">
                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                             </button>
                           )}
@@ -181,11 +181,11 @@ export default function EmployerDashboard() {
             </table>
           </div>
           
-          <div className="p-6 bg-white/5 border-t border-white/5 flex justify-between items-center">
-             <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest">Global Talent Distribution: 100% Remote-First</p>
+          <div className="p-6 bg-glass-surface/50 border-t border-glass-border/30 flex justify-between items-center">
+             <p className="text-[10px] font-bold text-text-muted/50 uppercase tracking-widest">Global Talent Distribution: 100% Remote-First</p>
              <div className="flex gap-1">
                 {[1, 2, 3].map(i => (
-                  <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 1 ? 'bg-blue-500' : 'bg-white/5'}`}></div>
+                   <div key={i} className={`w-1.5 h-1.5 rounded-full ${i === 1 ? 'bg-blue-500' : 'bg-glass-border/20'}`}></div>
                 ))}
              </div>
           </div>

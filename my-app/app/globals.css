@@ -1,10 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  /* Glassmorphism Tokens */
-  --color-glass-surface: rgba(255, 255, 255, 0.08);
-  --color-glass-border: rgba(255, 255, 255, 0.12);
-  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  /* Dynamic Theme Tokens */
+  --color-bg-page: var(--bg-page);
+  --color-text-main: var(--text-main);
+  --color-text-muted: var(--text-muted);
+  --color-glass-surface: var(--glass-surface);
+  --color-glass-border: var(--glass-border);
+  --shadow-glass: var(--glass-shadow);
   --blur-glass: 16px;
 
   /* Brand Palette (2026) */
@@ -16,15 +19,38 @@
   --font-geist: "Geist", sans-serif;
 }
 
+:root {
+  /* Light Mode (Ethereal Frost) */
+  --bg-page: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: rgba(15, 23, 42, 0.5);
+  --glass-surface: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.8);
+  --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+  --grid-opacity: 0.03;
+  --grain-opacity: 0.015;
+}
+
+[data-theme='dark'] {
+  /* Dark Mode (Original Protocol) */
+  --bg-page: #05070a;
+  --text-main: #f1f5f9;
+  --text-muted: rgba(241, 245, 249, 0.4);
+  --glass-surface: rgba(255, 255, 255, 0.03);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --grid-opacity: 0.05;
+  --grain-opacity: 0.02;
+}
+
 @layer base {
   body {
-    @apply antialiased text-slate-100 min-h-screen selection:bg-blue-500/30;
-    background-color: var(--color-brand-slate);
+    @apply antialiased min-h-screen transition-colors duration-500 selection:bg-blue-500/30;
+    color: var(--text-main);
+    background-color: var(--bg-page);
     background-image: 
-      radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.15) 0, transparent 50%), 
-      radial-gradient(at 100% 100%, hsla(250, 84%, 54%, 0.15) 0, transparent 50%),
-      radial-gradient(at 50% 50%, hsla(224, 71%, 4%, 1) 0, transparent 100%);
-    background-color: #05070a;
+      radial-gradient(at 0% 0%, hsla(217, 91%, 60%, 0.1) 0, transparent 50%), 
+      radial-gradient(at 100% 100%, hsla(250, 84%, 54%, 0.1) 0, transparent 50%);
     background-attachment: fixed;
   }
 
@@ -36,13 +62,14 @@
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.05;
+    opacity: var(--grid-opacity);
     pointer-events: none;
     z-index: -1;
     background-image: 
-      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+      linear-gradient(currentColor 1px, transparent 1px),
+      linear-gradient(90deg, currentColor 1px, transparent 1px);
     background-size: 40px 40px;
+    transition: opacity 0.5s ease;
   }
 
   /* Grainy texture overlay */
@@ -53,21 +80,23 @@
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.02;
+    opacity: var(--grain-opacity);
     pointer-events: none;
     z-index: 9999;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+    transition: opacity 0.5s ease;
   }
 }
 
 @layer components {
   .glass-card {
-    @apply backdrop-blur-[--blur-glass] bg-white/[0.03] border border-white/10 shadow-2xl rounded-[2rem];
+    @apply backdrop-blur-[--blur-glass] bg-glass-surface border border-glass-border shadow-glass rounded-[2rem];
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .glass-card:hover {
-    @apply border-white/20 bg-white/[0.06] shadow-blue-500/10;
+    @apply shadow-blue-500/10 scale-[1.01];
+    background-color: color-mix(in srgb, var(--glass-surface), white 10%);
   }
 
   .text-glow {

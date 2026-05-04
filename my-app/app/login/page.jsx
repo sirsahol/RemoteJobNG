@@ -39,18 +39,18 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 pt-20">
-      <div className="glass-card p-12 w-full max-w-md border-white/10 relative overflow-hidden animate-in zoom-in-95 duration-700">
+      <div className="glass-card p-12 w-full max-w-md border-glass-border relative overflow-hidden animate-in zoom-in-95 duration-700">
         <div className="absolute -top-20 -right-20 w-48 h-48 bg-blue-500/10 rounded-full blur-3xl"></div>
         
         <div className="text-center mb-12 relative z-10">
           <span className="text-blue-400 font-bold tracking-[0.3em] text-[10px] uppercase mb-4 block">Secure Auth</span>
-          <h2 className="text-4xl font-black text-white tracking-tight leading-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Node</span></h2>
-          <p className="text-white/40 mt-3 font-medium text-sm">Synchronizing your professional trajectory.</p>
+          <h2 className="text-4xl font-black text-text-main tracking-tight leading-tight">Access <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400">Node</span></h2>
+          <p className="text-text-muted mt-3 font-medium text-sm">Synchronizing your professional trajectory.</p>
         </div>
 
         <form className="space-y-8 relative z-10" onSubmit={handleSubmit}>
           <div>
-            <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em] mb-3">
+            <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em] mb-3">
               Identity Identifier
             </label>
             <input
@@ -58,24 +58,24 @@ function LoginForm() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder="Username"
-              className="w-full bg-[#0a0c10] border border-white/5 rounded-xl p-4 text-white placeholder-white/10 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
+              className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/20 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
               required
             />
           </div>
 
           <div>
             <div className="flex items-center justify-between mb-3">
-              <label className="block text-[10px] font-black text-white/40 uppercase tracking-[0.2em]">
+              <label className="block text-[10px] font-black text-text-muted/40 uppercase tracking-[0.2em]">
                 Secret Sequence
               </label>
-              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-white transition-colors">Recover</Link>
+              <Link href="#" className="text-[9px] font-black text-blue-400 uppercase tracking-widest hover:text-text-main transition-colors">Recover</Link>
             </div>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="w-full bg-[#0a0c10] border border-white/5 rounded-xl p-4 text-white placeholder-white/10 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
+              className="w-full bg-glass-surface border border-glass-border rounded-xl p-4 text-text-main placeholder-text-muted/20 focus:outline-none focus:border-blue-500/50 transition-all font-medium text-sm"
               required
             />
           </div>
@@ -95,12 +95,12 @@ function LoginForm() {
           </button>
         </form>
 
-        <div className="mt-10 pt-10 border-t border-white/5 text-center relative z-10">
-          <p className="text-white/40 text-[10px] font-bold uppercase tracking-widest">
+        <div className="mt-10 pt-10 border-t border-glass-border text-center relative z-10">
+          <p className="text-text-muted text-[10px] font-bold uppercase tracking-widest">
             Unregistered?{" "}
             <Link
               href="/signup"
-              className="text-blue-400 font-black hover:text-white transition-colors ml-2"
+              className="text-blue-400 font-black hover:text-text-main transition-colors ml-2"
             >
               Establish Identity
             </Link>
