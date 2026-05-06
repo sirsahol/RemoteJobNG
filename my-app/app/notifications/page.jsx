@@ -28,7 +28,7 @@ export default function NotificationsPage() {
       <div className="max-w-3xl mx-auto space-y-10">
         
         <NotificationHeader 
-          hasUnread={notifications.some(n => !n.is_read)} 
+          hasUnread={notifications?.some(n => !n.is_read)} 
           markAllRead={markAllRead} 
         />
 

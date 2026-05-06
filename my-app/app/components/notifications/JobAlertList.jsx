@@ -1,7 +1,7 @@
 import React from "react";
 
 export function JobAlertList({ alerts }) {
-  if (alerts.length === 0) {
+  if (!alerts || alerts.length === 0) {
     return (
       <div className="md:col-span-2 p-10 rounded-2xl border border-glass-border bg-bg-page/2 text-center">
           <p className="text-text-muted/20 font-black text-[10px] uppercase tracking-widest">No active triggers detected.</p>
