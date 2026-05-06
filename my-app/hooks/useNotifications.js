@@ -3,7 +3,7 @@
  * Hook for handling real-time WebSocket notifications.
  */
 import { useEffect, useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/context/AuthContext';
 
 export function useNotifications() {
   const { user } = useAuth();
@@ -21,7 +21,7 @@ export function useNotifications() {
     const socket = new WebSocket(wsUrl);
 
     socket.onmessage = (event) => {
-      const data = json.parse(event.data);
+      const data = JSON.parse(event.data);
       if (data.type === 'notification') {
         const newNotification = {
           id: Date.now(),

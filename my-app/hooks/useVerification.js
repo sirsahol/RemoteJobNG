@@ -3,7 +3,7 @@
  * Logic hook for managing user-side verification requests.
  */
 import { useState, useEffect } from 'react';
-import api from '@/utils/api';
+import api from '@/utils/axiosInstance';
 
 export function useVerification() {
   const [requests, setRequests] = useState([]);

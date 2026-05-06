@@ -1,13 +1,13 @@
 "use client";
 
 import React from 'react';
-import { Clock, CheckCircle, Cancel, WarningCircle } from 'iconoir-react';
+import { Clock, CheckCircle, XmarkCircle, WarningCircle } from 'iconoir-react';
 
 export function VerificationStatusList({ requests }) {
   const getStatusIcon = (status) => {
     switch (status) {
       case 'VERIFIED': return <CheckCircle className="text-emerald-500" />;
-      case 'REJECTED': return <Cancel className="text-red-500" />;
+      case 'REJECTED': return <XmarkCircle className="text-red-500" />;
       case 'IN_PROGRESS': return <Clock className="text-blue-500" />;
       default: return <WarningCircle className="text-amber-500" />;
     }

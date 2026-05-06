@@ -3,7 +3,7 @@
  * Logic hook for accessing neural intelligence and candidate matching.
  */
 import { useState, useEffect } from 'react';
-import api from '@/utils/api';
+import api from '@/utils/axiosInstance';
 
 export function useEmployerInsights() {
   const [matches, setMatches] = useState([]);
